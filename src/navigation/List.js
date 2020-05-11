@@ -42,7 +42,7 @@ const List = (props) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.GhostWhite }}>
-      <Header title="MY LIST" />
+      <Header title="Noteras" />
       <Search 
         placeholder="Search here..."
       />
