@@ -9,14 +9,14 @@ export default class Task extends React.Component {
     return (
       <TouchableOpacity style={styles.task}>
         <CheckButton name="done" />
-        <Category 
-          name={this.props.category}
-          size={30} 
-        />
         <View style={styles.taskContent}>
           <Text style={styles.taskTitle}>{this.props.text}</Text>
           <Text style={styles.taskTime}>{this.props.time}</Text>
         </View>
+        <Category 
+          name={this.props.category}
+          size={30} 
+        />
         <CheckButton name="marked" />
       </TouchableOpacity>
     );
