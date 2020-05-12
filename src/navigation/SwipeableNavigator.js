@@ -2,7 +2,7 @@ import React from 'react';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import List from './List';
 import Categories from './Categories';
-import CalendarView from './Calendar';
+import CalendarView from './CalendarView';
 
 export default class SwipeableNavigator extends React.Component {
   constructor(props) {
@@ -17,15 +17,27 @@ export default class SwipeableNavigator extends React.Component {
     }
   }
 
+  renderScene = ({route}) => {
+    switch(route.key) {
+      case "list":
+        return <List navigation={this.props.navigation} />
+      case "categories":
+        return <Categories />
+      case "calendar":
+        return <CalendarView />
+    }
+  }
+
   render() {
     return (
       <TabView
         navigationState={{...(this.state)}}
-        renderScene={SceneMap({
-          list: List,
-          categories: Categories,
-          calendar: CalendarView,
-        })}
+        // renderScene={SceneMap({
+        //   list: List,
+        //   categories: Categories,
+        //   calendar: CalendarView,
+        // })}
+        renderScene={this.renderScene}
         onIndexChange={index => this.setState({index})}
         renderTabBar={() => null}
       />

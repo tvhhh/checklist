@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import colors from '../../styles/colors';
 
 export default StyleSheet.create({
   listTitle: {
@@ -12,7 +11,7 @@ export default StyleSheet.create({
   },
   task: {
     flex: 1,
-    backgroundColor: colors.Water,
+    backgroundColor: "white",
     alignSelf: "stretch",
     alignItems: "center",
     flexDirection: "row",

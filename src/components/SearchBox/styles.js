@@ -2,13 +2,19 @@ import { StyleSheet } from 'react-native';
 import colors from '../../styles/colors';
 
 export default StyleSheet.create({
+  searchBoxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 5,
+  },
   barContainer: {
-    backgroundColor: colors.GhostWhite,
+    flex: 1,
+    backgroundColor: colors.Background,
     borderBottomColor: "transparent",
     borderTopColor: "transparent",
   },
   inputContainer: {
-    backgroundColor: colors.GhostWhite,
+    backgroundColor: colors.Background,
     borderBottomWidth: 1,
     borderWidth: 1,
   },
