@@ -11,7 +11,14 @@ export default class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: [],
+      list: [
+        {text: "Finish PSE Mockup", time: "TODAY, 12:00 PM", category: "work"},
+        {text: "Doi no NMH", time: "TODAY, 3:00 PM", category: "payment"},
+        {text: "Do OS Assignment", time: "TODAY, 5:00 PM", category: "study"},
+        {text: "Go jogging", time: "TODAY, 7:00 PM", category: "workout"},
+        {text: "Take medicine", time: "TODAY, 9:00 PM", category: "health"},
+        {text: "Adidas Ford", time: "TODAY, 11:00 PM", category: "entertainment"},
+      ],
     }
   }
 
@@ -19,9 +26,7 @@ export default class List extends React.Component {
     return (
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
         <Header title="MY LIST" />
-        <SearchBox 
-          placeholder="Search here..."
-        />
+        <SearchBox navigation={this.props.navigation} navigateTo="Search" />
         {(this.state.list.length > 0) ?
           <TaskList taskList={this.state.list} /> :
           (<View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>

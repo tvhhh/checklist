@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, } from 'react-native';
+import { View, } from 'react-native';
 import Header from '../components/Header/index';
 import Category from '../components/Category/index';
 import colors from '../styles/colors';

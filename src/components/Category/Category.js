@@ -10,7 +10,7 @@ import colors from '../../styles/colors';
 export default class Category extends React.Component {
   render() {
     let name = this.props.name;
-    let size = 55;
+    let size = this.props.size || 55;
     let icon;
     if (name === "health") {
       icon = <FontAwesome name="heartbeat" color={colors.Health} size={size} />
