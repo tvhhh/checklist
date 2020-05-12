@@ -1,55 +1,41 @@
 import React from 'react';
-import { View, } from 'react-native';
+import { Text, View, } from 'react-native';
 import Header from '../components/Header/index';
 import TaskList from '../components/TaskList/index';
-import Search from '../components/SearchBar/index';
+import SearchBox from '../components/SearchBox/index';
 import Button from '../components/Button/index';
 import colors from '../styles/colors';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
-const List = (props) => {
-  const list = [
-    { text: "Finish SE Quiz", time: "TODAY, 10:00 PM" },
-    { text: "Finish PSE Report", time: "TODAY, 10:01 PM" },
-    { text: "Finish OS Quiz", time: "TODAY, 10:02 PM" },
-    { text: "Finish SE Quiz", time: "TODAY, 10:00 PM" },
-    { text: "Finish PSE Report", time: "TODAY, 10:01 PM" },
-    { text: "Finish OS Quiz", time: "TODAY, 10:02 PM" },
-    { text: "Finish SE Quiz", time: "TODAY, 10:00 PM" },
-    { text: "Finish PSE Report", time: "TODAY, 10:01 PM" },
-    { text: "Finish OS Quiz", time: "TODAY, 10:02 PM" },
-    { text: "Finish SE Quiz", time: "TODAY, 10:00 PM" },
-    { text: "Finish PSE Report", time: "TODAY, 10:01 PM" },
-    { text: "Finish OS Quiz", time: "TODAY, 10:02 PM" },
-    { text: "Finish SE Quiz", time: "TODAY, 10:00 PM" },
-    { text: "Finish PSE Report", time: "TODAY, 10:01 PM" },
-    { text: "Finish OS Quiz", time: "TODAY, 10:02 PM" },
-    { text: "Finish SE Quiz", time: "TODAY, 10:00 PM" },
-    { text: "Finish PSE Report", time: "TODAY, 10:01 PM" },
-    { text: "Finish OS Quiz", time: "TODAY, 10:02 PM" },
-    { text: "Finish SE Quiz", time: "TODAY, 10:00 PM" },
-    { text: "Finish PSE Report", time: "TODAY, 10:01 PM" },
-    { text: "Finish OS Quiz", time: "TODAY, 10:02 PM" },
-    { text: "Finish SE Quiz", time: "TODAY, 10:00 PM" },
-    { text: "Finish PSE Report", time: "TODAY, 10:01 PM" },
-    { text: "Finish OS Quiz", time: "TODAY, 10:02 PM" },
-    { text: "Finish SE Quiz", time: "TODAY, 10:00 PM" },
-    { text: "Finish PSE Report", time: "TODAY, 10:01 PM" },
-    { text: "Finish OS Quiz", time: "TODAY, 10:02 PM" },
-    { text: "Finish SE Quiz", time: "TODAY, 10:00 PM" },
-    { text: "Finish PSE Report", time: "TODAY, 10:01 PM" },
-    { text: "Finish OS Quiz", time: "TODAY, 10:02 PM" },
-  ];
+export default class List extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: [],
+    }
+  }
 
-  return (
-    <View style={{ flex: 1, backgroundColor: colors.GhostWhite }}>
-      <Header title="Noteras" />
-      <Search 
-        placeholder="Search here..."
-      />
-      <TaskList taskList={list} />
-      <Button.Plus />
-    </View>
-  ); 
+  render() {
+    return (
+      <View style={{ flex: 1, backgroundColor: colors.Background }}>
+        <Header title="MY LIST" />
+        <SearchBox 
+          placeholder="Search here..."
+        />
+        {(this.state.list.length > 0) ?
+          <TaskList taskList={this.state.list} /> :
+          (<View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+            <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 28 }}>What are you gonna do?</Text>
+            <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 20 }}>Tap + to create a new task</Text>
+            <FontAwesome5
+              name="tasks"
+              color="grey"
+              size={50}
+            />
+          </View>)
+        }
+        <Button.Plus />
+      </View>
+    );
+  } 
 };
-
-export default List;

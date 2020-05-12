@@ -11,7 +11,6 @@ export default class Task extends React.Component {
       <TouchableOpacity style={styles.task}>
         <CheckButton name="done" />
         <AntDesign 
-          color={colors.ButtonBlue} 
           name="questioncircle"
           size={30}
         />

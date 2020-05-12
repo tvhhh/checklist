@@ -10,8 +10,8 @@ export class Plus extends React.Component {
       <TouchableOpacity style={styles.plusButton}>
         <AntDesign 
           name="pluscircle"
-          color={colors.SpanishBlue}
-          size={this.props.size || 50}
+          color={colors.PlusButton}
+          size={this.props.size || 60}
         />
       </TouchableOpacity>
     );

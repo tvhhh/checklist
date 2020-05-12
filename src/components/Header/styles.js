@@ -1,9 +1,7 @@
 import { StyleSheet } from 'react-native';
-import colors from '../../styles/colors';
 
 export default StyleSheet.create({
   header: {
-    backgroundColor: colors.CoolBlack,
     alignSelf: "stretch",
     alignItems: "center",
     justifyContent: "center",
@@ -13,7 +11,6 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    color: "white",
     fontFamily: "sans-serif",
     fontSize: 36,
     fontWeight: "bold",
@@ -21,7 +18,6 @@ export default StyleSheet.create({
     opacity: 0.87,
   },
   time: {
-    color: "white",
     fontFamily: "sans-serif-light",
     fontSize: 15,
     textAlign: "center",

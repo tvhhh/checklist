@@ -1,27 +1,10 @@
 import React from 'react';
-import { Text, View, } from 'react-native';
+import { View, } from 'react-native';
 import Header from '../components/Header/index';
 import colors from '../styles/colors';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars'
 
-// const CalendarView = (props) => {
-//   const setMarkedDate = (day) => {
-    
-//   }
-//   return (
-//     <View style={{ flex: 1, backgroundColor: colors.GhostWhite }}>
-//       <Header title="CALENDAR" />
-//       {/* <Text>Calendar here</Text> */}
-//       <Calendar
-//         current
-//         hideExtraDays={true}
-        
-//       />
-//     </View>
-//   );
-// };
-
-class CalendarView extends React.Component{
+export default class CalendarView extends React.Component{
   constructor(props) {
     super(props)
     this.state={
@@ -44,18 +27,21 @@ class CalendarView extends React.Component{
   
   render(){
     return(
-      <View style={{ flex: 1, backgroundColor: colors.GhostWhite }}>
+      <View style={{ flex: 1, backgroundColor: colors.Background }}>
         <Header title="CALENDAR" />
-        {/* <Text>Calendar here</Text> */}
         <Calendar
           current
           hideExtraDays={true}
           onDayPress={(day) => this.setMarkedDates(day.dateString)}
           markedDates={this.state.markedDates}
+          theme={{
+            calendarBackground: colors.Background,
+            textDayFontSize: 18,
+            textDayHeaderFontSize: 16,
+            textMonthFontSize: 20,
+          }}
         />
       </View>
     );
   }
 };
-
-export default CalendarView;

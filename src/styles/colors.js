@@ -1,14 +1,12 @@
 const colors = {
-  CoolBlack: "#032F64",
-  USAFABlue: "#034698",
-  SpanishBlue: "#006CBB",
-  ButtonBlue: "#28A7EA",
-  PictonBlue: "#45BDEE",
-  SkyBlue: "#7AD7F0",
-  PaleCyan: "#92DFF3",
-  Diamond: "#B7E9F7",
-  Water: "#DBF3FA",
-  GhostWhite: "#F5FCFF",
+  PlusButton: "#034698",
+  Background: "#e6e6e6",
+  Health: "#ff0000",
+  Workout: "#1e90ff",
+  Work: "#8b4513",
+  Study: "#800080",
+  Payment: "#006400",
+  Entertainment: "#2f4f4f",
 };
 
 export default colors;
