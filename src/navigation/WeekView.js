@@ -7,19 +7,19 @@ import Button from '../components/Button/index';
 import colors from '../styles/colors';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
-export default class List extends React.Component {
+export default class WeekList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       list: [
         {text: "Finish PSE Mockup", time: "TODAY, 12:00 PM", category: "work"},
-        {text: "Pay tuition fees", time: "TODAY, 3:00 PM", category: "payment"},
+        {text: "Doi no NMH", time: "TODAY, 3:00 PM", category: "payment"},
         {text: "Do OS Assignment", time: "TODAY, 5:00 PM", category: "study"},
         {text: "Go jogging", time: "TODAY, 7:00 PM", category: "workout"},
         {text: "Take medicine", time: "TODAY, 9:00 PM", category: "health"},
-        {text: "Play LoL", time: "TODAY, 11:00 PM", category: "entertainment"},
+        {text: "Adidas Ford", time: "TODAY, 11:00 PM", category: "entertainment"},
       ],
-    };
+    }
   }
 
   render() {
@@ -28,7 +28,7 @@ export default class List extends React.Component {
         <Header title="Noteras" />
         <SearchBox navigation={this.props.navigation} navigateTo="Search" />
         {(this.state.list.length > 0) ?
-          <TaskList title="Today" taskList={this.state.list} /> :
+          <TaskList title="This Week" taskList={this.state.list} /> :
           (<View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
             <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 28 }}>What are you gonna do?</Text>
             <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 20 }}>Tap + to create a new task</Text>
@@ -39,7 +39,7 @@ export default class List extends React.Component {
             />
           </View>)
         }
-        <Button.Plus navigation={this.props.navigation} navigateTo="TaskForm" />
+        <Button.Plus />
       </View>
     );
   } 

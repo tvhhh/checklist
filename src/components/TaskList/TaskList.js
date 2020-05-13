@@ -7,13 +7,14 @@ export default class TaskList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: props.title,
       taskList: props.taskList,
     };
   }
 
   render() {
     const sections = [{
-      title: "TODAY",
+      title: this.state.title,
       data: this.state.taskList,
     }];
 
