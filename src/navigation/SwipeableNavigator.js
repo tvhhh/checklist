@@ -3,6 +3,8 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import List from './List';
 import Categories from './Categories';
 import CalendarView from './CalendarView';
+import WeekList from './WeekView';
+import PriorityList from './PriorityView';
 
 export default class SwipeableNavigator extends React.Component {
   constructor(props) {
@@ -13,6 +15,8 @@ export default class SwipeableNavigator extends React.Component {
         { key: "list", title: "My List" },
         { key: "categories", title: "Categories" },
         { key: "calendar", title: "Calendar" },
+        { key: "weeklist", title: "Week List"},
+        { key: "prioritylist", title: "Priority List"},
       ]
     }
   }
@@ -21,10 +25,14 @@ export default class SwipeableNavigator extends React.Component {
     switch(route.key) {
       case "list":
         return <List navigation={this.props.navigation} />
-      case "categories":
-        return <Categories />
+      case "weeklist":
+        return <WeekList />
+      case "prioritylist":
+        return <PriorityList />
       case "calendar":
         return <CalendarView />
+      case "categories":
+        return <Categories />
     }
   }
 

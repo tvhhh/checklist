@@ -7,7 +7,7 @@ import Button from '../components/Button/index';
 import colors from '../styles/colors';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
-export default class List extends React.Component {
+export default class WeekList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +28,7 @@ export default class List extends React.Component {
         <Header title="Noteras" />
         <SearchBox navigation={this.props.navigation} navigateTo="Search" />
         {(this.state.list.length > 0) ?
-          <TaskList title="Today" taskList={this.state.list} /> :
+          <TaskList title="This Week" taskList={this.state.list} /> :
           (<View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
             <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 28 }}>What are you gonna do?</Text>
             <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 20 }}>Tap + to create a new task</Text>
