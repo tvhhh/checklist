@@ -13,13 +13,13 @@ export default class List extends React.Component {
     this.state = {
       list: [
         {text: "Finish PSE Mockup", time: "TODAY, 12:00 PM", category: "work"},
-        {text: "Doi no NMH", time: "TODAY, 3:00 PM", category: "payment"},
+        {text: "Pay tuition fees", time: "TODAY, 3:00 PM", category: "payment"},
         {text: "Do OS Assignment", time: "TODAY, 5:00 PM", category: "study"},
         {text: "Go jogging", time: "TODAY, 7:00 PM", category: "workout"},
         {text: "Take medicine", time: "TODAY, 9:00 PM", category: "health"},
-        {text: "Adidas Ford", time: "TODAY, 11:00 PM", category: "entertainment"},
+        {text: "Play LoL", time: "TODAY, 11:00 PM", category: "entertainment"},
       ],
-    }
+    };
   }
 
   render() {
@@ -39,7 +39,7 @@ export default class List extends React.Component {
             />
           </View>)
         }
-        <Button.Plus />
+        <Button.Plus navigation={this.props.navigation} navigateTo="TaskForm" />
       </View>
     );
   } 
