@@ -12,14 +12,14 @@ export default StyleSheet.create({
   },
   title: {
     fontFamily: "sans-serif",
-    fontSize: 36,
+    fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
     opacity: 0.87,
   },
   time: {
     fontFamily: "sans-serif-light",
-    fontSize: 15,
+    fontSize: 14,
     textAlign: "center",
     opacity: 0.66,
   },

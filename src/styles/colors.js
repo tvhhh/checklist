@@ -1,5 +1,4 @@
 const colors = {
-  PlusButton: "#034698",
   Background: "#e6e6e6",
   Health: "#ff0000",
   Workout: "#1e90ff",

@@ -1,7 +1,6 @@
 import React from 'react';
 import { SectionList, Text, View, } from 'react-native';
-import Task from './Task';
-import styles from './styles';
+import Task from '../TaskList/Task';
 
 export default class TaskList extends React.Component {
   constructor(props) {
@@ -10,8 +9,8 @@ export default class TaskList extends React.Component {
 
   render() {
     const sections = [{
-      title: this.props.title,
-      data: this.props.taskList,
+      title: "Notifications",
+      data: this.props.upcomingList,
     }];
 
     return (
@@ -20,7 +19,11 @@ export default class TaskList extends React.Component {
           sections={sections}
           keyExtractor={(item, index) => item + index}
           renderItem={obj => <Task {...(obj.item)} />}
-          renderSectionHeader={obj => <Text style={styles.listTitle}>{obj.section.title}</Text>} 
+          renderSectionHeader={obj => 
+            <Text style={{ color: "dimgrey", fontSize: 20, fontWeight: "bold", textAlign: "center", marginBottom: 5, }}>
+              {obj.section.title}
+            </Text>
+          } 
         />
       </View>
     );

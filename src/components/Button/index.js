@@ -1,3 +1,3 @@
-import { Plus } from './Button';
+import { Menu, Notice, Plus, Search } from './Button';
 
-export default Button = { Plus };
+export default Button = { Menu, Notice, Plus, Search };
