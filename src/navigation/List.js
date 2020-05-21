@@ -1,34 +1,45 @@
 import React from 'react';
 import { Text, View, } from 'react-native';
+import TaskForm from '../components/Form/TaskForm';
+import Search from '../components/SearchBox/Search';
 import Header from '../components/Header/index';
 import TaskList from '../components/TaskList/index';
 import SearchBox from '../components/SearchBox/index';
 import Button from '../components/Button/index';
 import colors from '../styles/colors';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 export default class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: [
-        {text: "Finish PSE Mockup", time: "TODAY, 12:00 PM", category: "work"},
-        {text: "Pay tuition fees", time: "TODAY, 3:00 PM", category: "payment"},
-        {text: "Do OS Assignment", time: "TODAY, 5:00 PM", category: "study"},
-        {text: "Go jogging", time: "TODAY, 7:00 PM", category: "workout"},
-        {text: "Take medicine", time: "TODAY, 9:00 PM", category: "health"},
-        {text: "Play LoL", time: "TODAY, 11:00 PM", category: "entertainment"},
-      ],
+      list: [],
+      showForm: false,
+      showSearch: false,
     };
   }
 
+  addTask = newTask => {
+    this.setState({list: [...this.state.list, newTask]});
+  }
+
+  toggleForm = () => {
+    this.setState({showForm: !this.state.showForm});
+  }
+
+  toggleSearch = () => {
+    this.setState({showSearch: !this.state.showSearch});
+  }
+
   render() {
+    if (this.state.showForm) return (<TaskForm onBack={this.toggleForm} onSubmit={this.addTask} />);
+    if (this.state.showSearch) return (<Search onBack={this.toggleSearch} />)
     return (
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
-        <Header title="Noteras" />
-        <SearchBox navigation={this.props.navigation} navigateTo="Search" />
+        <Header title={this.props.title} />
+        <SearchBox onPress={this.toggleSearch} />
         {(this.state.list.length > 0) ?
-          <TaskList title="Today" taskList={this.state.list} /> :
+          <TaskList title="TODAY" taskList={this.state.list} /> :
           (<View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
             <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 28 }}>What are you gonna do?</Text>
             <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 20 }}>Tap + to create a new task</Text>
@@ -39,7 +50,7 @@ export default class List extends React.Component {
             />
           </View>)
         }
-        <Button.Plus navigation={this.props.navigation} navigateTo="TaskForm" />
+        <Button.Plus onPress={this.toggleForm} />
       </View>
     );
   } 

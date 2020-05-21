@@ -1,19 +1,31 @@
 import React from 'react';
-import { View, } from 'react-native';
+import { FlatList, View, } from 'react-native';
 import Header from '../components/Header/index';
 import Category from '../components/Category/index';
 import colors from '../styles/colors';
 
 export default class Categories extends React.Component {
-  render() {
-    const categories = ["health", "workout", "work", "study", "payment", "entertainment"];
+  constructor(props) {
+    super(props);
+    this.state = {
+      categories: ["health", "workout", "work", "study", "payment", "entertainment"],
+    };
+  }
 
+  render() {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.Background }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.Background }}>
         <Header title="CATEGORIES" />
-        <View style={{ flexDirection: "row", alignSelf: "stretch", justifyContent: "center", marginTop: 5, }}>
-          {categories.map((category, index) => (<Category name={category} key={index} />))}
-        </View>
+        <FlatList 
+          data={this.state.categories}
+          keyExtractor={(item, index) => item + index}
+          renderItem={obj => (
+            <View style={{ height: 100, width: 120, margin: 8, }}>
+              <Category name={obj.item} size={80} />
+            </View>
+          )}
+          numColumns={3}
+        />
       </View>
     );
   }

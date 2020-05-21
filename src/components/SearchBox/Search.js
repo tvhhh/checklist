@@ -24,7 +24,7 @@ export default class Search extends React.Component {
     return (
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
         <View style={styles.searchBoxContainer}>
-          <MaterialIcons name="arrow-back" size={30} color="grey" onPress={() => this.props.navigation.goBack()} />
+          <MaterialIcons name="arrow-back" size={30} color="grey" onPress={this.props.onBack} />
           <SearchBar
             round
             containerStyle={styles.barContainer}

@@ -7,7 +7,7 @@ import colors from '../../styles/colors';
 export class Plus extends React.Component {
   render() {
     return (
-      <TouchableOpacity style={styles.plusButton} onPress={() => this.props.navigation.navigate(this.props.navigateTo)}>
+      <TouchableOpacity style={styles.plusButton} onPress={this.props.onPress}>
         <AntDesign 
           name="pluscircle"
           color={colors.PlusButton}

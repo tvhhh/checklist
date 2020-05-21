@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -27,8 +27,11 @@ export default class Category extends React.Component {
     }
 
     return (
-      <TouchableOpacity style={{ marginLeft: 8, marginRight: 8, }}>
+      <TouchableOpacity style={{ alignItems: "center", marginLeft: 8, marginRight: 8, }}>
         {icon}
+        <Text style={{ color: "dimgrey" }}>
+          {name.charAt(0).toUpperCase() + name.slice(1)}
+        </Text>
       </TouchableOpacity>
     );
   }
