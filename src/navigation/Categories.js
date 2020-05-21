@@ -2,6 +2,7 @@ import React from 'react';
 import { FlatList, View, } from 'react-native';
 import Header from '../components/Header/index';
 import Category from '../components/Category/index';
+import Button from '../components/Button/index';
 import colors from '../styles/colors';
 
 export default class Categories extends React.Component {
@@ -26,6 +27,8 @@ export default class Categories extends React.Component {
           )}
           numColumns={3}
         />
+        <Button.Menu onPress={() => this.props.navigation.toggleDrawer()} />
+        <Button.Notice />
       </View>
     );
   }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { TabView } from 'react-native-tab-view';
 import List from './List';
-import Categories from './Categories';
 import Calendar from './Calendar';
 
 export default class SwipeableNavigator extends React.Component {
@@ -13,7 +12,6 @@ export default class SwipeableNavigator extends React.Component {
         { key: "day", title: "My Day" },
         { key: "week", title: "My Week"},
         { key: "starred", title: "Starred"},
-        { key: "categories", title: "Categories" },
         { key: "calendar", title: "Calendar" },
       ]
     }
@@ -22,15 +20,13 @@ export default class SwipeableNavigator extends React.Component {
   renderScene = ({route}) => {
     switch(route.key) {
       case "day":
-        return <List title="MY DAY" />
+        return <List title="MY DAY" navigation={this.props.navigation} />
       case "week":
-        return <List title="MY WEEK" />
+        return <List title="MY WEEK" navigation={this.props.navigation} />
       case "starred":
-        return <List title="STARRED" />
+        return <List title="STARRED" navigation={this.props.navigation} />
       case "calendar":
-        return <Calendar />
-      case "categories":
-        return <Categories />
+        return <Calendar navigation={this.props.navigation} />
     }
   }
 

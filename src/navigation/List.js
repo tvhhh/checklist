@@ -50,6 +50,8 @@ export default class List extends React.Component {
             />
           </View>)
         }
+        <Button.Menu onPress={() => this.props.navigation.toggleDrawer()} />
+        <Button.Notice />
         <Button.Plus onPress={this.toggleForm} />
       </View>
     );
