@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View, } from 'react-native';
+import { FlatList, Text, View, } from 'react-native';
 import Header from '../components/Header/index';
 import Category from '../components/Category/index';
 import Button from '../components/Button/index';
@@ -21,8 +21,11 @@ export default class Categories extends React.Component {
           data={this.state.categories}
           keyExtractor={(item, index) => item + index}
           renderItem={obj => (
-            <View style={{ height: 100, width: 120, margin: 8, }}>
+            <View style={{ alignItems: "center", height: 100, width: 120, margin: 8, }}>
               <Category name={obj.item} size={80} />
+              <Text style={{ color: "dimgrey" }} >
+                {obj.item.charAt(0).toUpperCase() + obj.item.slice(1)}
+              </Text>
             </View>
           )}
           numColumns={3}

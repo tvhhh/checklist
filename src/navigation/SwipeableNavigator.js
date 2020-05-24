@@ -11,7 +11,7 @@ export default class SwipeableNavigator extends React.Component {
       routes: [
         { key: "day", title: "My Day" },
         { key: "week", title: "My Week"},
-        { key: "starred", title: "Starred"},
+        { key: "pinned", title: "Pinned"},
         { key: "calendar", title: "Calendar" },
       ]
     }
@@ -23,8 +23,8 @@ export default class SwipeableNavigator extends React.Component {
         return <List title="MY DAY" navigation={this.props.navigation} />
       case "week":
         return <List title="MY WEEK" navigation={this.props.navigation} />
-      case "starred":
-        return <List title="STARRED" navigation={this.props.navigation} />
+      case "pinned":
+        return <List title="PINNED" navigation={this.props.navigation} />
       case "calendar":
         return <Calendar navigation={this.props.navigation} />
     }

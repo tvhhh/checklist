@@ -26,13 +26,13 @@ export default StyleSheet.create({
   },
   taskTitle: {
     fontFamily: "serif",
-    fontSize: 20,
+    fontSize: 16,
     opacity: 0.87,
   },
   taskTime: {
     color: "dimgrey",
     fontFamily: "Roboto",
-    fontSize: 15,
+    fontSize: 12,
     opacity: 0.87,
   },
 });

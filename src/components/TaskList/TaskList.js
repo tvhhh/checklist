@@ -7,8 +7,8 @@ export default class TaskList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: props.title,
-      taskList: props.taskList,
+      title: this.props.title,
+      taskList: this.props.taskList,
     };
   }
 

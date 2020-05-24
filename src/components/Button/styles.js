@@ -15,5 +15,16 @@ export default StyleSheet.create({
     position: "absolute",
     bottom: 15,
     right: 15,
+    backgroundColor: "#034698",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 60,
+    width: 60,
+    borderRadius: 30,
+  },
+  searchButton: {
+    position: "absolute",
+    top: 100,
+    right: 15,
   },
 });

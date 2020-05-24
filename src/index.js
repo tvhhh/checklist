@@ -18,45 +18,33 @@ export default class TodoApp extends React.Component {
       <Drawer.Navigator 
         initialRouteName="MY LIST"
         drawerContentOptions={{
+          activeTintColor: "dodgerblue",
+          inactiveTintColor: "grey",
           itemStyle: { marginHorizontal: 0 },
           labelStyle: { fontSize: 16 },
         }}
+        screenOptions={({ route }) => ({
+          drawerIcon: ({ color, size }) => {
+            switch(route.name) {
+              case "PROFILE":
+                return <DrawerIcon icon={<FontAwesome name="user" size={size} color={color} />} />;
+              case "MY LIST":
+                return <DrawerIcon icon={<Feather name="list" size={size} color={color} />} />;
+              case "CATEGORIES":
+                return <DrawerIcon icon={<FontAwesome name="tags" size={size} color={color} />} />;
+              case "GROUPS":
+                return <DrawerIcon icon={<FontAwesome name="group" size={size} color={color} />} />;
+              case "SETTINGS":
+                return <DrawerIcon icon={<Ionicons name="ios-settings" size={size} color={color} />} />;
+            }
+          }
+        })}
       >
-        <Drawer.Screen name="PROFILE" component={Profile} 
-          options={{
-            drawerIcon: ({focused}) => (
-              <DrawerIcon icon={<FontAwesome name="user" size={30} color={focused ? "dodgerblue" : "grey"} />} />
-            ),
-          }}
-        />
-        <Drawer.Screen name="MY LIST" component={SwipeableNavigator} 
-          options={{
-            drawerIcon: ({focused}) => (
-              <DrawerIcon icon={<Feather name="list" size={30} color={focused ? "dodgerblue" : "grey"} />} />
-            ),
-          }}
-        />
-        <Drawer.Screen name="MANAGEMENT" component={Categories} 
-          options={{
-            drawerIcon: ({focused}) => (
-              <DrawerIcon icon={<FontAwesome name="tags" size={30} color={focused ? "dodgerblue" : "grey"} />} />
-            ),
-          }}
-        />
-        <Drawer.Screen name="GROUPS" component={Groups} 
-          options={{
-            drawerIcon: ({focused}) => (
-              <DrawerIcon icon={<FontAwesome name="group" size={30} color={focused ? "dodgerblue" : "grey"} />} />
-            ), 
-          }}
-        />
-        <Drawer.Screen name="SETTINGS" component={Settings} 
-          options={{
-            drawerIcon: ({focused}) => (
-              <DrawerIcon icon={<Ionicons name="ios-settings" size={30} color={focused ? "dodgerblue" : "grey"} />} />
-            ),
-          }}
-        />
+        <Drawer.Screen name="PROFILE" component={Profile} />
+        <Drawer.Screen name="MY LIST" component={SwipeableNavigator} />
+        <Drawer.Screen name="CATEGORIES" component={Categories} />
+        <Drawer.Screen name="GROUPS" component={Groups} />
+        <Drawer.Screen name="SETTINGS" component={Settings} />
       </Drawer.Navigator>
     );
   }

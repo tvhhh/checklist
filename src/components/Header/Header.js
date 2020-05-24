@@ -1,13 +1,13 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import styles from './styles';
-import { getToDay } from '../../util/DateTime';
+import { getToday, extractDateTime } from '../../util/DateTime';
 
 export default class Header extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      today: getToDay(),
+      today: getToday(),
     }
   }
 
@@ -15,7 +15,7 @@ export default class Header extends React.Component {
     return (
       <View style={styles.header}>
         <Text style={styles.title}>{this.props.title}</Text>
-        <Text style={styles.time}>{this.state.today.date}</Text>
+        <Text style={styles.time}>{extractDateTime(this.state.today).date}</Text>
       </View>
     );
   }
