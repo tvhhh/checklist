@@ -12,7 +12,7 @@ export class Menu extends React.Component {
         <Feather 
           name="menu"
           color="dimgrey"
-          size={40}
+          size={36}
         />
       </TouchableOpacity>
     );
@@ -26,7 +26,7 @@ export class Notice extends React.Component {
         <Ionicons 
           name="ios-notifications-outline"
           color="dimgrey"
-          size={40}
+          size={36}
         />
       </TouchableOpacity>
     );

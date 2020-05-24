@@ -8,7 +8,6 @@ export default class Profile extends React.Component {
     return (
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
         <Button.Menu onPress={() => this.props.navigation.toggleDrawer()} />
-        <Button.Notice />
       </View>
     );
   }

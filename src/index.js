@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import DrawerIcon from './components/Drawer/DrawerIcon';
 import Profile from './navigation/Profile';
@@ -16,7 +17,7 @@ export default class TodoApp extends React.Component {
   render() {
     return (
       <Drawer.Navigator 
-        initialRouteName="MY LIST"
+        initialRouteName="list"
         drawerContentOptions={{
           activeTintColor: "dodgerblue",
           inactiveTintColor: "grey",
@@ -26,25 +27,39 @@ export default class TodoApp extends React.Component {
         screenOptions={({ route }) => ({
           drawerIcon: ({ color, size }) => {
             switch(route.name) {
-              case "PROFILE":
+              case "profile":
                 return <DrawerIcon icon={<FontAwesome name="user" size={size} color={color} />} />;
-              case "MY LIST":
+              case "list":
                 return <DrawerIcon icon={<Feather name="list" size={size} color={color} />} />;
-              case "CATEGORIES":
+              case "categories":
                 return <DrawerIcon icon={<FontAwesome name="tags" size={size} color={color} />} />;
-              case "GROUPS":
+              case "groups":
                 return <DrawerIcon icon={<FontAwesome name="group" size={size} color={color} />} />;
-              case "SETTINGS":
+              case "settings":
                 return <DrawerIcon icon={<Ionicons name="ios-settings" size={size} color={color} />} />;
             }
-          }
+          },
+          drawerLabel: ({ color }) => {
+            switch(route.name) {
+              case "profile":
+                return <Text style={{ color: color, fontSize: 16 }}>PROFILE</Text>;
+              case "list":
+                return <Text style={{ color: color, fontSize: 16 }}>MY LIST</Text>;
+              case "categories":
+                return <Text style={{ color: color, fontSize: 16 }}>CATEGORIES</Text>;
+              case "groups":
+                return <Text style={{ color: color, fontSize: 16 }}>GROUPS</Text>;
+              case "settings":
+                return <Text style={{ color: color, fontSize: 16 }}>SETTINGS</Text>;
+            }
+          },
         })}
       >
-        <Drawer.Screen name="PROFILE" component={Profile} />
-        <Drawer.Screen name="MY LIST" component={SwipeableNavigator} />
-        <Drawer.Screen name="CATEGORIES" component={Categories} />
-        <Drawer.Screen name="GROUPS" component={Groups} />
-        <Drawer.Screen name="SETTINGS" component={Settings} />
+        <Drawer.Screen name="profile" component={Profile} />
+        <Drawer.Screen name="list" component={SwipeableNavigator} />
+        <Drawer.Screen name="categories" component={Categories} />
+        <Drawer.Screen name="groups" component={Groups} />
+        <Drawer.Screen name="settings" component={Settings} />
       </Drawer.Navigator>
     );
   }

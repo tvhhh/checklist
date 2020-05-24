@@ -17,14 +17,15 @@ export default class CategoryPicker extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", paddingTop: 20, paddingBottom: 20, }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", paddingTop: 20, paddingBottom: 20 }}>
         <FlatList 
           data={this.state.categories}
           keyExtractor={(item, index) => item + index}
           renderItem={obj => (
-            <View style={{ alignItems: "center", height: 80, width: 90, }}>
+            <View style={{ alignItems: "center", justifyContent: "center", padding: 8, }}>
               <Category 
-                name={obj.item} 
+                name={obj.item}
+                size={80} 
                 onPress={() => this.handleSubmit(obj.item)} 
               />
               <Text style={{ color: "dimgrey", fontSize: 12 }} >

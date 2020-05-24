@@ -28,10 +28,7 @@ export default class Task extends React.Component {
           <Text style={styles.taskTitle}>{this.state.title}</Text>
           <Text style={styles.taskTime}>{time}</Text>
         </View>
-        <Category 
-          name={this.props.category}
-          size={30} 
-        />
+        <Category name={this.props.category} size={40} />
         <CheckButton name="marked" />
       </TouchableOpacity>
     );

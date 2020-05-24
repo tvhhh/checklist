@@ -13,21 +13,23 @@ export default class TaskForm extends React.Component {
     super(props);
     let today = getToday();
     this.state = {
-      title: this.props.title,
-      description: this.props.description,
       isDateTimePickerVisible: false,
-      dueTime: this.props.time || today,
       isCategoryPickerVisible: false,
-      category: this.props.category || "uncategorized",
+      task: {
+        title: this.props.title,
+        description: this.props.description,
+        dueTime: this.props.time || today,
+        category: this.props.category || "uncategorized",
+      },
     }
   }
 
   updateTitle = text => {
-    this.setState({ title: text });
+    this.setState({ task: {...(this.state.task), title: text} });
   }
 
   updateDescription = text => {
-    this.setState({ description: text });
+    this.setState({ task: {...(this.state.task), description: text} });
   }
 
   showDateTimePicker = () => {
@@ -35,7 +37,7 @@ export default class TaskForm extends React.Component {
   }
 
   handleDateTimeConfirm = time => {
-    this.setState({ dueTime: time });
+    this.setState({ task: {...(this.state.task), dueTime: time} });
     this.setState({ isDateTimePickerVisible: false });
   }
 
@@ -48,16 +50,15 @@ export default class TaskForm extends React.Component {
   }
 
   updateCategory = category => {
-    this.setState({ category: category });
+    this.setState({ task: {...(this.state.task), category: category} });
   }
 
   handleSubmit = () => {
-    this.props.onSubmit(this.state);
-    this.props.onBack();
+    this.props.onSubmit(this.state.task);
   }
 
   render() {
-    let extractedDateTime = extractDateTime(this.state.dueTime);
+    let extractedDateTime = extractDateTime(this.state.task.dueTime);
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.taskFormLayout} >
@@ -85,13 +86,13 @@ export default class TaskForm extends React.Component {
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: "center", justifyContent: "center", padding: 12, }}>
-              {(this.state.category === "uncategorized") ? 
+              {(this.state.task.category === "uncategorized") ? 
                 (<TouchableOpacity onPress={this.toggleCategoryPicker} >
-                  <AntDesign name="questioncircleo" size={55} />
+                  <AntDesign name="questioncircleo" size={55} color="grey" />
                 </TouchableOpacity>) :
-                <Category name={this.state.category} onPress={this.toggleCategoryPicker} />
+                <Category name={this.state.task.category} onPress={this.toggleCategoryPicker} />
               }
-              <Text style={{ color: "dimgrey" }}>{this.state.category.toUpperCase()}</Text>
+              <Text style={{ color: "dimgrey" }}>{this.state.task.category.toUpperCase()}</Text>
             </View>
           </View>
           <Overlay
@@ -99,9 +100,9 @@ export default class TaskForm extends React.Component {
             onBackdropPress={this.toggleCategoryPicker}
             overlayStyle={{ 
               padding: 0,
-              height: 200,
+              height: 280,
               width: 300,
-              borderRadius: 5, 
+              borderRadius: 5,
             }}
           >
             <CategoryPicker onBack={this.toggleCategoryPicker} onSubmit={this.updateCategory} />

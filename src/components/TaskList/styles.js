@@ -4,7 +4,7 @@ export default StyleSheet.create({
   listTitle: {
     color: "dimgrey",
     fontFamily: "Roborto",
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 5,

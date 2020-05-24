@@ -5,6 +5,7 @@ import TaskForm from '../components/Form/TaskForm';
 import SearchForm from '../components/Form/SearchForm';
 import Header from '../components/Header/index';
 import TaskList from '../components/TaskList/index';
+import NoticeBox from '../components/Notification/index';
 import Button from '../components/Button/index';
 import colors from '../styles/colors';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -16,11 +17,12 @@ export default class List extends React.Component {
       list: [],
       showForm: false,
       showSearch: false,
+      showNotice: false,
     };
   }
 
   addTask = newTask => {
-    this.setState({list: [...this.state.list, newTask]});
+    this.setState({showForm: false, list: [...this.state.list, newTask]});
   }
 
   toggleForm = () => {
@@ -31,19 +33,16 @@ export default class List extends React.Component {
     this.setState({showSearch: !this.state.showSearch});
   }
 
+  toggleNotice = () => {
+    this.setState({showNotice: !this.state.showNotice});
+  }
+
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
         <Header title={this.props.title} />
+        <Button.Menu onPress={() => this.props.navigation.toggleDrawer()} />
         <Button.Search onPress={this.toggleSearch} />
-        {(this.state.list.length > 0) ?
-          <TaskList title="TODAY" taskList={this.state.list} /> :
-          (<View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
-            <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 28 }}>What are you gonna do?</Text>
-            <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 20 }}>Tap + to create a new task</Text>
-            <FontAwesome5 name="tasks" color="grey" size={50} />
-          </View>)
-        }
         <Overlay 
           isVisible={this.state.showSearch}  
           onBackdropPress={this.toggleSearch}
@@ -52,6 +51,25 @@ export default class List extends React.Component {
         >
           <SearchForm />
         </Overlay>
+        {(this.state.list.length > 0) ?
+          <TaskList title="TODAY" taskList={this.state.list} /> :
+          (<View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+            <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 24 }}>What are you gonna do?</Text>
+            <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 18 }}>Tap + to create a new task</Text>
+            <FontAwesome5 name="tasks" color="grey" size={50} />
+          </View>)
+        }
+        <Button.Notice onPress={this.toggleNotice} />
+        <Overlay 
+          isVisible={this.state.showNotice} 
+          onBackdropPress={this.toggleNotice}
+          overlayStyle={{ 
+            borderRadius: 10,
+          }}
+        >
+          <NoticeBox upcomingList={this.state.list} />
+        </Overlay>
+        <Button.Plus onPress={this.toggleForm} />
         <Overlay 
           isVisible={this.state.showForm} 
           onBackdropPress={this.toggleForm}
@@ -61,11 +79,8 @@ export default class List extends React.Component {
             borderRadius: 10,
           }}
         >
-          <TaskForm onBack={this.toggleForm} onSubmit={this.addTask} />
+          <TaskForm onSubmit={this.addTask} />
         </Overlay>
-        <Button.Menu onPress={() => this.props.navigation.toggleDrawer()} />
-        <Button.Notice />
-        <Button.Plus onPress={this.toggleForm} />
       </View>
     );
   } 
