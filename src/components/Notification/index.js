@@ -1,3 +1,3 @@
-import NoticeBox from './NoticeBox';
+import Notification from './Notification';
 
-export default NoticeBox;
+export default Notification;

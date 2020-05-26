@@ -280,13 +280,10 @@ const Stack = createStackNavigator();
 export default class Groups extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      showNotice: false,
-    }
   }
 
-  toggleNotice = () => {
-    this.setState({showNotice: !this.state.showNotice});
+  toggleDrawer = () => {
+    this.props.navigation.toggleDrawer();
   }
 
   render() {

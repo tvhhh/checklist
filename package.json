@@ -10,9 +10,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/datetimepicker": "^2.3.2",
     "@react-native-community/masked-view": "^0.1.10",
-    "@react-native-community/picker": "^1.5.0",
     "@react-navigation/drawer": "^5.7.2",
     "@react-navigation/native": "^5.3.0",
     "@react-navigation/stack": "^5.3.3",

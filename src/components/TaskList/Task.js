@@ -13,23 +13,41 @@ export default class Task extends React.Component {
       description: this.props.description,
       dueTime: this.props.dueTime,
       category: this.props.category,
-      done: false,
       pinned: false,
-    }
+      done: false,
+    };
+  }
+
+  UNSAFE_componentWillReceiveProps = newProps => {
+    this.setState({ ...newProps });
+  }
+
+  togglePinned = () => {
+    this.setState({ pinned: !this.state.pinned });
+  }
+
+  toggleDone = () => {
+    this.setState({ done: !this.state.done });
   }
 
   render() {
-    let extractedDateTime = extractDateTime(this.state.dueTime);
-    const time = `${extractedDateTime.date}  ${extractedDateTime.time}`;
+    const time = extractDateTime(this.state.dueTime);
+    const extractedTime = `${time.date}  ${time.time}`
     return (
-      <TouchableOpacity style={styles.task} onPress={this.props.onPress}>
-        <CheckButton name="done" />
-        <View style={styles.taskContent}>
-          <Text style={styles.taskTitle}>{this.state.title}</Text>
-          <Text style={styles.taskTime}>{time}</Text>
+      <TouchableOpacity onPress={this.props.onSelect}>
+        <View style={[styles.task, { opacity: (this.state.done) ? 0.5 : 1 }]}>
+        {this.props.showStateOption ?
+          <CheckButton name="done" checked={this.state.done} onPress={this.toggleDone} /> : null
+        }
+        <View style={{ flex: 1, }}>
+          <Text style={{ fontSize: 14, }}>{this.state.title}</Text>
+          <Text style={{ fontSize: 12, color: "grey", }}>{extractedTime}</Text>
         </View>
         <Category name={this.props.category} size={40} />
-        <CheckButton name="marked" />
+        {this.props.showStateOption ? 
+          <CheckButton name="pinned" checked={this.state.pinned} onPress={this.togglePinned} /> : null
+        }
+        </View>
       </TouchableOpacity>
     );
   }

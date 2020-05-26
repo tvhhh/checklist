@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, } from 'react-native';
-import Button from '../components/Button/index';
-import colors from '../styles/colors';
+import Header from '../Header/index';
+import CalendarPicker from '../Calendar/index';
+import Button from '../Button/index';
+import colors from '../../styles/colors';
 
-export default class Profile extends React.Component {
+export default class Calendar extends React.Component{
   constructor (props) {
     super(props);
   }
@@ -12,10 +14,13 @@ export default class Profile extends React.Component {
     this.props.navigation.toggleDrawer();
   }
 
-  render() {
-    return (
+  render(){
+    return(
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
+        <Header title="CALENDAR" />
         <Button.Menu onPress={this.toggleDrawer} />
+        <CalendarPicker />
+        <Button.Notice />
       </View>
     );
   }
