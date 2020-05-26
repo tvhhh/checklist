@@ -8,7 +8,6 @@ import TaskList from '../components/TaskList/index';
 import NoticeBox from '../components/Notification/index';
 import Button from '../components/Button/index';
 import colors from '../styles/colors';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 export default class List extends React.Component {
   constructor(props) {
@@ -51,14 +50,7 @@ export default class List extends React.Component {
         >
           <SearchForm />
         </Overlay>
-        {(this.state.list.length > 0) ?
-          <TaskList title="TODAY" taskList={this.state.list} /> :
-          (<View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
-            <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 24 }}>What are you gonna do?</Text>
-            <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 18 }}>Tap + to create a new task</Text>
-            <FontAwesome5 name="tasks" color="grey" size={50} />
-          </View>)
-        }
+        <TaskList taskList={this.state.list} />
         <Button.Notice onPress={this.toggleNotice} />
         <Overlay 
           isVisible={this.state.showNotice} 

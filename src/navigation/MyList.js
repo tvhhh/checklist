@@ -2,8 +2,9 @@ import React from 'react';
 import { TabView } from 'react-native-tab-view';
 import List from './List';
 import Calendar from './Calendar';
+import Categories from './Categories';
 
-export default class SwipeableNavigator extends React.Component {
+export default class MyList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,6 +14,7 @@ export default class SwipeableNavigator extends React.Component {
         { key: "week", title: "My Week"},
         { key: "pinned", title: "Pinned"},
         { key: "calendar", title: "Calendar" },
+        { key: "categories", title: "Categories" },
       ]
     }
   }
@@ -27,6 +29,8 @@ export default class SwipeableNavigator extends React.Component {
         return <List title="PINNED" navigation={this.props.navigation} />
       case "calendar":
         return <Calendar navigation={this.props.navigation} />
+      case "categories":
+        return <Categories navigation={this.props.navigation} />
     }
   }
 

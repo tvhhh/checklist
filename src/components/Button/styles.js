@@ -23,8 +23,7 @@ export default StyleSheet.create({
     borderRadius: 30,
   },
   searchButton: {
-    position: "absolute",
-    top: 100,
-    right: 15,
+    alignSelf: "flex-end",
+    marginRight: 5,
   },
 });

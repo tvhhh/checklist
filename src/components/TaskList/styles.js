@@ -17,7 +17,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     padding: 5,
     marginBottom: 5,
-    borderRadius: 20,
+    borderRadius: 15,
   },
   taskContent: {
     flex: 1,

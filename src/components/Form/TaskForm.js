@@ -65,7 +65,7 @@ export default class TaskForm extends React.Component {
           <TouchableOpacity style={{ position: "absolute", top: 10, right: 25 }} onPress={this.handleSubmit} >
             <Text style={{ color: "dodgerblue", fontSize: 20 }}>SAVE</Text>
           </TouchableOpacity>
-          <View style={{ flex: 1, padding: 10, paddingTop: 25, }}>
+          <View style={{ flex: 1, padding: 10, marginTop: 20, }}>
             <TextInput style={styles.titleInput}
               underlineColorAndroid="transparent"
               placeholder="I'm gonna do..."
