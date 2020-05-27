@@ -71,6 +71,7 @@ export default class TaskForm extends React.Component {
               placeholder="I'm gonna do..."
               placeholderTextColor="dimgrey"
               onChangeText={this.updateTitle}
+              defaultValue={this.state.task.title}
               autoCapitalize="none"
             />
             <TextInput style={styles.descriptionInput}
@@ -78,6 +79,7 @@ export default class TaskForm extends React.Component {
               placeholder="DESCRIPTION"
               placeholderTextColor="grey"
               onChangeText={this.updateDescription}
+              defaultValue={this.state.task.description}
               autoCapitalize="none"
             />
             <View style={{ flexDirection: "row", paddingTop: 20, }}>

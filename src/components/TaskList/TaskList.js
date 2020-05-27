@@ -11,13 +11,12 @@ export default class TaskList extends React.Component {
   }
 
   filterByDay = taskList => {
-    return taskList.reduce((obj, task) => {
-      const dueTime = task.dueTime;
-      if (isToday(task.dueTime)) 
-        return {
-          ...obj, 
-          [dueTime]: [...(obj[dueTime] || []), task],
-        };
+    return taskList.filter(task => isToday(task.dueTime)).reduce((obj, task) => {
+      const title = "TODAY";
+      return {
+        ...obj, 
+        [title]: [...(obj[title] || []), task],
+      };
     }, {});
   }
 
@@ -26,7 +25,7 @@ export default class TaskList extends React.Component {
 
     const sections = Object.keys(tasksByDay).map(key => ({
       data: tasksByDay[key],
-      title: "TODAY",
+      title: key,
     }));
 
     return (
