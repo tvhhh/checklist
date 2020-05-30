@@ -13,23 +13,39 @@ export default class Task extends React.Component {
       description: this.props.description,
       dueTime: this.props.dueTime,
       category: this.props.category,
-      done: false,
       pinned: false,
-    }
+      done: false,
+    };
+  }
+
+  UNSAFE_componentWillReceiveProps = newProps => {
+    this.setState({ ...newProps, pinned: false, done: false });
+  }
+
+  togglePinned = () => {
+    this.setState({ pinned: !this.state.pinned });
+  }
+
+  toggleDone = () => {
+    this.setState({ done: !this.state.done });
   }
 
   render() {
-    let extractedDateTime = extractDateTime(this.state.dueTime);
-    const time = `${extractedDateTime.date}  ${extractedDateTime.time}`;
+    const time = extractDateTime(this.state.dueTime);
+    const extractedTime = `${time.date}  ${time.time}`
     return (
-      <TouchableOpacity style={styles.task} onPress={this.props.onPress}>
-        <CheckButton name="done" />
+      <TouchableOpacity style={styles.task} onPress={this.props.onSelect}>
+        {this.props.showStateOption ? 
+          <CheckButton name="done" checked={this.state.done} onPress={this.toggleDone} /> : null
+        }
         <View style={styles.taskContent}>
           <Text style={styles.taskTitle}>{this.state.title}</Text>
-          <Text style={styles.taskTime}>{time}</Text>
+          <Text style={styles.taskTime}>{extractedTime}</Text>
         </View>
         <Category name={this.props.category} size={40} />
-        <CheckButton name="marked" />
+        {this.props.showStateOption ? 
+          <CheckButton name="pinned" checked={this.state.pinned} onPress={this.togglePinned} /> : null
+        }
       </TouchableOpacity>
     );
   }

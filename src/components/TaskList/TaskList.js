@@ -5,10 +5,22 @@ import styles from './styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { isToday } from '../../util/DateTime';
 
-export default class TaskList extends React.Component {
-  constructor(props) {
-    super(props);
+class EmptyComponent extends React.Component {
+  render() {
+    return (
+      <View style={styles.emptyComponentContainer}>
+        <Text style={[styles.emptyComponentText, { fontSize: 24 }]}>What are you gonna do?</Text>
+        <Text style={[styles.emptyComponentText, { fontSize: 18 }]}>Tap + to create a new task</Text>
+        <FontAwesome5 name="tasks" color="grey" size={50} />
+      </View>
+    );
   }
+};
+
+export default class TaskList extends React.Component {
+  renderItem = ({ item }) => <Task {...item} showStateOption={true} onSelect={() => this.props.onTaskSelect(item)} />
+
+  renderSectionHeader = ({ section }) => <Text style={styles.listTitle}>{section.title}</Text>
 
   filterByDay = taskList => {
     return taskList.filter(task => isToday(task.dueTime)).reduce((obj, task) => {
@@ -21,10 +33,10 @@ export default class TaskList extends React.Component {
   }
 
   render() {
-    const tasksByDay = this.filterByDay(this.props.taskList);
+    const tasksToday = this.filterByDay(this.props.taskList);
 
-    const sections = Object.keys(tasksByDay).map(key => ({
-      data: tasksByDay[key],
+    const sections = Object.keys(tasksToday).map(key => ({
+      data: tasksToday[key],
       title: key,
     }));
 
@@ -33,15 +45,9 @@ export default class TaskList extends React.Component {
         <SectionList
           sections={sections}
           keyExtractor={(item, index) => item + index}
-          renderItem={obj => <Task {...(obj.item)} />}
-          renderSectionHeader={obj => <Text style={styles.listTitle}>{obj.section.title}</Text>}
-          ListEmptyComponent={
-            <View style={{ alignItems: "center", justifyContent: "center", paddingTop: 180, paddingBottom: 180, }}>
-              <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 24 }}>What are you gonna do?</Text>
-              <Text style={{ color: "dimgrey", fontFamily: "notoserif", fontSize: 18 }}>Tap + to create a new task</Text>
-              <FontAwesome5 name="tasks" color="grey" size={50} />
-            </View>
-          }
+          renderItem={this.renderItem}
+          renderSectionHeader={this.renderSectionHeader}
+          ListEmptyComponent={<EmptyComponent />}
         />
       </>
     );

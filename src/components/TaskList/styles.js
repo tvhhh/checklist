@@ -35,4 +35,14 @@ export default StyleSheet.create({
     fontSize: 12,
     opacity: 0.87,
   },
+  emptyComponentContainer: {
+    alignItems: "center", 
+    justifyContent: "center", 
+    paddingTop: 180, 
+    paddingBottom: 180,
+  },
+  emptyComponentText: {
+    color: "dimgrey", 
+    fontFamily: "notoserif",
+  },
 });

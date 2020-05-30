@@ -40,4 +40,12 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderWidth: 1,
   },
+  confirmBoxLayout: {
+    flex: 1,
+  },
+  confirmBoxContent: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

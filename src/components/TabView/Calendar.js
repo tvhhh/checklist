@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, } from 'react-native';
 import { Overlay } from 'react-native-elements';
-import Header from '../components/Header/index';
-import CalendarPicker from '../components/Calendar/index';
-import NoticeBox from '../components/Notification/index';
-import Button from '../components/Button/index';
-import colors from '../styles/colors';
+import Header from '../Header/index';
+import CalendarPicker from '../Calendar/index';
+import NoticeBox from '../Notification/index';
+import Button from '../Button/index';
+import colors from '../../styles/colors';
 
 export default class Calendar extends React.Component{
   constructor (props) {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { FlatList, Text, View, } from 'react-native';
 import { Overlay } from 'react-native-elements';
-import Header from '../components/Header/index';
-import Category from '../components/Category/index';
-import NoticeBox from '../components/Notification/index';
-import Button from '../components/Button/index';
-import colors from '../styles/colors';
+import Header from '../Header/index';
+import Category from '../Category/index';
+import NoticeBox from '../Notification/index';
+import Button from '../Button/index';
+import colors from '../../styles/colors';
 
 export default class Categories extends React.Component {
   constructor(props) {
