@@ -6,7 +6,7 @@ export default StyleSheet.create({
     flex: 1,
   },
   titleInput: {
-    fontSize: 20,
+    fontSize: 18,
     borderColor: "grey",
     borderBottomWidth: 1,
     paddingBottom: 3,

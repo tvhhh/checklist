@@ -9,16 +9,22 @@ class EmptyComponent extends React.Component {
   render() {
     return (
       <View style={styles.emptyComponentContainer}>
-        <Text style={[styles.emptyComponentText, { fontSize: 24 }]}>What are you gonna do?</Text>
-        <Text style={[styles.emptyComponentText, { fontSize: 18 }]}>Tap + to create a new task</Text>
-        <FontAwesome5 name="tasks" color="grey" size={50} />
+        <Text style={{ color: "dimgrey", fontSize: 24 }}>You're all done now!</Text>
+        <Text style={{ color: "dimgrey", fontSize: 16 }}>Tap + to create a new task</Text>
+        <FontAwesome5 name="tasks" color="grey" size={40} />
       </View>
     );
   }
 };
 
 export default class TaskList extends React.Component {
-  renderItem = ({ item }) => <Task {...item} showStateOption={true} onSelect={() => this.props.onTaskSelect(item)} />
+  renderItem = ({ item }) => (
+    <Task
+      {...item}
+      showStateOption={true}
+      onSelect={() => this.props.onTaskSelect(item)}
+    />
+  )
 
   renderSectionHeader = ({ section }) => <Text style={styles.listTitle}>{section.title}</Text>
 

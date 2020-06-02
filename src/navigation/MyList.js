@@ -1,10 +1,14 @@
 import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 import { TabView } from 'react-native-tab-view';
 import List from '../components/TabView/List';
 import Calendar from '../components/TabView/Calendar';
 import Categories from '../components/TabView/Categories';
+import Notification from '../components/Notification/Notification';
 
-export default class MyList extends React.Component {
+const Stack = createStackNavigator();
+
+class SwipeableListView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -103,6 +107,21 @@ export default class MyList extends React.Component {
         onIndexChange={index => this.setState({index})}
         renderTabBar={() => null}
       />
+    );
+  }
+};
+
+export default class MyList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <Stack.Navigator headerMode="none">
+        <Stack.Screen name="List" component={SwipeableListView} />
+        <Stack.Screen name="Notice" component={Notification} />
+      </Stack.Navigator>
     );
   }
 };

@@ -1,9 +1,7 @@
 import React from 'react';
 import { FlatList, Text, View, } from 'react-native';
-import { Overlay } from 'react-native-elements';
 import Header from '../Header/index';
 import Category from '../Category/index';
-import NoticeBox from '../Notification/index';
 import Button from '../Button/index';
 import colors from '../../styles/colors';
 
@@ -16,15 +14,15 @@ export default class Categories extends React.Component {
     };
   }
 
-  toggleNotice = () => {
-    this.setState({showNotice: !this.state.showNotice});
+  toggleDrawer = () => {
+    this.props.navigation.toggleDrawer();
   }
 
   render() {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.Background }}>
         <Header title="CATEGORIES" />
-        <Button.Menu onPress={() => this.props.navigation.toggleDrawer()} />
+        <Button.Menu onPress={this.toggleDrawer} />
         <FlatList 
           data={this.state.categories}
           keyExtractor={(item, index) => item + index}
@@ -38,16 +36,7 @@ export default class Categories extends React.Component {
           )}
           numColumns={3}
         />
-        <Button.Notice onPress={this.toggleNotice} />
-        <Overlay 
-          isVisible={this.state.showNotice} 
-          onBackdropPress={this.toggleNotice}
-          overlayStyle={{ 
-            borderRadius: 10,
-          }}
-        >
-          <NoticeBox upcomingList={[]} />
-        </Overlay>
+        <Button.Notice />
       </View>
     );
   }
