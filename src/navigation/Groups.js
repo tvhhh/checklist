@@ -93,7 +93,7 @@ class DropDown extends React.Component {
       menuText: this.props.menuText,
       menu: [
         {
-          key: 'group1',
+          key: 'It has a name now',
           tasks: [
             {
               key: '0',
