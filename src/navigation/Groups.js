@@ -280,13 +280,10 @@ const Stack = createStackNavigator();
 export default class Groups extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      showNotice: false,
-    }
   }
 
-  toggleNotice = () => {
-    this.setState({showNotice: !this.state.showNotice});
+  toggleDrawer = () => {
+    this.props.navigation.toggleDrawer();
   }
 
   render() {
@@ -294,16 +291,7 @@ export default class Groups extends React.Component {
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
         <Header title={"GROUPS"} />
         <Button.Menu onPress={() => this.props.navigation.toggleDrawer()} />
-        <Button.Notice onPress={this.toggleNotice} />
-        <Overlay 
-          isVisible={this.state.showNotice} 
-          onBackdropPress={this.toggleNotice}
-          overlayStyle={{ 
-            borderRadius: 10,
-          }}
-        >
-          <NoticeBox upcomingList={[]} />
-        </Overlay>
+        <Button.Notice />
 
         {/* <SectionList 
           sections={DATA}

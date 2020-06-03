@@ -16,4 +16,9 @@ export const extractDateTime = time => {
     date: `${ddd}, ${mmm} ${dd}, ${yyyy}`,
     time: `${hh}:${mm}`,
   };
-}
+};
+
+export const isToday = time => {
+  let today = getToday();
+  return time.getFullYear() === today.getFullYear() && time.getMonth() === today.getMonth() && time.getDate() === today.getDate();
+};
