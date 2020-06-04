@@ -93,7 +93,7 @@ class DropDown extends React.Component {
       menuText: this.props.menuText,
       menu: [
         {
-          key: 'group1',
+          key: 'It has a name now',
           tasks: [
             {
               key: '0',
@@ -291,16 +291,7 @@ export default class Groups extends React.Component {
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
         <Header title={"GROUPS"} />
         <Button.Menu onPress={() => this.props.navigation.toggleDrawer()} />
-        <Button.Notice onPress={this.toggleNotice} />
-        <Overlay 
-          isVisible={this.state.showNotice} 
-          onBackdropPress={this.toggleNotice}
-          overlayStyle={{ 
-            borderRadius: 10,
-          }}
-        >
-          <NoticeBox upcomingList={[]} />
-        </Overlay>
+        <Button.Notice />
 
         {/* <SectionList 
           sections={DATA}
