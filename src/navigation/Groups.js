@@ -10,6 +10,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import {StackNavigator} from 'react-navigation'
 import { createStackNavigator } from '@react-navigation/stack';
+import { switchCase } from '@babel/types';
 
 // import Group from '../components/GroupList/index';
 
@@ -209,69 +210,215 @@ class DropDown extends React.Component {
 
 function HomeView({navigation}) {
   return (
-    <SectionList 
-      sections={DATA}
-      keyExtractor={(item, index) => item+index}
-      renderItem={({item})=> <View />}
-      renderSectionHeader={({section: {title}})=> (
-        <DropDown 
-          menuText={title}
-          navigation={navigation}  
-        />
-      )}
-    />
+    <View>
+      <SectionList 
+        sections={DATA}
+        keyExtractor={(item, index) => item+index}
+        renderItem={({item})=> <View />}
+        renderSectionHeader={({section: {title}})=> (
+          <DropDown 
+            menuText={title}
+            navigation={navigation}  
+          />
+        )}
+      />
+    </View>
   );
 }
 
 function GroupView({route, navigation}) {
   const { tasks } = route.params;
 
-  return (
-    <FlatList
-      data={tasks}
-      renderItem={({ item }) => 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => 
         <TouchableOpacity
-          style={{
-            backgroundColor:'#ffffff',
-            padding:15,
-            marginLeft:10,
-            marginRight:10,
-            marginBottom:5,
-            borderRadius:5,
-          }}
+          onPress={() => navigation.navigate('info', {
+            groupName: route.params.title,
+            title: "Info: " + route.params.title,
+          })}
         >
-        <View style={{flexDirection:'row', flex:1, alignItems:'center'}}>
-          <Text style={{fontWeight:'bold'}}> {item.name} </Text>
-          <FontAwesome5 
-            name = "circle"
-            color={item.state==TASK_STATES.NOT_RELATED?"#acacac":item.state==TASK_STATES.NOT_DONE?"#fdd023":item.state==TASK_STATES.DONE?"#009900":"#000000"}
-            style={{margin:10}}
+          <Octicons 
+            name="info"
+            size={25}
           />
-        </View>
+        </TouchableOpacity>,
 
-        <View style={{flexDirection:'row', flex:1, alignItems:'center'}}>
-          <FontAwesome5 
-            name = "circle"
-            color='#000000'
-            style={{margin:10}}
-            size={10}
-          />
-          <Text style={{}}> {item.dueDate} </Text>
-        </View>
+      headerRightContainerStyle: {padding: 15}
+    
+    });
+  }, [navigation]);
 
-        <View style={{flexDirection:'row', flex:1, alignItems:'center'}}>
-          <FontAwesome5 
-            name = "circle"
-            color = '#000000'
-            style={{margin:10}}
-            size={10}
-          />
-          <Text> {item.participants.toString()} </Text>
-        </View>
+  
+  return (
+    <View>
+      <FlatList
+        data={tasks}
+        renderItem={({ item }) => 
+          <TouchableOpacity
+            style={{
+              backgroundColor:'#ffffff',
+              padding:15,
+              marginLeft:10,
+              marginRight:10,
+              marginBottom:5,
+              borderRadius:5,
+            }}
+          >
+          <View style={{flexDirection:'row', flex:1, alignItems:'center'}}>
+            <Text style={{fontWeight:'bold', fontSize:16, flex:1}}> {item.name} </Text>
+            <FontAwesome5 
+              name = "circle"
+              color={item.state==TASK_STATES.NOT_RELATED?"#acacac":item.state==TASK_STATES.NOT_DONE?"#fdd023":item.state==TASK_STATES.DONE?"#009900":"#000000"}
+              style={{margin:10}}
+              size={20}
+            />
+          </View>
 
-        </TouchableOpacity>
-      }
-    />
+          <View style={{flexDirection:'row', flex:1, alignItems:'center'}}>
+            <FontAwesome5 
+              name = "circle"
+              color='#000000'
+              style={{margin:10}}
+              size={10}
+            />
+            <Text style={{}}> {item.dueDate} </Text>
+          </View>
+
+          <View style={{flexDirection:'row', flex:1, alignItems:'center'}}>
+            <FontAwesome5 
+              name = "circle"
+              color = '#000000'
+              style={{margin:10}}
+              size={10}
+            />
+            <Text> {item.participants.toString()} </Text>
+          </View>
+
+          </TouchableOpacity>
+        }
+      />
+
+      <Button.Create />
+
+    </View>
+  );
+}
+
+function InfoView({route, navigation}) {
+
+  const { groupName } = route.params;
+  const localStyles = {
+    container: {
+      backgroundColor: '#1e90ff',
+      padding: 12,
+      marginVertical: 5,
+      marginHorizontal: 8,
+      
+      borderRadius: 5,
+    },
+    item: {
+      color:'#ffffff', 
+      fontFamily:'sans-serif-light', 
+      fontSize: 20,
+    }
+  }
+
+  return (
+    <View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('members', {
+          title: 'Members: ' + groupName,
+          members: [
+            {name:'khoa', policy:POLICIES.OWNER},
+            {name:'hung', policy:POLICIES.ADMIN},
+            {name:'huy', policy:POLICIES.ADMIN},
+            {name:'huan', policy:POLICIES.ADMIN},
+            {name:'hoang', policy:POLICIES.ADMIN},
+            {name:'hieu', policy:POLICIES.ADMIN},
+            {name:'a ghost ?', policy:POLICIES.MEMBER},
+            {name:'red', policy:POLICIES.MEMBER},
+            {name:'green', policy:POLICIES.MEMBER},
+            {name:'blue', policy:POLICIES.MEMBER},
+            {name:'white', policy:POLICIES.MEMBER},
+          ],
+        })}
+        style={localStyles.container}
+      > 
+        {/* <Text style={styles.menuText}> {"Members"} </Text>   */}
+        <Text style={localStyles.item}> {"Members"} </Text>  
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={localStyles.container}
+      > 
+        <Text style={localStyles.item}> {"Add more people"} </Text>  
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={localStyles.container}
+      > 
+        <Text style={localStyles.item}> {"Leave group"} </Text>  
+      </TouchableOpacity>
+
+    </View>
+  );
+}
+
+function MemberView({route, navigation}) {
+  const { members } = route.params;
+  const localStyles = {
+    container: {
+      flexDirection: 'row',
+      backgroundColor: '#ffffff',
+      padding: 12,
+      marginVertical: 5,
+      marginHorizontal: 8,
+      
+      borderRadius: 5,
+    },
+
+    nameText: {
+      flex:2,
+      color:'#000000', 
+      fontFamily:'sans-serif-light', 
+      fontSize: 16,
+      marginLeft:8,
+    },
+
+    policyText: {
+      flex:1,
+      color:'#acacac', 
+      fontFamily:'sans-serif-light', 
+      fontSize: 16,
+    },
+  }
+
+  var policyRank = function(item) {
+    switch (item.policy) {
+      case POLICIES.OWNER:
+        return 0;
+      case POLICIES.ADMIN:
+        return 1;
+      case POLICIES.MEMBER:
+        return 2;
+    }
+  }
+  members.sort((a,b) => policyRank(a)-policyRank(b));
+
+  return (
+    // <Text>{JSON.stringify(members)}</Text>
+    <View>
+      <FlatList
+        data={members}
+        keyExtractor={item => item.name}
+        renderItem={({item}) =>
+        <View style={localStyles.container}> 
+          <Text style={localStyles.nameText}> {item.name} </Text>
+          <Text style={localStyles.policyText}> {item.policy} </Text>
+        </View>}
+      />
+    </View>
   );
 }
 
@@ -293,26 +440,38 @@ export default class Groups extends React.Component {
         <Button.Menu onPress={() => this.props.navigation.toggleDrawer()} />
         <Button.Notice />
 
-        {/* <SectionList 
-          sections={DATA}
-          keyExtractor={(item, index) => item+index}
-          renderItem={({item})=> <View />}
-          renderSectionHeader={({section: {title}})=> (
-            <DropDown menuText={title}/>
-          )}
-        /> */}
-
         <Stack.Navigator>
           <Stack.Screen 
             name="Home" 
             component={HomeView} 
             options={{title:'Home'}}  
           />
+
           <Stack.Screen 
             name="Group" 
             component={GroupView} 
-            options={({route}) => ({title: route.params.title})}
+            options={({navigation, route}) => ({
+              headerTitle: route.params.title,              
+              })}
           />
+
+          <Stack.Screen 
+            name="info"
+            component={InfoView}
+            options = {({route}) => ({
+              title: route.params.title,
+            })}
+          />
+
+          <Stack.Screen 
+            name="members"
+            component={MemberView}
+            options={({route}) => ({
+              title: route.params.title,
+              members: route.params.members,
+            })}
+          />
+
         </Stack.Navigator>
       </View>
     );
@@ -340,8 +499,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingVertical: 8,
     paddingLeft: 20,
-    
-
     flex: 1,
   },
 
@@ -358,4 +515,14 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     paddingLeft: 20,
   },
+
+  itemHeaderContainer: {
+    flex:1,
+    backgroundColor: '#1e90ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    
+    borderRadius: 5,
+  }
 });
