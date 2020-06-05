@@ -3,7 +3,7 @@ import { SectionList, Text, View, } from 'react-native';
 import Task from './Task';
 import styles from './styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { isToday } from '../../util/DateTime';
+import { isToday } from '../../utils/DateTime';
 
 class EmptyComponent extends React.Component {
   render() {

@@ -19,6 +19,6 @@ export default StyleSheet.create({
   emptyComponentContainer: {
     alignItems: "center",
     justifyContent: "center", 
-    paddingVertical: 200,
+    paddingVertical: 220,
   },
 });
