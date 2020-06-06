@@ -24,16 +24,36 @@ export default class CalendarPicker extends React.Component{
     })
   };
   
-  renderMarkedDates = taskList => {
-    let markedDates = {};
-    let markedEvents = {};
+  extractDateArr = taskList => {
+    let dates = [];
     taskList.forEach(task => {
       let date = extractDate(task.dueTime);
-      markedEvents = {[date]: {marked: true, dotColor: 'red'}};
-      markedDates = {...markedDates, markedEvents};
-    });
-    this.setState({markedDates: {...markedDates}});
-  };
+      dates.push(date);
+    })
+    return dates;
+  }
+    
+  componentDidMount() {
+    this.renderMarkedDates(this.props.taskList);
+  }
+
+
+  renderMarkedDates = taskList => {
+    let dates = this.extractDateArr(taskList);
+    var obj = dates.reduce((c, v) => Object.assign(c, {[v]: {selected: true,marked: true, dotColor: 'red'}}), {});
+    this.setState({ markedDates: {...this.state.markedDates, obj}});
+ }
+
+  // renderMarkedDates = taskList => {
+  //   let markedDates = {};
+  //   let markedEvents = {};
+  //   taskList.forEach(task => {
+  //     let date = extractDate(task.dueTime);
+  //     markedEvents = {[date]: {marked: true, dotColor: 'red'}};
+  //     markedDates = {...markedDates, markedEvents};
+  //   });
+  //   this.setState({markedDates: {...markedDates}});
+  // };
 
   render(){
     return(

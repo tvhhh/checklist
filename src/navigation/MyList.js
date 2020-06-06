@@ -24,7 +24,7 @@ class SwipeableListView extends React.Component {
       list: [],
     };
   }
-
+  
   // renderMarkedDates = taskList => {
   //   let markedDates = {};
   //   let markedEvents = {};
