@@ -19,7 +19,7 @@ export default class Calendar extends React.Component{
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
         <Header title="CALENDAR" />
         <Button.Menu onPress={this.toggleDrawer} />
-        <CalendarPicker />
+        <CalendarPicker  taskList={this.props.taskList} />
         <Button.Notice />
       </View>
     );

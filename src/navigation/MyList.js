@@ -5,6 +5,7 @@ import List from '../components/TabView/List';
 import Calendar from '../components/TabView/Calendar';
 import Categories from '../components/TabView/Categories';
 import Notification from '../components/Notification/Notification';
+import extractDate from '../util/DateTime';
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,17 @@ class SwipeableListView extends React.Component {
       list: [],
     };
   }
+
+  // renderMarkedDates = taskList => {
+  //   let markedDates = {};
+  //   let markedEvents = {};
+  //   taskList.forEach(task => {
+  //     let date = extractDate(task.dueTime);
+  //     markedEvents = {[date]: {marked: true, dotColor: 'red'}};
+  //     markedDates = {...markedDates, markedEvents};
+  //   });
+  //   return markedDates;
+  // }
 
   createTask = task => {
     this.setState({ 
@@ -93,7 +105,13 @@ class SwipeableListView extends React.Component {
           />
         );
       case "calendar":
-        return <Calendar navigation={this.props.navigation} />
+        return (
+          <Calendar 
+            navigation={this.props.navigation} 
+            taskList={this.state.list}
+            renderMarked={this.renderMarkedDates}
+            />
+        );
       case "categories":
         return <Categories navigation={this.props.navigation} />
     }
