@@ -3,7 +3,7 @@ import { SectionList, Text, View, } from 'react-native';
 import Task from './Task';
 import styles from './styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { isToday } from '../../util/DateTime';
+import { isToday, getWeekDates, getNameOfDay } from '../../util/DateTime';
 
 class EmptyComponent extends React.Component {
   render() {
@@ -28,6 +28,17 @@ export default class TaskList extends React.Component {
 
   renderSectionHeader = ({ section }) => <Text style={styles.listTitle}>{section.title}</Text>
 
+  filterByWeek = taskList => {
+    let [start, end] = getWeekDates();
+    return taskList.filter(task => task.dueTime <= end && task.dueTime >= start).reduce((obj, task) => {
+      const title = getNameOfDay(task.dueTime);
+      return {
+        ...obj,
+        [title]: [...(obj[title] || []), task],
+      }
+    }, {});
+  }
+
   filterByDay = taskList => {
     return taskList.filter(task => isToday(task.dueTime)).reduce((obj, task) => {
       const title = "TODAY";
@@ -38,11 +49,33 @@ export default class TaskList extends React.Component {
     }, {});
   }
 
-  render() {
-    const tasksToday = this.filterByDay(this.props.taskList);
+  filterByPinned = taskList => {
+    return taskList.filter(task => task.pinned === true).reduce((obj, task) => {
+      const title = "Important";
+      return {
+        ...obj,
+        [title]: [...(obj[title] || []), task],  
+      }
+    }, {});
+  }
 
-    const sections = Object.keys(tasksToday).map(key => ({
-      data: tasksToday[key],
+  filterOption = (title, taskList) => {
+    switch(title) {
+      case "MY DAY":
+        return this.filterByDay(taskList);
+      case "MY WEEK":
+        return this.filterByWeek(taskList);
+      case "PINNED":
+        return this.filterByPinned(taskList);
+    }
+    return [];
+  }
+
+  render() {
+    const tasks = this.filterOption(this.props.title, this.props.taskList.sort((a,b) => a.dueTime - b.dueTime));
+
+    const sections = Object.keys(tasks).map(key => ({
+      data: tasks[key],
       title: key,
     }));
 

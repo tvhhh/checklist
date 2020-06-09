@@ -72,7 +72,7 @@ export default class List extends React.Component {
         >
           <SearchForm />
         </Overlay>
-        <TaskList taskList={this.props.taskList} onTaskSelect={this.onTaskSelect} />
+        <TaskList title={this.props.title} taskList={this.props.taskList} onTaskSelect={this.onTaskSelect} />
         <Button.Notice onPress={() => this.props.navigation.navigate("Notice")} />
         <Button.Create onPress={this.toggleForm} />
         <Overlay 
