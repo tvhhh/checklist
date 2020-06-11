@@ -1,7 +1,7 @@
 import React from 'react';
 import { Calendar } from 'react-native-calendars';
 import colors from '../../styles/colors';
-import { extractDate } from '../../util/DateTime';
+import { extractDate } from '../../utils/DateTime';
 
 export default class CalendarPicker extends React.Component{
   constructor(props) {
@@ -43,17 +43,6 @@ export default class CalendarPicker extends React.Component{
     var obj = dates.reduce((c, v) => Object.assign(c, {[v]: {selected: true,marked: true, dotColor: 'red'}}), {});
     this.setState({ markedDates: {...this.state.markedDates, obj}});
  }
-
-  // renderMarkedDates = taskList => {
-  //   let markedDates = {};
-  //   let markedEvents = {};
-  //   taskList.forEach(task => {
-  //     let date = extractDate(task.dueTime);
-  //     markedEvents = {[date]: {marked: true, dotColor: 'red'}};
-  //     markedDates = {...markedDates, markedEvents};
-  //   });
-  //   this.setState({markedDates: {...markedDates}});
-  // };
 
   render(){
     return(

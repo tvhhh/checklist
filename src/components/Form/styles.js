@@ -24,22 +24,6 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
   },
-  searchBoxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 5,
-  },
-  barContainer: {
-    flex: 1,
-    backgroundColor: colors.Background,
-    borderBottomColor: "transparent",
-    borderTopColor: "transparent",
-  },
-  inputContainer: {
-    backgroundColor: colors.Background,
-    borderBottomWidth: 1,
-    borderWidth: 1,
-  },
   confirmBoxLayout: {
     flex: 1,
   },

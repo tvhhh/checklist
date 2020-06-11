@@ -4,7 +4,8 @@ import { TabView } from 'react-native-tab-view';
 import List from '../components/TabView/List';
 import Calendar from '../components/TabView/Calendar';
 import Categories from '../components/TabView/Categories';
-import Notification from '../components/Notification/Notification';
+import Search from '../components/SearchBox/index';
+import Notification from '../components/Notification/index';
 
 import Controller from '../utils/Controller';
 
@@ -135,6 +136,7 @@ export default class MyList extends React.Component {
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="List" component={SwipeableListView} />
         <Stack.Screen name="Notice" component={Notification} />
+        <Stack.Screen name="Search" component={Search} />
       </Stack.Navigator>
     );
   }

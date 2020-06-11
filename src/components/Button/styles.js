@@ -22,4 +22,9 @@ export default StyleSheet.create({
     top: 10,
     right: 15,
   },
+  searchButton: {
+    position: "absolute",
+    top: 12,
+    right: 45,
+  }
 });
