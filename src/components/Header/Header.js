@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import styles from './styles';
-import { getToday, extractDateTime } from '../../util/DateTime';
+import { getToday, extractDateTime } from '../../utils/DateTime';
 
 export default class Header extends React.Component {
   constructor(props) {
