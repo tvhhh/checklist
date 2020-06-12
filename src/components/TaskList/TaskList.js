@@ -83,7 +83,11 @@ export default class TaskList extends React.Component {
   }
 
   render() {
-    const tasks = this.filterOption(this.props.title, this.props.taskList.sort((a,b) => a.dueTime - b.dueTime), this.props.date);
+    const tasks = this.filterOption(
+      this.props.title, 
+      [...this.props.taskList].sort((a,b) => a.dueTime - b.dueTime), 
+      this.props.date
+    );
 
     const sections = Object.keys(tasks).map(key => ({
       data: tasks[key],

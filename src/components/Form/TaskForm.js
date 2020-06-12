@@ -21,15 +21,16 @@ export default class TaskForm extends React.Component {
       task: {
         title: this.props.title || "",
         description: this.props.description || "",
-        dueTime: this.props.time || today,
+        dueTime: this.props.dueTime || today,
         category: this.props.category || "uncategorized",
       },
-      error: false,
+      errorText: false,
+      errorTime: false,
     }
   }
 
   updateTitle = text => {
-    this.setState({ task: {...(this.state.task), title: text}, error: false });
+    this.setState({ task: {...(this.state.task), title: text}, errorText: false });
   }
 
   updateDescription = text => {
@@ -37,10 +38,11 @@ export default class TaskForm extends React.Component {
   }
 
   toggleDateTimePicker = () => {
-    this.setState({ isDateTimePickerVisible: !this.state.isDateTimePickerVisible });
+    this.setState({ isDateTimePickerVisible: !this.state.isDateTimePickerVisible, errorTime: false });
   }
 
   handleDateTimeConfirm = time => {
+    time.setSeconds(0, 0);
     this.setState({ task: {...(this.state.task), dueTime: time} });
     this.setState({ isDateTimePickerVisible: false });
   }
@@ -63,8 +65,11 @@ export default class TaskForm extends React.Component {
   }
 
   handleSubmit = () => {
+    let now = getToday();
     if (this.state.task.title.trim() === "") {
-      this.setState({ error: true });
+      this.setState({ errorText: true });
+    } else if (this.state.task.dueTime < now) {
+      this.setState({ errorTime: true });
     } else {
       this.props.onSubmit(this.state.task);
     }
@@ -89,7 +94,7 @@ export default class TaskForm extends React.Component {
               defaultValue={this.state.task.title}
               autoCapitalize="none"
             />
-            {this.state.error ? 
+            {this.state.errorText ? 
               <Text style={{ color: "red", fontSize: 12 }}>
                 This field is required.
               </Text> : null
@@ -107,6 +112,11 @@ export default class TaskForm extends React.Component {
                 <Text style={{ fontSize: 16 }}>{`${extractedDateTime.date}  ${extractedDateTime.time}`}</Text>
               </TouchableOpacity>
             </View>
+            {this.state.errorTime ? 
+              <Text style={{ color: "red", fontSize: 12 }}>
+                Sorry, your due time should be later than now.
+              </Text> : null
+            }
             <View style={{ alignItems: "center", justifyContent: "center", padding: 15, }}>
               {(this.state.task.category === "uncategorized") ? 
                 (<TouchableOpacity onPress={this.toggleCategoryPicker} >
