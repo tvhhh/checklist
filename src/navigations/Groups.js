@@ -1,14 +1,10 @@
 import React from 'react';
-import { Dimensions, ScrollView, View, Text, EventSubscriptionVendor, TouchableOpacity, SectionList, FlatList, StyleSheet } from 'react-native';
-import { Overlay } from 'react-native-elements';
-import NoticeBox from '../components/Notification/index';
+import { View, Text, TouchableOpacity, SectionList, FlatList, StyleSheet } from 'react-native';
 import Button from '../components/Button/index';
 import colors from '../styles/colors';
 import Header from '../components/Header/index';
 import Octicons from 'react-native-vector-icons/Octicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-import {StackNavigator} from 'react-navigation'
 import { createStackNavigator } from '@react-navigation/stack';
 
 // import Group from '../components/GroupList/index';

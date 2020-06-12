@@ -2,7 +2,6 @@ import React from 'react';
 import { View, } from 'react-native';
 import { Overlay } from 'react-native-elements';
 import TaskForm from '../Form/TaskForm';
-import SearchForm from '../Form/SearchForm';
 import Header from '../Header/index';
 import TaskList from '../TaskList/index';
 import Button from '../Button/index';
@@ -33,7 +32,7 @@ export default class List extends React.Component {
     }
   }
 
-  handleRemoval = selected => {
+  handleRemoval = () => {
     this.props.onRemoveTask(this.state.selected);
     this.setState({ showForm: false, selected: {} });
   }
@@ -50,30 +49,14 @@ export default class List extends React.Component {
     this.setState({ showForm: !this.state.showForm });
   }
 
-  toggleSearch = () => {
-    this.setState({ showSearch: !this.state.showSearch });
-  }
-
-  toggleNotice = () => {
-    this.setState({ showNotice: !this.state.showNotice });
-  }
-
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
         <Header title={this.props.title} />
         <Button.Menu onPress={this.toggleDrawer} />
-        <Button.Search style={{ alignSelf: "flex-end", marginRight: 5, }} onPress={this.toggleSearch} />
-        <Overlay 
-          isVisible={this.state.showSearch}  
-          onBackdropPress={this.toggleSearch}
-          fullScreen={true}
-          overlayStyle={{ padding: 0, }}
-        >
-          <SearchForm />
-        </Overlay>
-        <TaskList title={this.props.title} taskList={this.props.taskList} onTaskSelect={this.onTaskSelect} />
+        <Button.Search onPress={() => this.props.navigation.navigate("Search")} />
         <Button.Notice onPress={() => this.props.navigation.navigate("Notice")} />
+        <TaskList title={this.props.title} taskList={this.props.taskList} onTaskSelect={this.onTaskSelect} />
         <Button.Create onPress={this.toggleForm} />
         <Overlay 
           isVisible={this.state.showForm} 

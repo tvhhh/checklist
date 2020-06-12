@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View, } from 'react-native';
 import CheckButton from '../CheckBox/index';
 import Category from '../Category/index';
 import styles from './styles';
-import { extractDateTime } from '../../util/DateTime';
+import { extractDateTime } from '../../utils/DateTime';
 
 export default class Task extends React.Component {
   constructor (props) {
@@ -32,7 +32,7 @@ export default class Task extends React.Component {
 
   render() {
     const time = extractDateTime(this.state.dueTime);
-    const extractedTime = `${time.date}  ${time.time}`
+    const extractedTime = `${time.date}  ${time.time}`;
     return (
       <TouchableOpacity onPress={this.props.onSelect}>
         <View style={[styles.task, { opacity: (this.state.done) ? 0.5 : 1 }]}>

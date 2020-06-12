@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './styles';
 
@@ -47,8 +46,12 @@ export class Notice extends React.Component {
 export class Search extends React.Component {
   render() {
     return (
-      <TouchableOpacity style={this.props.style} onPress={this.props.onPress}>
-        <EvilIcons name="search" size={40} />
+      <TouchableOpacity style={styles.searchButton} onPress={this.props.onPress}>
+        <EvilIcons 
+          name="search"
+          color="grey" 
+          size={40} 
+        />
       </TouchableOpacity>
     );
   }

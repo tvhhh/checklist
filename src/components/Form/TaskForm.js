@@ -8,7 +8,7 @@ import ConfirmationBox from './ConfirmationBox';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import styles from './styles';
-import { getToday, extractDateTime } from '../../util/DateTime';
+import { getToday, extractDateTime } from '../../utils/DateTime';
 
 export default class TaskForm extends React.Component {
   constructor(props) {
