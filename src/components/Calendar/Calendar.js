@@ -7,41 +7,31 @@ export default class CalendarPicker extends React.Component{
   constructor(props) {
     super(props)
     this.state={
-      markedDates: {},
+      markedDates: this.renderMarkedDates(),
     }
   };
   
+
   setMarkedDates = key => {
-    let markedDates = {};
+    let marked = {};
+    this.props.onDayPress(key);
     if (typeof this.state.markedDates[key] !== 'undefined') {
-      markedDates = {[key]: {selected: !this.state.markedDates[key].selected}};
+      marked = {[key]: {selected: !this.state.markedDates[key].selected}};
     } else {
-      markedDates = {[key]: {selected: true}};
+      marked = {[key]: {selected: true}};
     }
 
     this.setState((prevState) => {
-      return {...prevState, markedDates};
+      return {...prevState, marked};
     })
   };
-  
-  extractDateArr = taskList => {
-    let dates = [];
-    taskList.forEach(task => {
-      let date = extractDate(task.dueTime);
-      dates.push(date);
-    })
-    return dates;
-  }
-    
-  componentDidMount() {
-    this.renderMarkedDates(this.props.taskList);
-  }
 
-
-  renderMarkedDates = taskList => {
-    let dates = this.extractDateArr(taskList);
-    var obj = dates.reduce((c, v) => Object.assign(c, {[v]: {selected: true,marked: true, dotColor: 'red'}}), {});
-    this.setState({ markedDates: {...this.state.markedDates, obj}});
+  renderMarkedDates = () => {
+    let marked = {};
+    this.props.taskList.forEach(task => {
+      marked[extractDate(task.dueTime)] = {marked: true, dotColor: 'blue', activeOpacity: 0};
+    });
+    return JSON.parse(JSON.stringify(marked));
  }
 
   // renderMarkedDates = taskList => {
@@ -60,7 +50,7 @@ export default class CalendarPicker extends React.Component{
       <Calendar
         current
         hideExtraDays={true}
-        onDayPress={(day) => this.setMarkedDates(day.dateString)}
+        onDayPress={(day) =>  this.setMarkedDates(day.dateString)}
         markedDates={this.state.markedDates}
         theme={{
           calendarBackground: colors.Background,

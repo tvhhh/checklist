@@ -19,8 +19,8 @@ export const extractDateTime = time => {
 };
 
 export const extractDate = time => {
-  let dd = time.getDate();
-  let mm = time.getMonth();
+  let dd = ("0" + time.getDate()).slice(-2)
+  let mm = ("0" + (time.getMonth() + 1)).slice(-2)
   let yyyy = time.getFullYear();
   return yyyy+'-'+mm+'-'+dd;
 }
@@ -48,20 +48,5 @@ export const getWeekDates = () => {
 
 export const getNameOfDay = time => {
   let day = time.getDay();
-  switch(day) {
-    case 0:
-      return DAYS[0];
-    case 1:
-      return DAYS[1];
-    case 2: 
-      return DAYS[2];
-    case 3: 
-      return DAYS[3];  
-    case 4: 
-      return DAYS[4];
-    case 5: 
-      return DAYS[5];
-    case 6: 
-      return DAYS[6];
-  }
+    return DAYS[day];
 }

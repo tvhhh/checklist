@@ -3,7 +3,7 @@ import { SectionList, Text, View, } from 'react-native';
 import Task from './Task';
 import styles from './styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { isToday, getWeekDates, getNameOfDay } from '../../util/DateTime';
+import { isToday, getWeekDates, getNameOfDay, extractDate } from '../../utils/DateTime';
 
 class EmptyComponent extends React.Component {
   render() {
@@ -59,7 +59,17 @@ export default class TaskList extends React.Component {
     }, {});
   }
 
-  filterOption = (title, taskList) => {
+  filterByDate = (taskList, date) => {
+    return taskList.filter(task => extractDate(task.dueTime) === date).reduce((obj, task) => {
+      const title = date;
+      return {
+        ...obj,
+        [title]: [...(obj[title] || []), task],  
+      }
+    }, {});
+  }
+
+  filterOption = (title, taskList, date) => {
     switch(title) {
       case "MY DAY":
         return this.filterByDay(taskList);
@@ -67,12 +77,13 @@ export default class TaskList extends React.Component {
         return this.filterByWeek(taskList);
       case "PINNED":
         return this.filterByPinned(taskList);
+      default:
+        return this.filterByDate(taskList, date);
     }
-    return [];
   }
 
   render() {
-    const tasks = this.filterOption(this.props.title, this.props.taskList.sort((a,b) => a.dueTime - b.dueTime));
+    const tasks = this.filterOption(this.props.title, this.props.taskList.sort((a,b) => a.dueTime - b.dueTime), this.props.date);
 
     const sections = Object.keys(tasks).map(key => ({
       data: tasks[key],
