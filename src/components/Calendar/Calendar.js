@@ -7,24 +7,15 @@ export default class CalendarPicker extends React.Component{
   constructor(props) {
     super(props)
     this.state={
-      markedDates: this.renderMarkedDates(),
+      markedDates: this.props.renderMarkedDates,
     }
   };
   
-
-  setMarkedDates = key => {
-    let marked = {};
-    this.props.onDayPress(key);
-    if (typeof this.state.markedDates[key] !== 'undefined') {
-      marked = {[key]: {selected: !this.state.markedDates[key].selected}};
-    } else {
-      marked = {[key]: {selected: true}};
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {
+      markedDates: nextProps.renderMarkedDates,
     }
-
-    this.setState((prevState) => {
-      return {...prevState, marked};
-    })
-  };
+  }
 
   renderMarkedDates = () => {
     let marked = {};
@@ -33,6 +24,11 @@ export default class CalendarPicker extends React.Component{
     });
     return JSON.parse(JSON.stringify(marked));
  }
+
+  setMarkedDates = date => {
+    this.props.onDayPress(date);
+  };
+
 
   render(){
     return(

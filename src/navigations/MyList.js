@@ -112,7 +112,15 @@ class SwipeableListView extends React.Component {
           />
         );
       case "calendar":
-        return <Calendar navigation={this.props.navigation} taskList={this.state.list}/>
+        return (
+          <Calendar
+            navigation={this.props.navigation} 
+            taskList={this.state.list}
+            onCreateTask={this.createTask}
+            onEditTask={this.editTask}
+            onRemoveTask={this.removeTask} 
+          />
+        );
       case "categories":
         return <Categories navigation={this.props.navigation} />
     }
