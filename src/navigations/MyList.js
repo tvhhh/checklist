@@ -77,41 +77,23 @@ class SwipeableListView extends React.Component {
   }
 
   renderScene = ({route}) => {
+    const listProps = {
+      navigation: this.props.navigation,
+      taskList: this.state.list,
+      onCreateTask: this.createTask,
+      onEditTask: this.editTask,
+      onRemoveTask: this.removeTask,
+    };
+
     switch(route.key) {
       case "day":
-        return (
-          <List 
-            title="MY DAY" 
-            navigation={this.props.navigation}
-            taskList={this.state.list}
-            onCreateTask={this.createTask}
-            onEditTask={this.editTask}
-            onRemoveTask={this.removeTask} 
-          />
-        );
+        return <List title="MY DAY" {...listProps} />
       case "week":
-        return (
-          <List 
-            title="MY WEEK" 
-            navigation={this.props.navigation}
-            taskList={this.state.list}
-            onCreateTask={this.createTask}
-            onEditTask={this.editTask}
-            onRemoveTask={this.removeTask} 
-          />
-        );
+        return <List title="MY WEEK" {...listProps} />
       case "pinned":
-        return (
-          <List 
-            title="PINNED" 
-            navigation={this.props.navigation}
-            taskList={this.state.list}
-            onCreateTask={this.createTask}
-            onEditTask={this.editTask}
-            onRemoveTask={this.removeTask} 
-          />
-        );
+        return <List title="PINNED" {...listProps} />
       case "calendar":
+
         return (
           <Calendar
             navigation={this.props.navigation} 
@@ -121,8 +103,9 @@ class SwipeableListView extends React.Component {
             onRemoveTask={this.removeTask} 
           />
         );
+
       case "categories":
-        return <Categories navigation={this.props.navigation} />
+        return <Categories {...listProps} />
     }
   }
 
