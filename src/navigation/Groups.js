@@ -78,6 +78,7 @@ const TEST_DATA = {
       ],
       tasks: [
         {
+          id: 0,
           name: '123',
           description: '123456',
           dueDate: '22/22/2022',
@@ -111,6 +112,7 @@ const TEST_DATA = {
 
       tasks: [
         {
+          id: 0,
           name: 'Alo alo',
           description: '123456',
           dueDate: '01/012022',
@@ -296,53 +298,53 @@ class DropDown extends React.Component {
       menuText: this.props.menuText,
       groups: this.props.groups,
       type: this.props.type,
-      menu: [
-        {
-          key: 'It has a name now',
-          tasks: [
-            {
-              key: '0',
-              name: 'Go Pro',
-              state: TASK_STATES.DONE,
-              description: 'abcxyz ?',
-              dueTime: '11:59',
-              dueDate: '22/22/2022',
-              participants: ['khoa', 'khoa2', 'another khoa'],
-            },
+      // menu: [
+      //   {
+      //     key: 'It has a name now',
+      //     tasks: [
+      //       {
+      //         key: '0',
+      //         name: 'Go Pro',
+      //         state: TASK_STATES.DONE,
+      //         description: 'abcxyz ?',
+      //         dueTime: '11:59',
+      //         dueDate: '22/22/2022',
+      //         participants: ['khoa', 'khoa2', 'another khoa'],
+      //       },
 
-            {
-              key: '1',
-              name: 'update UI',
-              state: TASK_STATES.NOT_DONE,
-              description: 'do it!',
-              dueTime: '23:01',
-              dueDate: '01/22/2022',
-              participants: ['captain','niatpac'],
-            },
+      //       {
+      //         key: '1',
+      //         name: 'update UI',
+      //         state: TASK_STATES.NOT_DONE,
+      //         description: 'do it!',
+      //         dueTime: '23:01',
+      //         dueDate: '01/22/2022',
+      //         participants: ['captain','niatpac'],
+      //       },
 
-            {
-              key: '2',
-              name: 'Try not to starve',
-              state: TASK_STATES.NOT_RELATED,
-              description: 'plz',
-              dueTime: '00:00',
-              dueDate: '01/01/2022',
-              participants: ['wes'],
-            },
+      //       {
+      //         key: '2',
+      //         name: 'Try not to starve',
+      //         state: TASK_STATES.NOT_RELATED,
+      //         description: 'plz',
+      //         dueTime: '00:00',
+      //         dueDate: '01/01/2022',
+      //         participants: ['wes'],
+      //       },
 
-            {
-              key: '3',
-              name: 'ABC',
-              state: TASK_STATES.NOT_RELATED,
-              description: '?',
-              dueTime: '00:00',
-              dueDate: '01/01/2022',
-              participants: ['someone'],
-            },
+      //       {
+      //         key: '3',
+      //         name: 'ABC',
+      //         state: TASK_STATES.NOT_RELATED,
+      //         description: '?',
+      //         dueTime: '00:00',
+      //         dueDate: '01/01/2022',
+      //         participants: ['someone'],
+      //       },
 
-          ],
-        },
-      ],
+      //     ],
+      //   },
+      // ],
 
       isShowingMenu: false,
     }
@@ -359,7 +361,7 @@ class DropDown extends React.Component {
           onPress={() => this.toggleShowMenu()}
           style={styles.container}
         > 
-          <Text style={styles.menuText}> {this.state.menuText} + {this.state.isShowingMenu===true?'1':'0'} </Text>
+          <Text style={styles.menuText}> {this.state.menuText} </Text>
           <Octicons 
             name={this.state.isShowingMenu ? "triangle-up" : "triangle-down"}
             style={{margin:10}}
@@ -374,6 +376,7 @@ class DropDown extends React.Component {
           <FlatList
             styles={{marginTop:5}}
             data={this.state.groups}
+            keyExtractor={item => item.id.toString()}
             renderItem = {({item}) => 
               <TouchableOpacity
                 onPress={()=>{
@@ -520,12 +523,15 @@ function GroupView({route, navigation}) {
     });
   }, [navigation]);
 
+  // console.debug("tasks = ");
+  // console.debug(tasks);
+
   
   return (
     <View style={{justifyContent:'flex-end'}}>
       <FlatList
         data={tasks}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => 
           <TouchableOpacity
             style={{
