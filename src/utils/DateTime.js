@@ -48,3 +48,26 @@ export const extractDate = time => {
   let yyyy = time.getFullYear();
   return `${yyyy}-${mm}-${dd}`;
 };
+
+
+export const getWeekDates = () => {
+  let now = new Date();
+  let dayOfWeek = now.getDay();
+  let numDay = now.getDate();
+
+  let start = new Date(now);
+  start.setDate(numDay);
+  start.setHours(0, 0, 0, 0);
+  
+  let end = new Date(now);
+  end.setDate(numDay + 7 );
+  end.setHours(0, 0 ,0 ,0);
+
+  return [start, end];
+}
+
+export const getNameOfDay = time => {
+  let day = time.getDay();
+    return DAYS[day];
+}
+
