@@ -5,7 +5,10 @@ import colors from '../styles/colors';
 import Header from '../components/Header/index';
 import Octicons from 'react-native-vector-icons/Octicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import AntDesgin from 'react-native-vector-icons/AntDesign'
+import AntDesgin from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import TaskForm from '../components/Form/TaskForm';
 
 import { StackNavigator } from 'react-navigation'
 import { createStackNavigator } from '@react-navigation/stack';
@@ -42,13 +45,19 @@ const TEST_DATA = {
         {
           id: 0, 
           policy: POLICIES.OWNER,
+        },
+        {
+          id: 2,
+          policy: POLICIES.MEMBER,
         }
       ],
 
       invitations: [
         {
           id: 0,
-          name: "another group",
+          name: 'another group',
+          uid: 1,
+          uName: 'not khoa'
         }
       ],
 
@@ -68,6 +77,7 @@ const TEST_DATA = {
       ],
       tasks: [
         {
+          id: 0,
           name: '123',
           description: '123456',
           dueDate: '22/22/2022',
@@ -83,9 +93,36 @@ const TEST_DATA = {
 
     {
       id: 1,
-      name: "another group",
+      name: 'another group',
       users: [],
       tasks: [],
+    },
+
+    { 
+      id: 2,
+      name: 'Starving',
+      users: [
+        {
+          id: 0,
+          name: 'khoa',
+          policy: POLICIES.MEMBER,
+        }
+      ],
+
+      tasks: [
+        {
+          id: 0,
+          name: 'Alo alo',
+          description: '123456',
+          dueDate: '01/012022',
+          participants: [
+            {
+              id: 0,
+              done: false,
+            }
+          ],
+        }
+      ],
     }
   ],
 }
@@ -134,7 +171,7 @@ class Server {
         name: string
           -- name of user
     
-    invitationsInfo: {groupId, groupName}, return when status = OK
+    invitationsInfo: {gid, gName, uid, uName}, return when status = OK
       groupId: int
         -- group id
       groupName: string
@@ -239,6 +276,7 @@ class Client {
           }
         }
       }
+
       console.debug("UID = " + this.uid + " FOUND ON SERVER !");
       console.debug(this.clientInfo);
     }
@@ -259,53 +297,53 @@ class DropDown extends React.Component {
       menuText: this.props.menuText,
       groups: this.props.groups,
       type: this.props.type,
-      menu: [
-        {
-          key: 'It has a name now',
-          tasks: [
-            {
-              key: '0',
-              name: 'Go Pro',
-              state: TASK_STATES.DONE,
-              description: 'abcxyz ?',
-              dueTime: '11:59',
-              dueDate: '22/22/2022',
-              participants: ['khoa', 'khoa2', 'another khoa'],
-            },
+      // menu: [
+      //   {
+      //     key: 'It has a name now',
+      //     tasks: [
+      //       {
+      //         key: '0',
+      //         name: 'Go Pro',
+      //         state: TASK_STATES.DONE,
+      //         description: 'abcxyz ?',
+      //         dueTime: '11:59',
+      //         dueDate: '22/22/2022',
+      //         participants: ['khoa', 'khoa2', 'another khoa'],
+      //       },
 
-            {
-              key: '1',
-              name: 'update UI',
-              state: TASK_STATES.NOT_DONE,
-              description: 'do it!',
-              dueTime: '23:01',
-              dueDate: '01/22/2022',
-              participants: ['captain','niatpac'],
-            },
+      //       {
+      //         key: '1',
+      //         name: 'update UI',
+      //         state: TASK_STATES.NOT_DONE,
+      //         description: 'do it!',
+      //         dueTime: '23:01',
+      //         dueDate: '01/22/2022',
+      //         participants: ['captain','niatpac'],
+      //       },
 
-            {
-              key: '2',
-              name: 'Try not to starve',
-              state: TASK_STATES.NOT_RELATED,
-              description: 'plz',
-              dueTime: '00:00',
-              dueDate: '01/01/2022',
-              participants: ['wes'],
-            },
+      //       {
+      //         key: '2',
+      //         name: 'Try not to starve',
+      //         state: TASK_STATES.NOT_RELATED,
+      //         description: 'plz',
+      //         dueTime: '00:00',
+      //         dueDate: '01/01/2022',
+      //         participants: ['wes'],
+      //       },
 
-            {
-              key: '3',
-              name: 'ABC',
-              state: TASK_STATES.NOT_RELATED,
-              description: '?',
-              dueTime: '00:00',
-              dueDate: '01/01/2022',
-              participants: ['someone'],
-            },
+      //       {
+      //         key: '3',
+      //         name: 'ABC',
+      //         state: TASK_STATES.NOT_RELATED,
+      //         description: '?',
+      //         dueTime: '00:00',
+      //         dueDate: '01/01/2022',
+      //         participants: ['someone'],
+      //       },
 
-          ],
-        },
-      ],
+      //     ],
+      //   },
+      // ],
 
       isShowingMenu: false,
     }
@@ -322,7 +360,7 @@ class DropDown extends React.Component {
           onPress={() => this.toggleShowMenu()}
           style={styles.container}
         > 
-          <Text style={styles.menuText}> {this.state.menuText} + {this.state.isShowingMenu===true?'1':'0'} </Text>
+          <Text style={styles.menuText}> {this.state.menuText} </Text>
           <Octicons 
             name={this.state.isShowingMenu ? "triangle-up" : "triangle-down"}
             style={{margin:10}}
@@ -337,6 +375,7 @@ class DropDown extends React.Component {
           <FlatList
             styles={{marginTop:5}}
             data={this.state.groups}
+            keyExtractor={item => item.id.toString()}
             renderItem = {({item}) => 
               <TouchableOpacity
                 onPress={()=>{
@@ -349,7 +388,9 @@ class DropDown extends React.Component {
                   }
                   else 
                   {
-                    this.props.navigation.navigate('invitation'); // should add something here...
+                    this.props.navigation.navigate('invitation', {
+                      group: item,
+                    }); // should add something here...
                   }
                 }}
               >
@@ -393,6 +434,7 @@ function HomeView({navigation}) {
     navigation.setOptions({
       headerRight: () => 
         <TouchableOpacity
+          onPress={() => {navigation.navigate('create-group')}}
           // onPress={() => navigation.navigate('info', {
           //   groupName: route.params.title,
           //   title: "Info: " + route.params.title,
@@ -413,7 +455,7 @@ function HomeView({navigation}) {
     <View>
       <FlatList
         data={DATA}
-        // keyExtractor={(item) => item}
+        keyExtractor={item => item.type}
         renderItem={({item}) => 
           <DropDown
             menuText={item.menuText}
@@ -431,9 +473,35 @@ function GroupView({route, navigation}) {
   const { group } = route.params;
   const tasks = group.tasks;
 
+  const maxLengthForTitle = 15;
+  const title  = route.params.title.length >  maxLengthForTitle ?
+                  route.params.title.substring(0, maxLengthForTitle-3) + '...':
+                  route.params.title;
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
+
+      headerTitle: title,
+
       headerRight: () => 
+      <View style={{flexDirection:'row'}}>
+
+        {/*add button*/}
+        {
+        (group.policy === POLICIES.OWNER || group.policy == POLICIES.ADMIN) &&
+        <TouchableOpacity
+          style={{marginRight:20}}
+        >
+          <MaterialIcons
+            name={"add-circle-outline"}
+            size={25}
+          />
+
+          
+        </TouchableOpacity>
+        }
+
+        {/*info button*/}
         <TouchableOpacity
           onPress={() => navigation.navigate('info', {
             group: group,
@@ -444,19 +512,25 @@ function GroupView({route, navigation}) {
             name="info"
             size={25}
           />
-        </TouchableOpacity>,
+        </TouchableOpacity>
+
+        
+      </View>,
 
       headerRightContainerStyle: {padding: 15}
     
     });
   }, [navigation]);
 
+  // console.debug("tasks = ");
+  // console.debug(tasks);
+
   
   return (
-    <View>
-      <View>
+    <View style={{justifyContent:'flex-end'}}>
       <FlatList
         data={tasks}
+        keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => 
           <TouchableOpacity
             style={{
@@ -496,18 +570,19 @@ function GroupView({route, navigation}) {
               style={{margin:10}}
               size={10}
             />
-            <Text> {item.participants.toString()} </Text>
+            <Text> {item.participants.map(user => {
+              for(const userInGroup of group.users) {
+                if (userInGroup.id === user.id)
+                {
+                  return userInGroup.name;
+                }
+              }
+            }).toString()} </Text>
           </View>
 
           </TouchableOpacity>
         }
       />
-      </View>
-
-      <View>
-        <Button.Create />
-
-      </View>
 
     </View>
   );
@@ -569,11 +644,14 @@ function InfoView({route, navigation}) {
         <Text style={localStyles.item}> {"Members"} </Text>  
       </TouchableOpacity>
 
+      {
+      (group.policy === POLICIES.OWNER || group.policy == POLICIES.ADMIN) &&
       <TouchableOpacity
         style={localStyles.container}
       > 
         <Text style={localStyles.item}> {"Add more people"} </Text>  
       </TouchableOpacity>
+      }
 
       <TouchableOpacity
         style={localStyles.container}
@@ -643,6 +721,7 @@ function MemberView({route, navigation}) {
 }
 
 function InvitationView({route, navigation}) {
+  const { group } = route.params;
   const localStyles = {
     infoContainer: {
       backgroundColor: '#ffffff',
@@ -696,8 +775,9 @@ function InvitationView({route, navigation}) {
         <Text
           style={localStyles.infoText}
         >
-          Group name goes here
+          {group.name}
         </Text>
+        <Text>{"Invitor: " + group.uName}</Text>
       </View>
 
       <View style={{flexDirection:'row'}}>
@@ -717,6 +797,25 @@ function InvitationView({route, navigation}) {
 
         
       </View>
+    </View>
+  );
+}
+
+function AddGroupView({route, navigation}) {
+
+  const [text, setText] = useState('');
+  return (
+    <View>
+      <Text> Input IDs with spaces .... </Text>
+      <TextInput 
+        style={{height: 40, borderColor:'#000000', borderWidth: 2}}
+        placeholder="IDs..."
+        onChangeText={text => setText(text)}
+        defaultValue={text}      
+      />
+      
+      <Text> {text.split(' ').map(id=>id+'\n')} </Text>
+
     </View>
   );
 }
@@ -781,6 +880,17 @@ export default class Groups extends React.Component {
               title: 'Invitations'
             })}
           />
+
+          <Stack.Screen
+            name='create-group'
+            component={AddGroupView}
+            options={({route}) => ({
+              title: 'Create a new group'
+            })}
+
+          />
+
+          
 
         </Stack.Navigator>
       </View>
