@@ -22,4 +22,15 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderWidth: 1,
   },
+  itemFormat: {
+    marginRight:10,
+    marginLeft:10,
+    marginTop:10,
+    paddingTop:8,
+    paddingBottom:8,
+    backgroundColor: 'white',
+    borderRadius:16,
+    borderWidth: 8,
+    borderColor: colors.Background,
+  },
 });

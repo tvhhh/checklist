@@ -1,5 +1,5 @@
 import React from 'react';
-import { Keyboard, TouchableOpacity, View, Text,FlatList } from 'react-native';
+import { Keyboard, TouchableHighlight, View, Text,FlatList } from 'react-native';
 import { SearchBar, ListItem } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -14,6 +14,7 @@ export default class Search extends React.Component {
       isLoading : true,
       search: "",
       taskList : props.route.params.taskList,
+      tempTaskList: props.route.params.taskList,
     };
   }
 
@@ -21,6 +22,17 @@ export default class Search extends React.Component {
     this.setState({search: search});
   };
 
+  searchFilterFunction = text => {    
+    const newData = this.state.taskList.filter(item => {      
+      const itemData = `${item.title.toUpperCase()}`;
+       const textData = text.toUpperCase();
+       if (itemData.includes(textData)){
+         return true;
+       }    
+       return false;
+    });    
+    this.setState({ tempTaskList: newData,search: text });  
+  };
 
   renderHeader = () => {
     return(
@@ -31,7 +43,7 @@ export default class Search extends React.Component {
           inputContainerStyle={styles.inputContainer}
           inputStyle={{ fontSize: 18 }}
           placeholder="Search your task here..."
-          onChangeText={this.updateState}
+          onChangeText={text => this.searchFilterFunction(text)}
           value={this.state.search}
           searchIcon={<EvilIcons name="search" size={25} />}
           />
@@ -42,11 +54,10 @@ export default class Search extends React.Component {
 
   renderItem = ({item}) =>{
     return(
-      <TouchableOpacity>
-        <View>
-         <ListItem title={item.title} />
-        </View>
-      </TouchableOpacity>
+      <TouchableHighlight style = {styles.itemFormat}>
+        <ListItem 
+          title={item.title} />
+      </TouchableHighlight>
     );
   }
 
@@ -54,7 +65,7 @@ export default class Search extends React.Component {
     return (    
       <View style={styles.searchLayout}>
       <FlatList style={styles.searchLayout}
-        data = {this.state.taskList}
+        data = {this.state.tempTaskList}
         keyExtractor = {item => item.title}
         renderItem = {this.renderItem}
         ListHeaderComponent = {this.renderHeader}
