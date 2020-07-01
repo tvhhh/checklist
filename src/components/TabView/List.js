@@ -54,7 +54,7 @@ export default class List extends React.Component {
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
         <Header title={this.props.title} />
         <Button.Menu onPress={this.toggleDrawer} />
-        <Button.Search onPress={() => this.props.navigation.navigate("Search")} />
+        <Button.Search onPress={() => this.props.navigation.navigate("Search",{taskList: this.props.taskList})} />
         <Button.Notice onPress={() => this.props.navigation.navigate("Notice")} />
         <TaskList title={this.props.title} taskList={this.props.taskList} onTaskSelect={this.onTaskSelect} />
         <Button.Create onPress={this.toggleForm} />
