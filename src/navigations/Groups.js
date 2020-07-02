@@ -1,8 +1,7 @@
 import React from 'react';
 import { Alert, Dimensions, ScrollView, View, Text, EventSubscriptionVendor, TouchableOpacity, SectionList, FlatList, StyleSheet } from 'react-native';
-import Button from '../components/Button/index';
-import colors from '../styles/colors';
-import Header from '../components/Header/index';
+
+import Header from '../components/Header';
 import Octicons from 'react-native-vector-icons/Octicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesgin from 'react-native-vector-icons/AntDesign';
@@ -14,6 +13,10 @@ import { StackNavigator } from 'react-navigation'
 import { createStackNavigator } from '@react-navigation/stack';
 import { switchCase } from '@babel/types';
 import { white } from 'color-name';
+
+import { Menu, Notice } from '../components/Button';
+import colors from '../styles/colors';
+
 // import console = require('console');
 // import console = require('console');
 
@@ -821,7 +824,7 @@ function AddGroupView({route, navigation}) {
 }
 
 const Stack = createStackNavigator();
-``
+
 export default class Groups extends React.Component {
   constructor (props) {
     super(props);
@@ -838,8 +841,8 @@ export default class Groups extends React.Component {
     return (
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
         <Header title={"GROUPS"} />
-        <Button.Menu onPress={() => this.props.navigation.toggleDrawer()} />
-        <Button.Notice />
+        <Menu onPress={() => this.props.navigation.toggleDrawer()} />
+        <Notice />
 
         <Stack.Navigator>
           <Stack.Screen 

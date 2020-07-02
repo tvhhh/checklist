@@ -1,26 +1,20 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import styles from './styles';
-import colors from '../../styles/colors';
 
-const categoryBackgroundColors = {
-  "health": "rgba(255, 0, 0, 0.1)",
-  "workout": "rgba(30, 144, 255, 0.1)",
-  "work": "rgba(139, 69, 19, 0.1)",
-  "study": "rgba(128, 0, 128, 0.1)",
-  "payment": "rgba(0, 100, 0, 0.1)",
-  "entertainment": "rgba(47, 79, 79, 0.1)",
-}
+import colors from '../styles/colors';
+
 
 export default class Category extends React.Component {
   render() {
     let name = this.props.name;
     let size = this.props.size || 60;
+    
     let icon;
     switch (name) {
       case "health":
@@ -48,7 +42,7 @@ export default class Category extends React.Component {
         style={[
           styles.categoryIcon,
           {
-            backgroundColor: categoryBackgroundColors[name],
+            backgroundColor: colors[name.charAt(0).toUpperCase() + name.slice(1)].replace('1.0', '0.1'),
             height: size,
             width: size,
             borderRadius: size / 2,
@@ -61,3 +55,10 @@ export default class Category extends React.Component {
     );
   }
 };
+
+const styles = StyleSheet.create({
+  categoryIcon: {
+    alignItems: "center",
+    justifyContent: "center", 
+  },
+});
