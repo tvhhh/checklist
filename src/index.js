@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 
+import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import DrawerIcon from './components/DrawerIcon';
@@ -22,46 +23,52 @@ const Drawer = createDrawerNavigator();
 export default class TodoApp extends React.Component {
   render() {
     return (
-      <Drawer.Navigator 
-        initialRouteName="list"
-        drawerContentOptions={{
-          activeTintColor: colors.PrimaryColor,
-          inactiveTintColor: colors.DisabledColor,
-          itemStyle: { marginHorizontal: 0 },
-          labelStyle: { fontSize: 16 },
-        }}
-        screenOptions={({ route }) => ({
-          drawerIcon: ({ color, size }) => {
-            switch(route.name) {
-              case "profile":
-                return <DrawerIcon icon={<FontAwesome name="user" size={size} color={color} />} />;
-              case "list":
-                return <DrawerIcon icon={<Feather name="list" size={size} color={color} />} />;
-              case "groups":
-                return <DrawerIcon icon={<FontAwesome name="group" size={size} color={color} />} />;
-              case "settings":
-                return <DrawerIcon icon={<Ionicons name="ios-settings" size={size} color={color} />} />;
-            }
-          },
-          drawerLabel: ({ color }) => {
-            switch(route.name) {
-              case "profile":
-                return <Text style={{ color: color, fontSize: 16 }}>PROFILE</Text>;
-              case "list":
-                return <Text style={{ color: color, fontSize: 16 }}>MY LIST</Text>;
-              case "groups":
-                return <Text style={{ color: color, fontSize: 16 }}>GROUPS</Text>;
-              case "settings":
-                return <Text style={{ color: color, fontSize: 16 }}>SETTINGS</Text>;
-            }
-          },
-        })}
-      >
-        <Drawer.Screen name="profile" component={Profile} />
-        <Drawer.Screen name="list" component={MyList} />
-        <Drawer.Screen name="groups" component={Groups} />
-        <Drawer.Screen name="settings" component={Settings} />
-      </Drawer.Navigator>
+      <NavigationContainer>
+        <Drawer.Navigator 
+          initialRouteName="list"
+          drawerContentOptions={{
+            activeTintColor: colors.PrimaryColor,
+            inactiveTintColor: colors.DisabledColor,
+            itemStyle: { marginHorizontal: 0 },
+            labelStyle: { fontSize: 16 },
+          }}
+          screenOptions={({ route }) => ({
+            drawerIcon: ({ color, size }) => {
+              switch(route.name) {
+                case "profile":
+                  return <DrawerIcon icon={<FontAwesome name="user" size={size} color={color} />} />;
+                case "list":
+                  return <DrawerIcon icon={<Feather name="list" size={size} color={color} />} />;
+                case "groups":
+                  return <DrawerIcon icon={<FontAwesome name="group" size={size} color={color} />} />;
+                case "settings":
+                  return <DrawerIcon icon={<Ionicons name="ios-settings" size={size} color={color} />} />;
+                default:
+                  return null;
+              }
+            },
+            drawerLabel: ({ color }) => {
+              switch(route.name) {
+                case "profile":
+                  return <Text style={{ color: color, fontSize: 16 }}>PROFILE</Text>;
+                case "list":
+                  return <Text style={{ color: color, fontSize: 16 }}>MY LIST</Text>;
+                case "groups":
+                  return <Text style={{ color: color, fontSize: 16 }}>GROUPS</Text>;
+                case "settings":
+                  return <Text style={{ color: color, fontSize: 16 }}>SETTINGS</Text>;
+                default:
+                  return null;
+              }
+            },
+          })}
+        >
+          <Drawer.Screen name="profile" component={Profile} />
+          <Drawer.Screen name="list" component={MyList} />
+          <Drawer.Screen name="groups" component={Groups} />
+          <Drawer.Screen name="settings" component={Settings} />
+        </Drawer.Navigator>
+      </NavigationContainer>
     );
   }
 };

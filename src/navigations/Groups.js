@@ -268,7 +268,7 @@ class Client {
   getAllInfo() {
     this.clientInfo = {...this.server.getClientInfo(this.uid)}; // deepcopy, to simulate getting data from server.
     if (this.clientInfo.status == RETURN_STATUS.UID_NOT_FOUND) {
-      console.debug("Client, getAllInfo(), UID = " + this.uid + ": NOT FOUND ON SERVER !");
+      // console.debug("Client, getAllInfo(), UID = " + this.uid + ": NOT FOUND ON SERVER !");
     } else
     {
       // adding policy to groupsInfo.groups.group
@@ -280,8 +280,8 @@ class Client {
         }
       }
 
-      console.debug("UID = " + this.uid + " FOUND ON SERVER !");
-      console.debug(this.clientInfo);
+      // console.debug("UID = " + this.uid + " FOUND ON SERVER !");
+      // console.debug(this.clientInfo);
     }
   }
 }

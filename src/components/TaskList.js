@@ -2,6 +2,9 @@ import React from 'react';
 import { SectionList, StyleSheet, Text, View, } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import Task from './Task';
@@ -12,8 +15,10 @@ import colors from '../styles/colors';
 
 import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateTime';
 
+import * as actions from '../redux/actions/TodoActions';
 
-export default class TaskList extends React.Component {
+
+class TaskList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,17 +44,19 @@ export default class TaskList extends React.Component {
   }
 
   handleFormSubmit = task => {
+    const actions = this.props.actions;
     this.setState({ showForm: false });
-    if (Object.keys(this.state.selected).length) {
-      this.props.onEditTask(task, this.state.selected);
+    if (Object.keys(this.state.selected).length > 0) {
+      actions.editTask(task, this.state.selected);
     } else {
-      this.props.onCreateTask(task);
+      actions.createTask(task);
     }
     this.setState({ selected: {} });
   }
 
   handleRemoval = () => {
-    this.props.onRemoveTask(this.state.selected);
+    const actions = this.props.actions;
+    actions.removeTask(this.state.selected);
     this.setState({ showForm: false, selected: {} });
   }
 
@@ -181,3 +188,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
+
+const mapStateToProps = state => ({
+  taskList: state.todos,
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskList);

@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { connect } from 'react-redux';
+
 import Header from '../Header';
 import CalendarPicker from '../CalendarPicker';
 import TaskList from '../TaskList';
@@ -11,7 +13,7 @@ import screenStyles from './screenStyles';
 import { extractDate } from '../../utils/DateTime';
 
 
-export default class Calendar extends React.Component{
+class Calendar extends React.Component{
   constructor (props) {
     super(props);
     this.state={
@@ -35,10 +37,10 @@ export default class Calendar extends React.Component{
     this.setState({pickedDate: date})
   }
 
-  render(){
+  render() {
     return(
       <View style={screenStyles.screenContainer}>
-        <Header title="CALENDAR" />
+        <Header title={this.props.title} />
         <Menu onPress={this.toggleDrawer} />
         <Search
           position={{ position: "absolute", top: 12, right: 45, }}
@@ -47,12 +49,14 @@ export default class Calendar extends React.Component{
         <Notice onPress={() => this.props.navigation.navigate("Notice")} />
         <View style={styles.calendarField}>
           <CalendarPicker 
-            taskList={this.props.taskList} 
-            onDayPress={this.onDayPress} 
+            onDayPress={this.onDayPress}
             renderMarkedDates={this.renderMarkedDates}
           />
         </View>
-        <TaskList {...this.props} calendarView={true} date={this.state.pickedDate} />
+        <TaskList
+          calendarView={true} 
+          date={this.state.pickedDate} 
+        />
       </View>
     );
   }
@@ -63,3 +67,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
+
+const mapStateToProps = state => ({
+  taskList: state.todos,
+});
+
+export default connect(mapStateToProps)(Calendar);

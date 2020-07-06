@@ -17,7 +17,7 @@ export default class Search extends React.Component {
     this.state = {
       isLoading : true,
       search: "",
-      taskList : props.route.params.taskList,
+      taskList: props.route.params.taskList,
       tempTaskList: props.route.params.taskList,
     };
   }

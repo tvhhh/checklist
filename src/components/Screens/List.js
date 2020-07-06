@@ -23,7 +23,7 @@ export default class List extends React.Component {
           onPress={() => this.props.navigation.navigate("Search",{taskList: this.props.taskList})}
         />
         <Notice onPress={() => this.props.navigation.navigate("Notice")} />
-        <TaskList {...this.props} />
+        <TaskList title={this.props.title} />
       </View>
     );
   }
