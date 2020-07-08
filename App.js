@@ -6,51 +6,36 @@
  * @flow strict-local
  */
 
-import React, { useEffect } from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
+import React from 'react';
+import { connect } from 'react-redux';
 
 import TodoApp from './src/index';
 
-import reducer from './src/redux/reducers/RootReducer';
-import { fetchData } from './src/utils/Controller';
-
-import SplashScreen from 'react-native-splash-screen';
+import { fetchData } from './src/redux/actions/DataActions';
 
 
-const STORAGE_KEY = "@TodoApp:TaskDB";
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-// const todosList = fetchData(STORAGE_KEY)
-// .then(data => {
-//   if (data !== null) {
-//     console.log("This shit first");
-//     return data.map(item => ({
-//       ...item,
-//       id: parseInt(item.id),
-//       dueTime: new Date(item.dueTime),
-//       pinned: item.pinned == 'true',
-//       done: item.done == 'true',
-//     }));
-//   }
-// }).catch(error => console.log(error));
-
-// console.log("This should be later");
-
-const initialState = {  };
-const store = createStore(reducer, initialState);
-
-console.log(store.getState());
-
-const App = () => {
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+  componentDidMount = () => {
+    this.props.fetchData();
+  }
   
-  return (
-    <Provider store={store}>
+  render() {
+    return (
       <TodoApp />
-    </Provider>
-  );
+    );
+  }
 };
 
-export default App;
+const mapStateToProps = state => ({
+  appData: state.data,
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchData: () => dispatch(fetchData()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

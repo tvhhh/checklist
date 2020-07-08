@@ -3,8 +3,6 @@ import { Calendar } from 'react-native-calendars';
 
 import colors from '../styles/colors';
 
-import { extractDate } from '../utils/DateTime';
-
 
 export default class CalendarPicker extends React.Component{
   constructor(props) {
@@ -28,7 +26,6 @@ export default class CalendarPicker extends React.Component{
   render(){
     return(
       <Calendar
-        current
         hideExtraDays={true}
         onDayPress={(day) =>  this.setMarkedDates(day.dateString)}
         markedDates={this.state.markedDates()}

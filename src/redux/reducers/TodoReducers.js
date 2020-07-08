@@ -1,4 +1,4 @@
-import { CREATE_TASK, EDIT_TASK, REMOVE_TASK } from '../actions/TodoActions';
+import { INIT_TASK_LIST, CREATE_TASK, EDIT_TASK, REMOVE_TASK } from '../actions/TodoActions';
 
 const initialState = [];
 
@@ -6,6 +6,8 @@ export default function todoReducer(state = initialState, action) {
   const payload = action.payload;
 
   switch (action.type) {
+    case INIT_TASK_LIST:
+      return [...payload.taskList];
     case CREATE_TASK:
       return [
         { id: (state.length == 0) ? 0 : state[0].id + 1, ...payload.task },

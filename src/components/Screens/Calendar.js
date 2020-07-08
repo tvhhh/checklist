@@ -26,6 +26,7 @@ class Calendar extends React.Component{
     this.props.taskList.forEach(task => {
       marked[extractDate(task.dueTime)] = {marked: true, dotColor: 'blue', activeOpacity: 0};
     });
+    marked[this.state.pickedDate] = {...marked[this.state.pickedDate], selected: true};
     return JSON.parse(JSON.stringify(marked));
   }
 
@@ -54,6 +55,7 @@ class Calendar extends React.Component{
           />
         </View>
         <TaskList
+          title={this.props.title}
           calendarView={true} 
           date={this.state.pickedDate} 
         />

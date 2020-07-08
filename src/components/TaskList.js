@@ -110,8 +110,10 @@ class TaskList extends React.Component {
         return this.filterByWeek(taskList);
       case "PINNED":
         return this.filterByPinned(taskList);
-      default:
+      case "CALENDAR":
         return this.filterByDate(taskList, date);
+      default:
+        return null;
     }
   }
 
