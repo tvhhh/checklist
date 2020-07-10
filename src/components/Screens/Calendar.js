@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { connect } from 'react-redux';
 
@@ -48,12 +48,10 @@ class Calendar extends React.Component{
           onPress={() => this.props.navigation.navigate("Search",{taskList: this.props.taskList})}
         />
         <Notice onPress={() => this.props.navigation.navigate("Notice")} />
-        <View style={styles.calendarField}>
-          <CalendarPicker 
-            onDayPress={this.onDayPress}
-            renderMarkedDates={this.renderMarkedDates}
-          />
-        </View>
+        <CalendarPicker 
+          onDayPress={this.onDayPress}
+          renderMarkedDates={this.renderMarkedDates}
+        />
         <TaskList
           title={this.props.title}
           calendarView={true} 
@@ -64,14 +62,8 @@ class Calendar extends React.Component{
   }
 };
 
-const styles = StyleSheet.create({
-  calendarField: {
-    marginBottom: 20,
-  },
-});
-
 const mapStateToProps = state => ({
-  taskList: state.todos,
+  taskList: state.tasks,
 });
 
 export default connect(mapStateToProps)(Calendar);

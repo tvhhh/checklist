@@ -15,7 +15,7 @@ import colors from '../styles/colors';
 
 import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateTime';
 
-import * as actions from '../redux/actions/TodoActions';
+import { createTask, editTask, removeTask } from '../redux/actions/TaskActions';
 
 
 class TaskList extends React.Component {
@@ -44,19 +44,17 @@ class TaskList extends React.Component {
   }
 
   handleFormSubmit = task => {
-    const actions = this.props.actions;
     this.setState({ showForm: false });
     if (Object.keys(this.state.selected).length > 0) {
-      actions.editTask(task, this.state.selected);
+      this.props.editTask(task, this.state.selected);
     } else {
-      actions.createTask(task);
+      this.props.createTask(task);
     }
     this.setState({ selected: {} });
   }
 
   handleRemoval = () => {
-    const actions = this.props.actions;
-    actions.removeTask(this.state.selected);
+    this.props.removeTask(this.state.selected);
     this.setState({ showForm: false, selected: {} });
   }
 
@@ -94,7 +92,7 @@ class TaskList extends React.Component {
 
   filterByDate = (taskList, date) => {
     return taskList.filter(task => extractDate(task.dueTime) === date).reduce((obj, task) => {
-      const title = date;
+      const title = "";
       return {
         ...obj,
         [title]: [...(obj[title] || []), task],  
@@ -192,11 +190,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  taskList: state.todos,
+  taskList: state.tasks,
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(actions, dispatch),
+  createTask: bindActionCreators(createTask, dispatch),
+  editTask: bindActionCreators(editTask, dispatch),
+  removeTask: bindActionCreators(removeTask, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskList);

@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
+
 const TASKS_STORAGE_KEY = '@TodoApp:TaskDB';
 
-export const getTaskList = async () => {
+export const fetchTaskList = async () => {
   return AsyncStorage.getItem(TASKS_STORAGE_KEY)
   .then(response => (response !== null) ? JSON.parse(response) : null)
   .then(data => (data !== null) ? 
@@ -16,6 +17,6 @@ export const getTaskList = async () => {
   .catch(error => console.log(error));
 };
 
-export const updateTaskDB = async (value) => {
+export const storeTaskList = async (value) => {
   return await AsyncStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(value));
 };

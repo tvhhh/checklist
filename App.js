@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 
 import TodoApp from './src/index';
 
-import { fetchData } from './src/redux/actions/DataActions';
+import { fetchData } from './src/redux/actions/TaskActions';
 
 
 class App extends React.Component {
@@ -24,14 +24,12 @@ class App extends React.Component {
   }
   
   render() {
-    return (
-      <TodoApp />
-    );
+    return <TodoApp />;
   }
 };
 
 const mapStateToProps = state => ({
-  appData: state.data,
+  taskList: state.tasks,
 });
 
 const mapDispatchToProps = dispatch => ({

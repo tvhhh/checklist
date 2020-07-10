@@ -1,12 +1,15 @@
-export const INIT_TASK_LIST = "INIT_TASK_LIST";
+import { fetchTaskList, storeTaskList } from '../../api/api';
+
+
+export const GET_TASKS = "FETCH_TASKS";
 export const CREATE_TASK = "CREATE_TASK";
 export const EDIT_TASK = "EDIT_TASK";
 export const REMOVE_TASK = "REMOVE_TASK";
 
-export const initializeTaskList = taskList => ({
-  type: INIT_TASK_LIST,
+export const getData = data => ({
+  type: GET_TASKS,
   payload: {
-    taskList,
+    data,
   },
 });
 
@@ -14,7 +17,7 @@ export const createTask = task => ({
   type: CREATE_TASK,
   payload: {
     task,
-  },
+  }
 });
 
 export const editTask = (task, selected) => ({
@@ -31,3 +34,9 @@ export const removeTask = selected => ({
     selected,
   },
 });
+
+export const fetchData = () => dispatch => {
+  fetchTaskList()
+  .then(data => dispatch(getData(data)))
+  .catch(error => console.log(`Fetch error: ${error}`));
+};

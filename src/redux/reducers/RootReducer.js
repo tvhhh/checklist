@@ -1,11 +1,9 @@
 import { combineReducers } from 'redux';
-import todoReducer from './TodoReducers';
-import dataReducer from './DataReducers';
+import taskReducer from './TaskReducers';
 
 
 const reducer = combineReducers({
-  data: dataReducer,
-  todos: todoReducer,
+  tasks: taskReducer,
 });
 
 export default reducer;
