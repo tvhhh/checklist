@@ -1,17 +1,19 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TabView } from 'react-native-tab-view';
-import List from '../components/TabView/List';
-import Calendar from '../components/TabView/Calendar';
-import Categories from '../components/TabView/Categories';
-import Search from '../components/SearchBox/index';
-import Notification from '../components/Notification/index';
 
-import Controller from '../utils/Controller';
+import List from '../components/Screens/List';
+import Calendar from '../components/Screens/Calendar';
+import Categories from '../components/Screens/Categories';
+import Search from '../components/Screens/Search';
+import Notification from '../components/Screens/Notification';
+
+import { fetchData, storeData } from '../utils/Controller';
+
 
 const Stack = createStackNavigator();
 
-const STORAGE_KEY = "@TodoListApp:Key";
+const STORAGE_KEY = "@TodoListApp:TaskDB";
 
 class SwipeableListView extends React.Component {
   constructor(props) {
@@ -30,17 +32,19 @@ class SwipeableListView extends React.Component {
   }
 
   componentDidMount = () => {
-    Controller._fetchData(STORAGE_KEY)
-      .then(data => {
-        if (data !== null) {
-          const fetchedList = data.map(item => ({
-            ...item,
-            id: parseInt(item.id),
-            dueTime: new Date(item.dueTime),
-          }));
-          this.setState({ list: fetchedList });
-        }
-      }).catch(error => console.log(error));
+    fetchData(STORAGE_KEY)
+    .then(data => {
+      if (data !== null) {
+        const fetchedList = data.map(item => ({
+          ...item,
+          id: parseInt(item.id),
+          dueTime: new Date(item.dueTime),
+          pinned: item.pinned == 'true',
+          done: item.done == 'true',
+        }));
+        this.setState({ list: fetchedList });
+      }
+    }).catch(error => console.log(error));
   }
 
   createTask = task => {
@@ -49,7 +53,7 @@ class SwipeableListView extends React.Component {
       { id: this.state.list.length, ...task },
     ];
     this.setState({ list: newList });
-    Controller._storeData(STORAGE_KEY, JSON.stringify(newList)).catch(error => console.log(error));
+    storeData(STORAGE_KEY, JSON.stringify(newList)).catch(error => console.log(error));
   }
 
   editTask = (task, selected) => {
@@ -60,7 +64,7 @@ class SwipeableListView extends React.Component {
       ...this.state.list.slice(index + 1),
     ];
     this.setState({ list: newList });
-    Controller._storeData(STORAGE_KEY, JSON.stringify(newList)).catch(error => console.log(error));
+    storeData(STORAGE_KEY, JSON.stringify(newList)).catch(error => console.log(error));
   }
 
   removeTask = selected => {
@@ -73,7 +77,7 @@ class SwipeableListView extends React.Component {
       }))),
     ];
     this.setState({ list: newList });
-    Controller._storeData(STORAGE_KEY, JSON.stringify(newList)).catch(error => console.log(error));
+    storeData(STORAGE_KEY, JSON.stringify(newList)).catch(error => console.log(error));
   }
 
   renderScene = ({route}) => {

@@ -1,14 +1,21 @@
 import React from 'react';
 import { Text } from 'react-native';
+
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import DrawerIcon from './components/Drawer/DrawerIcon';
+
+import DrawerIcon from './components/DrawerIcon';
+
 import Profile from './navigations/Profile';
 import MyList from './navigations/MyList';
 import Groups from './navigations/Groups';
 import Settings from './navigations/Settings';
+
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import colors from './styles/colors';
+
 
 const Drawer = createDrawerNavigator();
 
@@ -18,8 +25,8 @@ export default class TodoApp extends React.Component {
       <Drawer.Navigator 
         initialRouteName="list"
         drawerContentOptions={{
-          activeTintColor: "dodgerblue",
-          inactiveTintColor: "grey",
+          activeTintColor: colors.PrimaryColor,
+          inactiveTintColor: colors.DisabledColor,
           itemStyle: { marginHorizontal: 0 },
           labelStyle: { fontSize: 16 },
         }}
