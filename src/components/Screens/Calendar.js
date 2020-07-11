@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import Header from '../Header';
 import CalendarPicker from '../CalendarPicker';
-import TaskList from '../TaskList';
+import TaskList, { FILTER_DATE } from '../TaskList';
 import { Menu, Notice, Search } from '../Button';
 
 import screenStyles from './screenStyles';
@@ -18,7 +18,7 @@ class Calendar extends React.Component{
     super(props);
     this.state={
       pickedDate: extractDate(new Date()),
-    }
+    };
   }
 
   renderMarkedDates = () => {
@@ -35,7 +35,7 @@ class Calendar extends React.Component{
   }
   
   onDayPress = date => {
-    this.setState({pickedDate: date})
+    this.setState({ pickedDate: date });
   }
 
   render() {
@@ -53,9 +53,9 @@ class Calendar extends React.Component{
           renderMarkedDates={this.renderMarkedDates}
         />
         <TaskList
-          title={this.props.title}
-          calendarView={true} 
-          date={this.state.pickedDate} 
+          filterOption={FILTER_DATE}
+          calendarView={true}
+          date={this.state.pickedDate}
         />
       </View>
     );

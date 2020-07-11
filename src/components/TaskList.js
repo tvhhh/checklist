@@ -18,6 +18,12 @@ import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateT
 import { createTask, editTask, removeTask } from '../redux/actions/TaskActions';
 
 
+export const FILTER_TODAY = "FILTER_TODAY";
+export const FILTER_WEEK = "FILTER_WEEK";
+export const FILTER_PINNED = "FILTER_PINNED";
+export const FILTER_DATE = "FILTER_DATE";
+export const FILTER_NAME = "FILTER_NAME";
+
 class TaskList extends React.Component {
   constructor(props) {
     super(props);
@@ -100,26 +106,25 @@ class TaskList extends React.Component {
     }, {});
   }
 
-  filterOption = (title, taskList, date) => {
-    switch(title) {
-      case "MY DAY":
+  filter = (option, taskList) => {
+    switch(option) {
+      case FILTER_TODAY:
         return this.filterByToday(taskList);
-      case "MY WEEK":
+      case FILTER_WEEK:
         return this.filterByWeek(taskList);
-      case "PINNED":
+      case FILTER_PINNED:
         return this.filterByPinned(taskList);
-      case "CALENDAR":
-        return this.filterByDate(taskList, date);
+      case FILTER_DATE:
+        return this.filterByDate(taskList, this.props.date);
       default:
-        return null;
+        return taskList;
     }
   }
 
   render() {
-    const tasks = this.filterOption(
-      this.props.title,
+    const tasks = this.filter(
+      this.props.filterOption,
       [...this.props.taskList].sort((a,b) => a.dueTime - b.dueTime),
-      this.props.date,
     );
 
     const sections = Object.keys(tasks).map(key => ({
