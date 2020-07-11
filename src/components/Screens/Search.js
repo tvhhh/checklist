@@ -1,13 +1,14 @@
 import React from 'react';
-import { StyleSheet, TouchableHighlight, View, FlatList } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, FlatList } from 'react-native';
 import { SearchBar, ListItem } from 'react-native-elements';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-
+import Task from '../Task'
+import TaskForm from '../Form/TaskForm';
 import screenStyles from './screenStyles';
 import colors from '../../styles/colors';
-
+import { Overlay } from 'react-native-elements';
 import 'react-native-gesture-handler';
 
 
@@ -19,22 +20,40 @@ export default class Search extends React.Component {
       search: "",
       taskList : props.route.params.taskList,
       tempTaskList: props.route.params.taskList,
+      showForm: false,
+      selected: {},
     };
   }
 
   updateState = search => {
     this.setState({search: search});
   };
+  onSelectedTaskPress = task => {
+    this.setState({ showForm: true, selected: task });
+  }
+  onFormBackdropPress = () => {
+    this.setState({ showForm: false, selected: {} });
+  }
+  handleFormSubmit = task => {
+    this.setState({ showForm: false });
+    this.onEditTask(task, this.state.selected);
+    this.setState({ selected: {} });
+  }
+
+  handleRemoval = () => {
+    this.props.onRemoveTask(this.state.selected);
+    this.setState({ showForm: false, selected: {} });
+  }
+
 
   searchFilterFunction = text => {    
     const newData = this.state.taskList.filter(item => {      
       const itemData = `${item.title.toUpperCase()}`;
       const textData = text.toUpperCase();
-      // if (itemData.includes(textData)){
-      //   return true;
-      // }    
-      // return false;
-      return itemData.includes(textData);
+      if (itemData.includes(textData)){
+        return true;
+      }    
+      return false;
     });    
     this.setState({ tempTaskList: newData, search: text });
   };
@@ -56,15 +75,7 @@ export default class Search extends React.Component {
       </View>
     );
   };
-
-  renderItem = ({item}) =>{
-    return(
-      <TouchableHighlight style={styles.itemFormat}>
-        <ListItem title={item.title} />
-      </TouchableHighlight>
-    );
-  }
-
+  renderItem = ({ item }) => <Task {...item} onSelect={() => this.onSelectedTaskPress(item)} />
   render() {
     return (    
       <View style={screenStyles.screenContainer}>
@@ -74,6 +85,18 @@ export default class Search extends React.Component {
           renderItem={this.renderItem}
           ListHeaderComponent={this.renderHeader}
         />
+        <Overlay
+          isVisible={this.state.showForm} 
+          onBackdropPress={this.onFormBackdropPress}
+          overlayStyle={[styles.taskForm, { height: Object.keys(this.state.selected).length ? 350 : 300 }]}
+        >
+          <TaskForm
+            {...this.state.selected}
+            isOnSelected={Object.keys(this.state.selected).length > 0} 
+            onSubmit={this.handleFormSubmit}
+            onRemove={this.handleRemoval}
+          />
+        </Overlay>
       </View>
     );
   }
