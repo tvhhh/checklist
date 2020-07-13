@@ -24,7 +24,7 @@ export default class Categories extends React.Component {
   render() {
     return (
       <View style={[screenStyles.screenContainer, styles.container]}>
-        <Header title="CATEGORIES" />
+        <Header title={this.props.title} />
         <Menu onPress={this.toggleDrawer} />
         <Search
           position={{ position: "absolute", top: 12, right: 45, }}

@@ -28,6 +28,8 @@ export default class TaskForm extends React.Component {
         description: this.props.description || "",
         dueTime: this.props.dueTime || today,
         category: this.props.category || "uncategorized",
+        pinned: this.props.pinned || false,
+        done: this.props.done || false,
       },
       errorText: false,
       errorTime: false,

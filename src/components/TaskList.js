@@ -2,6 +2,9 @@ import React from 'react';
 import { SectionList, StyleSheet, Text, View, } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import Task from './Task';
@@ -12,8 +15,16 @@ import colors from '../styles/colors';
 
 import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateTime';
 
+import { createTask, editTask, removeTask } from '../redux/actions/TaskActions';
 
-export default class TaskList extends React.Component {
+
+export const FILTER_TODAY = "FILTER_TODAY";
+export const FILTER_WEEK = "FILTER_WEEK";
+export const FILTER_PINNED = "FILTER_PINNED";
+export const FILTER_DATE = "FILTER_DATE";
+export const FILTER_NAME = "FILTER_NAME";
+
+class TaskList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,16 +51,16 @@ export default class TaskList extends React.Component {
 
   handleFormSubmit = task => {
     this.setState({ showForm: false });
-    if (Object.keys(this.state.selected).length) {
-      this.props.onEditTask(task, this.state.selected);
+    if (Object.keys(this.state.selected).length > 0) {
+      this.props.editTask(task, this.state.selected);
     } else {
-      this.props.onCreateTask(task);
+      this.props.createTask(task);
     }
     this.setState({ selected: {} });
   }
 
   handleRemoval = () => {
-    this.props.onRemoveTask(this.state.selected);
+    this.props.removeTask(this.state.selected);
     this.setState({ showForm: false, selected: {} });
   }
 
@@ -87,7 +98,7 @@ export default class TaskList extends React.Component {
 
   filterByDate = (taskList, date) => {
     return taskList.filter(task => extractDate(task.dueTime) === date).reduce((obj, task) => {
-      const title = date;
+      const title = "";
       return {
         ...obj,
         [title]: [...(obj[title] || []), task],  
@@ -95,24 +106,25 @@ export default class TaskList extends React.Component {
     }, {});
   }
 
-  filterOption = (title, taskList, date) => {
-    switch(title) {
-      case "MY DAY":
+  filter = (option, taskList) => {
+    switch(option) {
+      case FILTER_TODAY:
         return this.filterByToday(taskList);
-      case "MY WEEK":
+      case FILTER_WEEK:
         return this.filterByWeek(taskList);
-      case "PINNED":
+      case FILTER_PINNED:
         return this.filterByPinned(taskList);
+      case FILTER_DATE:
+        return this.filterByDate(taskList, this.props.date);
       default:
-        return this.filterByDate(taskList, date);
+        return taskList;
     }
   }
 
   render() {
-    const tasks = this.filterOption(
-      this.props.title,
+    const tasks = this.filter(
+      this.props.filterOption,
       [...this.props.taskList].sort((a,b) => a.dueTime - b.dueTime),
-      this.props.date,
     );
 
     const sections = Object.keys(tasks).map(key => ({
@@ -181,3 +193,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
+
+const mapStateToProps = state => ({
+  taskList: state.tasks,
+});
+
+const mapDispatchToProps = dispatch => ({
+  createTask: bindActionCreators(createTask, dispatch),
+  editTask: bindActionCreators(editTask, dispatch),
+  removeTask: bindActionCreators(removeTask, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskList);

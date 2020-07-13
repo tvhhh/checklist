@@ -6,22 +6,34 @@
  * @flow strict-local
  */
 
-import React, { useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
+import { connect } from 'react-redux';
+
 import TodoApp from './src/index';
 
-import SplashScreen from 'react-native-splash-screen';
+import { fetchData } from './src/redux/actions/TaskActions';
 
-const App = () => {
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount = () => {
+    this.props.fetchData();
+  }
   
-  return (
-    <NavigationContainer>
-      <TodoApp />
-    </NavigationContainer>
-  );
+  render() {
+    return <TodoApp />;
+  }
 };
 
-export default App;
+const mapStateToProps = state => ({
+  taskList: state.tasks,
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchData: () => dispatch(fetchData()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
