@@ -88,7 +88,6 @@ class SwipeableListView extends React.Component {
       onEditTask: this.editTask,
       onRemoveTask: this.removeTask,
     };
-
     switch(route.key) {
       case "day":
         return <List title="MY DAY" {...listProps} />
