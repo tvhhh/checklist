@@ -1,9 +1,8 @@
 import React from 'react';
 import { Text } from 'react-native';
 
-import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
+import { NavigationContainer } from '@react-navigation/native';
 import DrawerIcon from './components/DrawerIcon';
 
 import Profile from './navigations/Profile';
@@ -14,23 +13,27 @@ import Settings from './navigations/Settings';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { connect } from 'react-redux';
 import colors from './styles/colors';
 
 
 const Drawer = createDrawerNavigator();
 
-export default class TodoApp extends React.Component {
+class TodoApp extends React.Component {
   render() {
+    const theme = this.props.darkTheme ? colors.DarkBackground : colors.LightBackground;
     return (
       <NavigationContainer>
-        <Drawer.Navigator 
+        <Drawer.Navigator
           initialRouteName="list"
           drawerContentOptions={{
             activeTintColor: colors.PrimaryColor,
             inactiveTintColor: colors.DisabledColor,
             itemStyle: { marginHorizontal: 0 },
             labelStyle: { fontSize: 16 },
+          }}
+          drawerStyle={{
+            backgroundColor: theme,
           }}
           screenOptions={({ route }) => ({
             drawerIcon: ({ color, size }) => {
@@ -72,3 +75,9 @@ export default class TodoApp extends React.Component {
     );
   }
 };
+
+const mapStateToProps = state => ({
+  darkTheme: state.customize.darkTheme,
+});
+
+export default connect(mapStateToProps)(TodoApp);

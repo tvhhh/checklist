@@ -4,12 +4,12 @@ import { FlatList, StyleSheet, Text, View, } from 'react-native';
 import Header from '../Header';
 import Category from '../Category';
 import { Menu, Notice, Search } from '../Button';
-
+import { connect } from 'react-redux';
 import screenStyles from './screenStyles';
 import colors from '../../styles/colors';
 
 
-export default class Categories extends React.Component {
+class Categories extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,8 +22,10 @@ export default class Categories extends React.Component {
   }
 
   render() {
+    const theme = this.props.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const textColor = this.props.darkTheme ? "white" : "black";
     return (
-      <View style={[screenStyles.screenContainer, styles.container]}>
+      <View style={[screenStyles.screenContainer, styles.container, {backgroundColor: theme}]}>
         <Header title={this.props.title} />
         <Menu onPress={this.toggleDrawer} />
         <Search
@@ -37,7 +39,7 @@ export default class Categories extends React.Component {
           renderItem={obj => (
             <View style={styles.categoryContainer}>
               <Category name={obj.item} size={100} />
-              <Text style={styles.categoryName}>
+              <Text style={{color: textColor}}>
                 {obj.item.charAt(0).toUpperCase() + obj.item.slice(1)}
               </Text>
             </View>
@@ -59,7 +61,9 @@ const styles = StyleSheet.create({
     justifyContent: "center", 
     padding: 10,
   },
-  categoryName: {
-    color: colors.PrimaryText,
-  },
 });
+
+const mapStateToProps = state => ({
+  darkTheme: state.customize.darkTheme,
+});
+export default connect(mapStateToProps)(Categories);

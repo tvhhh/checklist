@@ -4,18 +4,19 @@ import { View, } from 'react-native';
 import Header from '../Header';
 import TaskList from '../TaskList';
 import { Menu, Notice, Search } from '../Button';
+import { connect } from 'react-redux';
+import colors from '../../styles/colors';
 
-import screenStyles from './screenStyles';
 
-
-export default class List extends React.Component {
+class List extends React.Component {
   toggleDrawer = () => {
     this.props.navigation.toggleDrawer();
   }
 
   render() {
+    const theme = this.props.darkTheme ? colors.DarkBackground: colors.LightBackground;
     return (
-      <View style={screenStyles.screenContainer}>
+      <View style={{flex: 1, backgroundColor: theme}}>
         <Header title={this.props.title} />
         <Menu onPress={this.toggleDrawer} />
         <Search
@@ -28,3 +29,9 @@ export default class List extends React.Component {
     );
   }
 };
+
+const mapStateToProps = state => ({
+  darkTheme: state.customize.darkTheme,
+});
+
+export default connect(mapStateToProps)(List);

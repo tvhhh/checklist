@@ -4,9 +4,9 @@ import { StyleSheet, View, } from 'react-native';
 import { Menu } from '../components/Button';
 
 import colors from '../styles/colors';
+import { connect } from 'react-redux';
 
-
-export default class Profile extends React.Component {
+class Profile extends React.Component {
   constructor (props) {
     super(props);
   }
@@ -16,17 +16,18 @@ export default class Profile extends React.Component {
   }
 
   render() {
+    const theme = this.props.darkTheme ? colors.DarkBackground: colors.LightBackground ;
     return (
-      <View style={styles.screenContainer}>
+      <View style={{flex: 1, backgroundColor: theme}}>
         <Menu onPress={this.toggleDrawer} />
       </View>
     );
   }
 };
 
-const styles = StyleSheet.create({
-  screenContainer: {
-    flex: 1,
-    backgroundColor: colors.Background,
-  },
+const mapStateToProps = state => ({
+  darkTheme: state.customize.darkTheme,
 });
+
+
+export default connect(mapStateToProps)(Profile);

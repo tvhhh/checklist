@@ -6,15 +6,15 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import { connect } from 'react-redux';
 import colors from '../styles/colors';
+import Task from './Task';
 
 
-export default class Category extends React.Component {
+class Category extends React.Component {
   render() {
     let name = this.props.name;
     let size = this.props.size || 60;
-    
     let icon;
     switch (name) {
       case "health":
@@ -36,7 +36,7 @@ export default class Category extends React.Component {
         icon = <MaterialCommunityIcons name="theater" color={colors.Entertainment} size={0.625 * size} />;
         break;
     }
-
+    if (name == "uncategorized" && this.props.darkTheme) name = "uncategorizedd";
     return (
       <TouchableOpacity 
         style={[
@@ -62,3 +62,9 @@ const styles = StyleSheet.create({
     justifyContent: "center", 
   },
 });
+
+const mapStateToProps = state => ({
+  darkTheme: state.customize.darkTheme,
+});
+
+export default connect(mapStateToProps)(Category);

@@ -29,7 +29,8 @@ class TaskList extends React.Component {
 
   renderItem = ({ item }) => <Task {...item} onSelect={() => this.onSelectedTaskPress(item)} />
 
-  renderSectionHeader = ({ section }) => <Text style={styles.listTitle}>{section.title}</Text>
+  renderSectionHeader = ({ section }) => 
+    <Text style={[styles.listTitle, {color: this.props.darkTheme === false ? colors.LightTitleText : colors.DarkTitleText}]}>{section.title}</Text>
 
   onAddButtonPress = () => {
     this.setState({ showForm: true });
@@ -127,6 +128,8 @@ class TaskList extends React.Component {
       title: key,
     }));
 
+    const largeTextColor = this.props.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const smallTextColor = this.props.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
     return (
       <>
         <SectionList
@@ -136,8 +139,8 @@ class TaskList extends React.Component {
           renderSectionHeader={this.renderSectionHeader}
           ListEmptyComponent={this.props.calendarView ? null : (
             <View style={styles.emptyComponentContainer}>
-              <Text style={styles.emptyComponentLargeText}>You're all done now!</Text>
-              <Text style={styles.emptyComponentSmallText}>Tap + to create a new task</Text>
+              <Text style={{color: largeTextColor, fontSize: 24}}>You're all done now!</Text>
+              <Text style={{color: smallTextColor, fontSize: 24}}>Tap + to create a new task</Text>
               <FontAwesome5 name="tasks" color="grey" size={40} />
             </View>
           )}
@@ -175,14 +178,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 220,
   },
-  emptyComponentLargeText: {
-    color: colors.PrimaryText,
-    fontSize: 24,
-  },
-  emptyComponentSmallText: {
-    color: colors.SecondaryText,
-    fontSize: 16,
-  },
   taskForm: {
     padding: 0,
     borderRadius: 10,
@@ -191,6 +186,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
   taskList: state.todos,
+  darkTheme: state.customize.darkTheme,
 });
 
 const mapDispatchToProps = dispatch => ({
