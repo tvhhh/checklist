@@ -21,7 +21,9 @@ const Drawer = createDrawerNavigator();
 
 class TodoApp extends React.Component {
   render() {
-    const theme = this.props.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <NavigationContainer>
         <Drawer.Navigator
@@ -53,13 +55,13 @@ class TodoApp extends React.Component {
             drawerLabel: ({ color }) => {
               switch(route.name) {
                 case "profile":
-                  return <Text style={{ color: color, fontSize: 16 }}>PROFILE</Text>;
+                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>PROFILE</Text>;
                 case "list":
-                  return <Text style={{ color: color, fontSize: 16 }}>MY LIST</Text>;
+                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>MY LIST</Text>;
                 case "groups":
-                  return <Text style={{ color: color, fontSize: 16 }}>GROUPS</Text>;
+                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>GROUPS</Text>;
                 case "settings":
-                  return <Text style={{ color: color, fontSize: 16 }}>SETTINGS</Text>;
+                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>SETTINGS</Text>;
                 default:
                   return null;
               }
@@ -77,7 +79,7 @@ class TodoApp extends React.Component {
 };
 
 const mapStateToProps = state => ({
-  darkTheme: state.customize.darkTheme,
+  customize: state.customize,
 });
 
 export default connect(mapStateToProps)(TodoApp);

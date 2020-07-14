@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Alert, Dimensions, ScrollView, View, Text, EventSubscriptionVendor, TouchableOpacity, SectionList, FlatList, StyleSheet } from 'react-native';
 
 import Header from '../components/Header';
@@ -13,7 +13,7 @@ import { StackNavigator } from 'react-navigation'
 import { createStackNavigator } from '@react-navigation/stack';
 import { switchCase } from '@babel/types';
 import { white } from 'color-name';
-
+import { connect } from 'react-redux';
 import { Menu, Notice } from '../components/Button';
 import colors from '../styles/colors';
 
@@ -528,7 +528,6 @@ function GroupView({route, navigation}) {
   // console.debug("tasks = ");
   // console.debug(tasks);
 
-  
   return (
     <View style={{justifyContent:'flex-end'}}>
       <FlatList
@@ -537,7 +536,7 @@ function GroupView({route, navigation}) {
         renderItem={({ item }) => 
           <TouchableOpacity
             style={{
-              backgroundColor:'#ffffff',
+              backgroundColor: "#ffffff",
               padding:15,
               marginLeft:10,
               marginRight:10,
@@ -825,7 +824,7 @@ function AddGroupView({route, navigation}) {
 
 const Stack = createStackNavigator();
 
-export default class Groups extends React.Component {
+class Groups extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -838,8 +837,9 @@ export default class Groups extends React.Component {
   }
 
   render() {
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
     return (
-      <View style={{ flex: 1, backgroundColor: colors.Background }}>
+      <View style={{ flex: 1, backgroundColor: theme}}>
         <Header title={"GROUPS"} />
         <Menu onPress={() => this.props.navigation.toggleDrawer()} />
         <Notice />
@@ -948,3 +948,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   }
 });
+
+
+const mapStateToProps = state => ({
+  customize: state.customize,
+});
+
+
+export default connect(mapStateToProps)(Groups);

@@ -30,7 +30,11 @@ class TaskList extends React.Component {
   renderItem = ({ item }) => <Task {...item} onSelect={() => this.onSelectedTaskPress(item)} />
 
   renderSectionHeader = ({ section }) => 
-    <Text style={[styles.listTitle, {color: this.props.darkTheme === false ? colors.LightTitleText : colors.DarkTitleText}]}>{section.title}</Text>
+    <Text style={[styles.listTitle, {
+      color: this.props.customize.darkTheme === false ? colors.LightTitleText : colors.DarkTitleText,
+      fontFamily: this.props.customize.font,
+      fontSize: this.props.customize.fontSize,
+    }]}>{section.title}</Text>
 
   onAddButtonPress = () => {
     this.setState({ showForm: true });
@@ -128,8 +132,13 @@ class TaskList extends React.Component {
       title: key,
     }));
 
-    const largeTextColor = this.props.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
-    const smallTextColor = this.props.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
+    const largeTextColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const smallTextColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
+    
     return (
       <>
         <SectionList
@@ -139,8 +148,8 @@ class TaskList extends React.Component {
           renderSectionHeader={this.renderSectionHeader}
           ListEmptyComponent={this.props.calendarView ? null : (
             <View style={styles.emptyComponentContainer}>
-              <Text style={{color: largeTextColor, fontSize: 24}}>You're all done now!</Text>
-              <Text style={{color: smallTextColor, fontSize: 24}}>Tap + to create a new task</Text>
+              <Text style={{color: largeTextColor, fontSize: fontSize, fontFamily: font}}>You're all done now!</Text>
+              <Text style={{color: smallTextColor, fontSize: fontSize, fontFamily: font}}>Tap + to create a new task</Text>
               <FontAwesome5 name="tasks" color="grey" size={40} />
             </View>
           )}
@@ -152,7 +161,7 @@ class TaskList extends React.Component {
         <Overlay
           isVisible={this.state.showForm} 
           onBackdropPress={this.onFormBackdropPress}
-          overlayStyle={[styles.taskForm, { height: Object.keys(this.state.selected).length ? 350 : 300 }]}
+          overlayStyle={[styles.taskForm, { height: Object.keys(this.state.selected).length ? 380 : 320 , backgroundColor: theme, borderColor: overlayBorderColor}]}
         >
           <TaskForm
             {...this.state.selected}
@@ -180,13 +189,14 @@ const styles = StyleSheet.create({
   },
   taskForm: {
     padding: 0,
+    borderWidth: 3,
     borderRadius: 10,
   },
 });
 
 const mapStateToProps = state => ({
   taskList: state.todos,
-  darkTheme: state.customize.darkTheme,
+  customize: state.customize,
 });
 
 const mapDispatchToProps = dispatch => ({

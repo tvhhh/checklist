@@ -1,12 +1,12 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, View, } from 'react-native';
-
+import { connect } from 'react-redux';
 import Category from '../Category';
 
 import colors from '../../styles/colors';
 
 
-export default class CategoryPicker extends React.Component {
+class CategoryPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,6 +20,8 @@ export default class CategoryPicker extends React.Component {
   }
 
   render() {
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <View style={styles.container}>
         <FlatList 
@@ -32,7 +34,7 @@ export default class CategoryPicker extends React.Component {
                 size={80} 
                 onPress={() => this.handleSubmit(obj.item)} 
               />
-              <Text style={styles.categoryName} >
+              <Text style={[styles.categoryName, {fontFamily: font, fontSize: 15}]} >
                 {obj.item.charAt(0).toUpperCase() + obj.item.slice(1)}
               </Text>
             </View>
@@ -59,6 +61,11 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     color: colors.PrimaryText,
-    fontSize: 12,
   },
 });
+
+const mapStateToProps = state => ({
+  customize: state.customize,
+});
+
+export default connect(mapStateToProps)(CategoryPicker);

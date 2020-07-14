@@ -15,12 +15,24 @@ class Header extends React.Component {
   }
 
   render() {
-    const titleColor = this.props.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText ;
-    const timeColor = this.props.darkTheme ? colors.DarkSecondaryText: colors.LightSecondaryText;
+    const titleColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText ;
+    const timeColor = this.props.customize.darkTheme ? colors.DarkSecondaryText: colors.LightSecondaryText;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <View style={styles.container}>
-        <Text style={{color: titleColor, fontSize: 24, textAlign: "center"}}>{this.props.title}</Text>
-        <Text style={{color: timeColor, fontSize: 14, textAlign: "center"}}>{extractDateTime(this.state.today).date}</Text>
+        <Text style={{
+          color: titleColor, 
+          fontSize: fontSize, 
+          textAlign: "center",
+          fontFamily: font,
+          }}>{this.props.title}</Text>
+        <Text style={{
+          color: timeColor,
+          fontSize: fontSize - 7,
+          textAlign: "center",
+          fontFamily: font
+          }}>{extractDateTime(this.state.today).date}</Text>
       </View>
     );
   }
@@ -36,7 +48,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  darkTheme: state.customize.darkTheme,
+  customize: state.customize,
 });
 
 export default connect(mapStateToProps)(Header);

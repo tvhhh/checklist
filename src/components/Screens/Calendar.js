@@ -49,7 +49,7 @@ class Calendar extends React.Component{
   // }
 
   render() {
-    const theme = this.props.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
     return(
       <View style={[screenStyles.screenContainer, {backgroundColor: theme}]}>
         <Header title={this.props.title} />
@@ -78,7 +78,7 @@ class Calendar extends React.Component{
 
 const mapStateToProps = state => ({
   taskList: state.todos,
-  darkTheme: state.customize.darkTheme,
+  customize: state.customize,
 });
 
 export default connect(mapStateToProps)(Calendar);

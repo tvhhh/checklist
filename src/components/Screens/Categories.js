@@ -22,8 +22,10 @@ class Categories extends React.Component {
   }
 
   render() {
-    const theme = this.props.darkTheme ? colors.DarkBackground : colors.LightBackground;
-    const textColor = this.props.darkTheme ? "white" : "black";
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <View style={[screenStyles.screenContainer, styles.container, {backgroundColor: theme}]}>
         <Header title={this.props.title} />
@@ -38,8 +40,8 @@ class Categories extends React.Component {
           keyExtractor={(item, index) => item + index}
           renderItem={obj => (
             <View style={styles.categoryContainer}>
-              <Category name={obj.item} size={100} />
-              <Text style={{color: textColor}}>
+              <Category name={obj.item} size={fontSize + 70} />
+              <Text style={{color: textColor, fontSize: fontSize - 5, fontFamily: font}}>
                 {obj.item.charAt(0).toUpperCase() + obj.item.slice(1)}
               </Text>
             </View>
@@ -64,6 +66,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  darkTheme: state.customize.darkTheme,
+  customize: state.customize,
 });
 export default connect(mapStateToProps)(Categories);

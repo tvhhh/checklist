@@ -16,7 +16,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const theme = this.props.darkTheme ? colors.DarkBackground: colors.LightBackground ;
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground: colors.LightBackground ;
     return (
       <View style={{flex: 1, backgroundColor: theme}}>
         <Menu onPress={this.toggleDrawer} />
@@ -26,7 +26,7 @@ class Profile extends React.Component {
 };
 
 const mapStateToProps = state => ({
-  darkTheme: state.customize.darkTheme,
+  customize: state.customize,
 });
 
 

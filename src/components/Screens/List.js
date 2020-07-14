@@ -14,7 +14,7 @@ class List extends React.Component {
   }
 
   render() {
-    const theme = this.props.darkTheme ? colors.DarkBackground: colors.LightBackground;
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground: colors.LightBackground;
     return (
       <View style={{flex: 1, backgroundColor: theme}}>
         <Header title={this.props.title} />
@@ -31,7 +31,7 @@ class List extends React.Component {
 };
 
 const mapStateToProps = state => ({
-  darkTheme: state.customize.darkTheme,
+  customize: state.customize,
 });
 
 export default connect(mapStateToProps)(List);

@@ -36,7 +36,7 @@ class Category extends React.Component {
         icon = <MaterialCommunityIcons name="theater" color={colors.Entertainment} size={0.625 * size} />;
         break;
     }
-    if (name == "uncategorized" && this.props.darkTheme) name = "uncategorizedd";
+    if (name == "uncategorized" && this.props.customize.darkTheme) name = "uncategorizedd";
     return (
       <TouchableOpacity 
         style={[
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  darkTheme: state.customize.darkTheme,
+  customize: state.customize,
 });
 
 export default connect(mapStateToProps)(Category);

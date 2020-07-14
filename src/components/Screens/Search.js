@@ -7,11 +7,11 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import screenStyles from './screenStyles';
 import colors from '../../styles/colors';
-
+import { connect } from 'react-redux';
 import 'react-native-gesture-handler';
 
 
-export default class Search extends React.Component {
+class Search extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -40,13 +40,17 @@ export default class Search extends React.Component {
   };
 
   renderHeader = () => {
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const inputText = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return(
       <View style={styles.searchBoxContainer}>
         <SearchBar
           round
-          containerStyle={styles.barContainer}
-          inputContainerStyle={styles.inputContainer}
-          inputStyle={styles.inputText}
+          containerStyle={[styles.barContainer, {backgroundColor: theme}]}
+          inputContainerStyle={[styles.inputContainer, {backgroundColor: theme}]}
+          inputStyle={[styles.inputText, {color: inputText, fontFamily: font, fontSize: fontSize}]}
           placeholder="Search your task here..."
           onChangeText={text => this.searchFilterFunction(text)}
           value={this.state.search}
@@ -58,16 +62,19 @@ export default class Search extends React.Component {
   };
 
   renderItem = ({item}) =>{
+    const overlay = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
+    const theme = this.props.darkTheme ? colors.DarkBackground : colors.LightBackground;
     return(
-      <TouchableHighlight style={styles.itemFormat}>
+      <TouchableHighlight style={[styles.itemFormat, {backgroundColor: overlay, borderColor: theme}]}>
         <ListItem title={item.title} />
       </TouchableHighlight>
     );
   }
 
   render() {
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
     return (    
-      <View style={screenStyles.screenContainer}>
+      <View style={[screenStyles.screenContainer,{backgroundColor: theme}]}>
         <FlatList
           data={this.state.tempTaskList}
           keyExtractor={item => item.title}
@@ -87,17 +94,14 @@ const styles =StyleSheet.create({
   },
   barContainer: {
     flex: 1,
-    backgroundColor: colors.Background,
     borderBottomColor: "transparent",
     borderTopColor: "transparent",
   },
   inputContainer: {
-    backgroundColor: colors.Background,
     borderBottomWidth: 1,
     borderWidth: 1,
   },
   inputText: {
-    color: colors.PrimaryText,
     fontSize: 18,
   },
   itemFormat: {
@@ -106,9 +110,13 @@ const styles =StyleSheet.create({
     marginTop:10,
     paddingTop:8,
     paddingBottom:8,
-    backgroundColor: colors.Overlay,
     borderRadius:16,
     borderWidth: 8,
-    borderColor: colors.Background,
   },
 });
+
+const mapStateToProps = state => ({
+  customize: state.customize,
+});
+
+export default connect(mapStateToProps)(Search);

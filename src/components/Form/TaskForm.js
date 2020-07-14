@@ -1,7 +1,7 @@
 import React from 'react';
 import { Keyboard, StyleSheet, Text, TextInput,TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Overlay } from 'react-native-elements';
-
+import { connect } from 'react-redux';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import CategoryPicker from './CategoryPicker';
 import Category from '../Category';
@@ -15,7 +15,7 @@ import colors from '../../styles/colors';
 import { getToday, extractDateTime } from '../../utils/DateTime';
 
 
-export default class TaskForm extends React.Component {
+class TaskForm extends React.Component {
   constructor(props) {
     super(props);
     let today = getToday();
@@ -84,42 +84,45 @@ export default class TaskForm extends React.Component {
 
   render() {
     const extractedDateTime = extractDateTime(this.state.task.dueTime);
-
+    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const text2ndColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.taskFormLayout} >
           <View style={styles.taskFormHeader}>
             <TouchableOpacity style={styles.saveButtonContainer} onPress={this.handleSubmit} >
-              <Text style={styles.saveButtonText}>SAVE</Text>
+              <Text style={[styles.saveButtonText, {fontSize: fontSize - 5, fontFamily: font}]}>SAVE</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.taskFormInputField}>
-            <TextInput style={styles.titleInput}
+            <TextInput style={[styles.titleInput, {fontSize: fontSize - 5, fontFamily: font, color: textColor}]}
               underlineColorAndroid="transparent"
               placeholder="I'm gonna do..."
-              placeholderTextColor={colors.PrimaryText}
+              placeholderTextColor={textColor}
               onChangeText={this.updateTitle}
               defaultValue={this.state.task.title}
               autoCapitalize="none"
             />
             {this.state.errorText ? 
-              <Text style={styles.errorText}>
+              <Text style={styles.errorText, {fontSize: fontSize - 5, fontFamily: font}}>
                 This field is required.
               </Text> : null
             }
-            <TextInput style={styles.descriptionInput}
+            <TextInput style={[styles.descriptionInput, {fontSize: fontSize - 5, fontFamily: font}]}
               underlineColorAndroid="transparent"
               placeholder="DESCRIPTION"
-              placeholderTextColor={colors.SecondaryText}
+              placeholderTextColor={text2ndColor}
               onChangeText={this.updateDescription}
               defaultValue={this.state.task.description}
               autoCapitalize="none"
             />
             <TouchableOpacity style={styles.datetimePicker} onPress={this.toggleDateTimePicker}>
-              <Text style={styles.dateTimePickerText}>{`${extractedDateTime.date}  ${extractedDateTime.time}`}</Text>
+              <Text style={[styles.dateTimePickerText, {color: textColor, fontSize: fontSize - 5, fontFamily: font}]}>{`${extractedDateTime.date}  ${extractedDateTime.time}`}</Text>
             </TouchableOpacity>
             {this.state.errorTime ? 
-              <Text style={styles.errorText}>
+              <Text style={styles.errorText, {fontSize: fontSize - 5, fontFamily: font}}>
                 Sorry, your due time should be later than now.
               </Text> : null
             }
@@ -130,7 +133,7 @@ export default class TaskForm extends React.Component {
                 </TouchableOpacity>) :
                 <Category name={this.state.task.category} onPress={this.toggleCategoryPicker} />
               }
-              <Text style={styles.categoryName}>{this.state.task.category.toUpperCase()}</Text>
+              <Text style={{color: text2ndColor, fontSize: fontSize - 5, fontFamily: font}}>{this.state.task.category.toUpperCase()}</Text>
             </View>
             {this.props.isOnSelected ?
               <View style={styles.taskFormFooter}>
@@ -186,7 +189,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   titleInput: {
-    fontSize: 18,
     borderColor: colors.Border,
     borderBottomWidth: 1,
     paddingBottom: 3,
@@ -219,9 +221,6 @@ const styles = StyleSheet.create({
     width: 300,
     borderRadius: 5,
   },
-  categoryName: {
-    color: colors.PrimaryText,
-  },
   taskFormFooter: {
     alignItems: "center",
     justifyContent: "center",
@@ -246,3 +245,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
+
+const mapStateToProps = state => ({
+  customize: state.customize,
+});
+
+export default connect(mapStateToProps)(TaskForm);

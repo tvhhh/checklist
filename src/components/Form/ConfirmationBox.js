@@ -1,23 +1,25 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, } from 'react-native';
-
+import { connect } from 'react-redux';
 import colors from '../../styles/colors';
 
 
-export default class ConfirmationBox extends React.Component {
+class ConfirmationBox extends React.Component {
   render() {
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <View style={styles.container}>
         <View style={styles.content}>
-          <Text style={styles.largeText}>Delete this task?</Text>
-          <Text style={styles.smallText}>You cannot undo this action</Text>
+          <Text style={[styles.largeText, {fontFamily: font, fontSize: fontSize}]}>Delete this task?</Text>
+          <Text style={[styles.smallText, {fontFamily: font, fontSize: fontSize - 5}]}>You cannot undo this action</Text>
         </View>
         <View style={styles.optionContainer}>
           <TouchableOpacity style={styles.button} onPress={this.props.onCancel}>
-            <Text style={styles.cancelText}>Cancel</Text>
+            <Text style={[styles.cancelText, {fontFamily: font, fontSize: fontSize}]}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={this.props.onConfirm}>
-            <Text style={styles.confirmText}>Delete</Text>
+            <Text style={[styles.confirmText, {fontFamily: font, fontSize: fontSize}]}>Delete</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -35,13 +37,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   largeText: {
-    color: colors.PrimaryText,
-    fontSize: 20,
     marginBottom: 5,
   },
   smallText: {
     color: colors.PrimaryText,
-    fontSize: 14,
   },
   optionContainer: {
     flexDirection: "row",
@@ -52,10 +51,14 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     color: "red",
-    fontSize: 20,
   },
   cancelText: {
     color: "dodgerblue",
-    fontSize: 20,
   },
 });
+
+const mapStateToProps = state => ({
+  customize: state.customize.customize,
+});
+
+export default connect(mapStateToProps)(ConfirmationBox);

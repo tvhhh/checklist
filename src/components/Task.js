@@ -29,16 +29,18 @@ class Task extends React.Component {
 
   render() {
     const extractedTime = extractDateTime(this.state.dueTime);
-    const overlayTheme = this.props.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
-    const titleTextColor = this.props.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
-    const timeTextColor = this.props.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
+    const overlayTheme = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
+    const titleTextColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const timeTextColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <TouchableOpacity onPress={this.props.onSelect}>
         <View style={[styles.taskContainer, { opacity: (this.state.done) ? 0.5 : 1, backgroundColor: overlayTheme}]}>
           <CheckButton name="done" checked={this.state.done} onPress={this.props.toggleDone} />
           <View style={styles.textContainer}>
-            <Text style={[styles.taskTitle, {color: titleTextColor}]}>{this.state.title}</Text>
-            <Text style={[styles.taskTime, {color: timeTextColor}]}>{`${extractedTime.date}  ${extractedTime.time}`}</Text>
+            <Text style={[styles.taskTitle, {color: titleTextColor, fontFamily: font, fontSize: fontSize - 3}]}>{this.state.title}</Text>
+            <Text style={[styles.taskTime, {color: timeTextColor, fontFamily: font, fontSize: fontSize - 5}]}>{`${extractedTime.date}  ${extractedTime.time}`}</Text>
           </View>
           <Category name={this.state.category} size={40} />
           <CheckButton name="pinned" checked={this.state.pinned} onPress={this.props.togglePinned} />
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = state => ({
-  darkTheme: state.customize.darkTheme,
+  customize: state.customize,
 });
 
 export default connect(mapStateToProps)(Task);
