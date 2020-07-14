@@ -21,7 +21,10 @@ class List extends React.Component {
         <Menu onPress={this.toggleDrawer} />
         <Search
           position={{ position: "absolute", top: 12, right: 45, }}
-          onPress={() => this.props.navigation.navigate("Search",{taskList: this.props.taskList})}
+          onPress={() => this.props.navigation.navigate("Search",{
+            taskList: this.props.taskList,
+          })}
+          {...this.props.onRemoveTask}
         />
         <Notice onPress={() => this.props.navigation.navigate("Notice")} />
         <TaskList title={this.props.title} />
