@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import todoReducer from './TodoReducers';
+import userDataReducers from './UserDataReducers';
 import customizeReducer from './CustomizationReducers';
 
 const reducer = combineReducers({
-  todos: todoReducer,
+  userData: userDataReducers,
   customize: customizeReducer,
 });
 

@@ -1,14 +1,17 @@
 import React, {useState} from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
+
 
 import { connect } from 'react-redux';
 
 import Header from '../Header';
 import CalendarPicker from '../CalendarPicker';
-import TaskList from '../TaskList';
+import TaskList, { FILTER_DATE } from '../TaskList';
 import { Menu, Notice, Search } from '../Button';
+
 import colors from '../../styles/colors'; 
-import screenStyles from './screenStyles';
+import screenStyles from './ScreenStyles';
+
 
 import { extractDate } from '../../utils/DateTime';
 
@@ -17,7 +20,7 @@ class Calendar extends React.Component{
     super(props);
     this.state={
       pickedDate: extractDate(new Date()),
-    }
+    };
   }
 
   renderMarkedDates = () => {
@@ -25,7 +28,7 @@ class Calendar extends React.Component{
     this.props.taskList.forEach(task => {
       marked[extractDate(task.dueTime)] = {marked: true, dotColor: 'blue', activeOpacity: 0};
     });
-    marked[this.state.pickedDate] = {...marked[this.state.pickedDate], selected: true}
+    marked[this.state.pickedDate] = {...marked[this.state.pickedDate], selected: true};
     return JSON.parse(JSON.stringify(marked));
   }
 
@@ -34,7 +37,7 @@ class Calendar extends React.Component{
   }
   
   onDayPress = date => {
-    this.setState({pickedDate: date})
+    this.setState({ pickedDate: date });
   }
 
   // static getDerivedStateFromProps(nextProps) {
@@ -59,16 +62,14 @@ class Calendar extends React.Component{
           onPress={() => this.props.navigation.navigate("Search",{taskList: this.props.taskList})}
         />
         <Notice onPress={() => this.props.navigation.navigate("Notice")} />
-        <View style={{marginBottom: 20}}>
-          <CalendarPicker 
-            onDayPress={this.onDayPress}
-            renderMarkedDates={this.renderMarkedDates}
-            theme={theme}
-            // key={this.props.key}
-          />
-        </View>
+        <CalendarPicker 
+          onDayPress={this.onDayPress}
+          renderMarkedDates={this.renderMarkedDates}
+          theme={theme}
+        />
         <TaskList
-          calendarView={true} 
+          filterOption={FILTER_DATE}
+          calendarView={true}
           date={this.state.pickedDate}
         />
       </View>
@@ -77,8 +78,8 @@ class Calendar extends React.Component{
 };
 
 const mapStateToProps = state => ({
-  taskList: state.todos,
   customize: state.customize,
+  taskList: state.userData.data.tasks,
 });
 
 export default connect(mapStateToProps)(Calendar);

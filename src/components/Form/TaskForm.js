@@ -1,5 +1,5 @@
 import React from 'react';
-import { Keyboard, StyleSheet, Text, TextInput,TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';

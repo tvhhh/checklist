@@ -4,9 +4,11 @@ import { SearchBar, ListItem } from 'react-native-elements';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+
 import Task from '../Task'
 import TaskForm from '../Form/TaskForm';
-import screenStyles from './screenStyles';
+import screenStyles from './ScreenStyles';
+
 import colors from '../../styles/colors';
 import { connect } from 'react-redux';
 import { Overlay } from 'react-native-elements';

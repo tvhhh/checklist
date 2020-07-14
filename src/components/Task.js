@@ -10,25 +10,8 @@ import { extractDateTime } from '../utils/DateTime';
 
 
 class Task extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      id: this.props.id,
-      title: this.props.title,
-      description: this.props.description,
-      dueTime: this.props.dueTime,
-      category: this.props.category,
-      pinned: false,
-      done: false,
-    };
-  }
-
-  UNSAFE_componentWillReceiveProps = newProps => {
-    this.setState({ ...newProps });
-  }
-
   render() {
-    const extractedTime = extractDateTime(this.state.dueTime);
+    const extractedTime = extractDateTime(this.props.dueTime);
     const overlayTheme = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
     const titleTextColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
     const timeTextColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
@@ -36,14 +19,14 @@ class Task extends React.Component {
     const font = this.props.customize.font;
     return (
       <TouchableOpacity onPress={this.props.onSelect}>
-        <View style={[styles.taskContainer, { opacity: (this.state.done) ? 0.5 : 1, backgroundColor: overlayTheme}]}>
-          <CheckButton name="done" checked={this.state.done} onPress={this.props.toggleDone} />
+        <View style={[styles.taskContainer, { opacity: (this.props.done) ? 0.5 : 1, backgroundColor: overlayTheme}]}>
+          <CheckButton name="done" checked={this.props.done} onPress={this.props.toggleDone} />
           <View style={styles.textContainer}>
-            <Text style={[styles.taskTitle, {color: titleTextColor, fontFamily: font, fontSize: fontSize - 3}]}>{this.state.title}</Text>
+            <Text style={[styles.taskTitle, {color: titleTextColor, fontFamily: font, fontSize: fontSize - 3}]}>{this.props.title}</Text>
             <Text style={[styles.taskTime, {color: timeTextColor, fontFamily: font, fontSize: fontSize - 5}]}>{`${extractedTime.date}  ${extractedTime.time}`}</Text>
           </View>
-          <Category name={this.state.category} size={40} />
-          <CheckButton name="pinned" checked={this.state.pinned} onPress={this.props.togglePinned} />
+          <Category name={this.props.category} size={40} />
+          <CheckButton name="pinned" checked={this.props.pinned} onPress={this.props.togglePinned} />
         </View>
       </TouchableOpacity>
     );

@@ -15,8 +15,14 @@ import colors from '../styles/colors';
 
 import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateTime';
 
-import * as actions from '../redux/actions/TodoActions';
+import { createTask, editTask, removeTask } from '../redux/actions/UserDataActions';
 
+
+export const FILTER_TODAY = "FILTER_TODAY";
+export const FILTER_WEEK = "FILTER_WEEK";
+export const FILTER_PINNED = "FILTER_PINNED";
+export const FILTER_DATE = "FILTER_DATE";
+export const FILTER_NAME = "FILTER_NAME";
 
 class TaskList extends React.Component {
   constructor(props) {
@@ -49,19 +55,17 @@ class TaskList extends React.Component {
   }
 
   handleFormSubmit = task => {
-    const actions = this.props.actions;
     this.setState({ showForm: false });
     if (Object.keys(this.state.selected).length > 0) {
-      actions.editTask(task, this.state.selected);
+      this.props.editTask(task, this.state.selected);
     } else {
-      actions.createTask(task);
+      this.props.createTask(task);
     }
     this.setState({ selected: {} });
   }
 
   handleRemoval = () => {
-    const actions = this.props.actions;
-    actions.removeTask(this.state.selected);
+    this.props.removeTask(this.state.selected);
     this.setState({ showForm: false, selected: {} });
   }
 
@@ -99,7 +103,7 @@ class TaskList extends React.Component {
 
   filterByDate = (taskList, date) => {
     return taskList.filter(task => extractDate(task.dueTime) === date).reduce((obj, task) => {
-      const title = date;
+      const title = "";
       return {
         ...obj,
         [title]: [...(obj[title] || []), task],  
@@ -107,24 +111,25 @@ class TaskList extends React.Component {
     }, {});
   }
 
-  filterOption = (title, taskList, date) => {
-    switch(title) {
-      case "MY DAY":
+  filter = (option, taskList) => {
+    switch(option) {
+      case FILTER_TODAY:
         return this.filterByToday(taskList);
-      case "MY WEEK":
+      case FILTER_WEEK:
         return this.filterByWeek(taskList);
-      case "PINNED":
+      case FILTER_PINNED:
         return this.filterByPinned(taskList);
+      case FILTER_DATE:
+        return this.filterByDate(taskList, this.props.date);
       default:
-        return this.filterByDate(taskList, date);
+        return taskList;
     }
   }
 
   render() {
-    const tasks = this.filterOption(
-      this.props.title,
+    const tasks = this.filter(
+      this.props.filterOption,
       [...this.props.taskList].sort((a,b) => a.dueTime - b.dueTime),
-      this.props.date,
     );
 
     const sections = Object.keys(tasks).map(key => ({
@@ -195,12 +200,14 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  taskList: state.todos,
   customize: state.customize,
+  taskList: state.userData.data.tasks,
 });
 
 const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(actions, dispatch),
+  createTask: bindActionCreators(createTask, dispatch),
+  editTask: bindActionCreators(editTask, dispatch),
+  removeTask: bindActionCreators(removeTask, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskList);
