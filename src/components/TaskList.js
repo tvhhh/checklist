@@ -15,7 +15,7 @@ import colors from '../styles/colors';
 
 import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateTime';
 
-import { createTask, editTask, removeTask } from '../redux/actions/TaskActions';
+import { createTask, editTask, removeTask } from '../redux/actions/UserDataActions';
 
 
 export const FILTER_TODAY = "FILTER_TODAY";
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  taskList: state.tasks,
+  taskList: state.userData.data.tasks,
 });
 
 const mapDispatchToProps = dispatch => ({

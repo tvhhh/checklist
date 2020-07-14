@@ -5,7 +5,7 @@ import Header from '../Header';
 import TaskList, { FILTER_TODAY, FILTER_WEEK, FILTER_PINNED } from '../TaskList';
 import { Menu, Notice, Search } from '../Button';
 
-import screenStyles from './screenStyles';
+import screenStyles from './ScreenStyles';
 
 
 export default class List extends React.Component {

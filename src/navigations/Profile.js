@@ -1,32 +1,41 @@
 import React from 'react';
-import { StyleSheet, View, } from 'react-native';
+import { connect } from 'react-redux';
 
-import { Menu } from '../components/Button';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import colors from '../styles/colors';
+import ProfileManagement from '../components/Screens/ProfileManagement';
+import LogIn from '../components/Screens/LogIn';
+import SignUp from '../components/Screens/SignUp';
 
 
-export default class Profile extends React.Component {
-  constructor (props) {
-    super(props);
-  }
+const Stack = createStackNavigator();
 
-  toggleDrawer = () => {
-    this.props.navigation.toggleDrawer();
-  }
-
+class GuestScreen extends React.Component {
   render() {
     return (
-      <View style={styles.screenContainer}>
-        <Menu onPress={this.toggleDrawer} />
-      </View>
+      <Stack.Navigator headerMode="none">
+        <Stack.Screen name="LogIn" component={LogIn} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+      </Stack.Navigator>
     );
   }
 };
 
-const styles = StyleSheet.create({
-  screenContainer: {
-    flex: 1,
-    backgroundColor: colors.Background,
-  },
+class Profile extends React.Component {
+  render() {
+    return (
+      <>
+        {this.props.loggedIn ? 
+          <ProfileManagement navigation={this.props.navigation} /> : 
+          <GuestScreen />
+        }
+      </>
+    );
+  }
+};
+
+const mapStateToProps = state => ({
+  loggedIn: state.userData.loggedIn,
 });
+
+export default connect(mapStateToProps)(Profile);

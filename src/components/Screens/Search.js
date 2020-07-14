@@ -5,7 +5,7 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
-import screenStyles from './screenStyles';
+import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
 
 import 'react-native-gesture-handler';

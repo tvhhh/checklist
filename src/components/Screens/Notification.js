@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import screenStyles from './screenStyles';
+import screenStyles from './ScreenStyles';
 
 
 export default class Notification extends React.Component {

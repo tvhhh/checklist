@@ -8,7 +8,7 @@ import CalendarPicker from '../CalendarPicker';
 import TaskList, { FILTER_DATE } from '../TaskList';
 import { Menu, Notice, Search } from '../Button';
 
-import screenStyles from './screenStyles';
+import screenStyles from './ScreenStyles';
 
 import { extractDate } from '../../utils/DateTime';
 
@@ -63,7 +63,7 @@ class Calendar extends React.Component{
 };
 
 const mapStateToProps = state => ({
-  taskList: state.tasks,
+  taskList: state.userData.data.tasks,
 });
 
 export default connect(mapStateToProps)(Calendar);

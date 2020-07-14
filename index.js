@@ -16,6 +16,10 @@ import SplashScreen from 'react-native-splash-screen';
 
 import reducer from './src/redux/reducers/RootReducer';
 
+import { initializeApp } from './src/api';
+
+
+initializeApp();
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
@@ -29,8 +33,6 @@ const ReduxApp = () => {
       <App />
     </Provider>
   );
-}
-
-console.log(store.getState());
+};
 
 AppRegistry.registerComponent(appName, () => ReduxApp);

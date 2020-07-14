@@ -5,7 +5,7 @@ import Header from '../Header';
 import Category from '../Category';
 import { Menu, Notice, Search } from '../Button';
 
-import screenStyles from './screenStyles';
+import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
 
 
