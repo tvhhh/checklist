@@ -76,7 +76,7 @@ class Search extends React.Component {
           placeholder="Search your task here..."
           onChangeText={text => this.searchFilterFunction(text)}
           value={this.state.search}
-          searchIcon={<EvilIcons name="search" size={25} />}
+          searchIcon={<EvilIcons name="search" size={25} color={colors.Button} />}
           />
         <MaterialCommunityIcons name="filter-variant" size={30} color={colors.Button} onPress={() => {}} />
       </View>

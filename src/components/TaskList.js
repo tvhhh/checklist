@@ -141,6 +141,7 @@ class TaskList extends React.Component {
     const smallTextColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
     const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
     const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
+    const buttonColor = this.props.customize.darkTheme ? "#91a5c7" : colors.SecondaryColor;
     const fontSize = this.props.customize.fontSize;
     const font = this.props.customize.font;
     
@@ -161,6 +162,7 @@ class TaskList extends React.Component {
         />
         <Create
           position={{ position: "absolute", bottom: 15, right: 15, }}
+          buttonColor={buttonColor}
           onPress={this.onAddButtonPress} 
         />
         <Overlay

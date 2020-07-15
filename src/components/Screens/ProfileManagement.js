@@ -33,8 +33,13 @@ class ProfileManagement extends React.Component {
 
   render() {
     const data = this.props.appData.data;
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
-      <View style={screenStyles.screenContainer}>
+      <View style={[screenStyles.screenContainer, {backgroundColor: theme}]}>
         <Menu onPress={this.toggleDrawer} />
         <View style={styles.header}>
           <FontAwesome
@@ -42,50 +47,50 @@ class ProfileManagement extends React.Component {
             color="dimgrey"
             size={100} 
           />
-          <Text style={styles.username}>{`@${data.username}`}</Text>
+          <Text style={[styles.username, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{`@${data.username}`}</Text>
         </View>
         <TouchableOpacity style={styles.infoField}>
           <AntDesign name="contacts" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={styles.infoTitle}>Full Name</Text>
-            <Text style={styles.info}>{data.name || "What's your name?"}</Text>
+            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Full Name</Text>
+            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{data.name || "What's your name?"}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField}>
           <FontTisto name="email" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={styles.infoTitle}>Email</Text>
-            <Text style={styles.info}>{data.email}</Text>
+            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Email</Text>
+            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{data.email}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField}>
           <FontTisto name="phone" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={styles.infoTitle}>Phone number</Text>
-            <Text style={styles.info}>{data.phone || "Update your phone number"}</Text>
+            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Phone number</Text>
+            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{data.phone || "Update your phone number"}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField}>
           <FontAwesome name="key" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={styles.infoTitle}>Change password</Text>
-            <Text style={styles.info}>Reset your password</Text>
+            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Change password</Text>
+            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Reset your password</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField}>
           <MaterialCommunityIcons name="account-remove" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={styles.infoTitle}>Deactivate account</Text>
-            <Text style={styles.info}>Remove your account</Text>
+            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Deactivate account</Text>
+            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Remove your account</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.logOut} onPress={this.logOut}>
-          <Text style={styles.logOutText}>LOG OUT</Text>
+          <Text style={[styles.logOutText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>LOG OUT</Text>
           <MaterialCommunityIcons name="logout" size={25} color="white" />
         </TouchableOpacity>
       </View>
@@ -143,6 +148,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  customize: state.customize,
   appData: state.userData,
 });
 

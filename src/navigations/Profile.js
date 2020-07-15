@@ -8,7 +8,6 @@ import ProfileManagement from '../components/Screens/ProfileManagement';
 import LogIn from '../components/Screens/LogIn';
 import SignUp from '../components/Screens/SignUp';
 import colors from '../styles/colors';
-import { connect } from 'react-redux';
 
 const Stack = createStackNavigator();
 
@@ -26,7 +25,6 @@ class GuestScreen extends React.Component {
 
 class Profile extends React.Component {
   render() {
-    const theme = this.props.customize.darkTheme ? colors.DarkBackground: colors.LightBackground ;
     return (
       <>
         {this.props.loggedIn ? 
@@ -39,7 +37,6 @@ class Profile extends React.Component {
 };
 
 const mapStateToProps = state => ({
-  customize: state.customize,
   loggedIn: state.userData.loggedIn,
 });
 

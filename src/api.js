@@ -3,18 +3,20 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 const firebaseConfig = {
-  apiKey: "<API-KEY>",
-  authDomain: "<AUTH-DOMAIN>",
-  databaseURL: "<DATABASE-URL>",
-  projectId: "<PROJECT-ID>",
-  storageBucket: "<STORAGE-BUCKET>",
-  messagingSenderId: "<SENDER-ID>",
-  appId: "<APP-ID>",
-  measurementId: "<MEASUREMENT-ID>",
+  apiKey: "AIzaSyBfZjRzGXUE3hpv718gFxr1Ir5pvFKWkmY",
+  authDomain: "todos-f0b71.firebaseapp.com",
+  databaseURL: "https://todos-f0b71.firebaseio.com",
+  projectId: "todos-f0b71",
+  storageBucket: "todos-f0b71.appspot.com",
+  messagingSenderId: "32907944673",
+  appId: "1:32907944673:web:3b0c27a619f044eb978da0",
+  measurementId: "G-YVR9FCCVND"
 };
+
 
 const USER_ASYNC_STORAGE_KEY = '@TodoApp:UserDB';
 const TASKS_ASYNC_STORAGE_KEY = '@TodoApp:TaskDB';
+const CUSTOM_ASYNC_STORAGE_KEY = '@TodoApp:CustomDB'
 
 export const initializeApp = () => {
   firebase.initializeApp(firebaseConfig);
@@ -98,4 +100,14 @@ export const fetchTaskList = async () => {
 export const storeTaskList = async (taskList) => {
   return await AsyncStorage.setItem(TASKS_ASYNC_STORAGE_KEY, taskList)
   .catch(error => console.log(`AsyncStorage - Save tasklist: ${error}`));
+};
+
+export const fetchCustomization = async () => {
+  return AsyncStorage.getItem(CUSTOM_ASYNC_STORAGE_KEY)
+  .catch(error => console.log(`AsyncStorage - Fetch customization: ${error}`));
+}
+
+export const storeCustomization = async (customize) => {
+  return await AsyncStorage.setItem(CUSTOM_ASYNC_STORAGE_KEY, customize)
+  .catch(error => console.log(`AsyncStorage - Save customization: ${error}`));
 };

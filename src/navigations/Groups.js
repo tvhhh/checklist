@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Alert, Dimensions, ScrollView, View, Text, EventSubscriptionVendor, TouchableOpacity, SectionList, FlatList, StyleSheet } from 'react-native';
+import { Alert, Dimensions, ScrollView, View, Text, EventSubscriptionVendor, TouchableOpacity, SectionList, FlatList, StyleSheet, TextInput } from 'react-native';
 
 import Header from '../components/Header';
 import Octicons from 'react-native-vector-icons/Octicons';

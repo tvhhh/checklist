@@ -1,13 +1,13 @@
 import React from 'react';
 import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-
+import { connect } from 'react-redux';
 import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
 
 import { createUser, isUsernameExisting, isEmailExisting } from '../../api';
 
 
-export default class SignUp extends React.Component {
+class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,15 +91,21 @@ export default class SignUp extends React.Component {
   }
   
   render() {
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const text2ndColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
+    const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={[screenStyles.screenContainer, styles.container]}>
-          <Text style={styles.title}>SIGN UP</Text>
+        <View style={[screenStyles.screenContainer, styles.container, {backgroundColor: theme}]}>
+          <Text style={[styles.title, {color: textColor, fontFamily: font, fontSize: fontSize}]}>SIGN UP</Text>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Username</Text>
-            <TextInput style={styles.input}
+            <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Username</Text>
+            <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
               placeholder="Enter username"
-              placeholderTextColor={colors.SecondaryText}
+              placeholderTextColor={text2ndColor}
               onChangeText={this.onChangeUserName}
               defaultValue={this.state.username}
               onFocus={this.turnOffAlert}
@@ -107,10 +113,10 @@ export default class SignUp extends React.Component {
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Email</Text>
-            <TextInput style={styles.input}
+            <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Email</Text>
+            <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
               placeholder="Enter email"
-              placeholderTextColor={colors.SecondaryText}
+              placeholderTextColor={text2ndColor}
               onChangeText={this.onChangeEmail}
               defaultValue={this.state.email}
               onFocus={this.turnOffAlert}
@@ -118,10 +124,10 @@ export default class SignUp extends React.Component {
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Password</Text>
-            <TextInput style={styles.input}
+            <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Password</Text>
+            <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
               placeholder="Enter password"
-              placeholderTextColor={colors.SecondaryText}
+              placeholderTextColor={text2ndColor}
               onChangeText={this.onChangePassword}
               defaultValue={this.state.password}
               onFocus={this.turnOffAlert}
@@ -130,10 +136,10 @@ export default class SignUp extends React.Component {
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Confirm password</Text>
-            <TextInput style={styles.input}
+            <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Confirm password</Text>
+            <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
               placeholder="Re-enter password"
-              placeholderTextColor={colors.SecondaryText}
+              placeholderTextColor={text2ndColor}
               onChangeText={this.onConfirmPassword}
               defaultValue={this.state.confirmedPassword}
               onFocus={this.turnOffAlert}
@@ -145,17 +151,17 @@ export default class SignUp extends React.Component {
             style={styles.submitButton}
             onPress={this.handleSubmit}
           >
-            <Text style={styles.submitText}>SIGN UP</Text>
+            <Text style={[styles.submitText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>SIGN UP</Text>
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.otherOptionsButton}
             onPress={() => this.props.navigation.goBack()}
           >
-            <Text style={styles.otherOptionsText}>Back to Login</Text>
+            <Text style={[styles.otherOptionsText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Back to Login</Text>
           </TouchableOpacity>
           {(this.state.error) ? 
             <View style={styles.alertBox}>
-              <Text style={styles.alertText}>{this.state.errorText}</Text>
+              <Text style={[styles.alertText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{this.state.errorText}</Text>
             </View> : null
           }
         </View>
@@ -225,3 +231,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+const mapStateToProps = state => ({
+  customize: state.customize,
+});
+
+export default connect(mapStateToProps)(SignUp);

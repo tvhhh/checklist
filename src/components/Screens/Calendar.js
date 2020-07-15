@@ -25,11 +25,20 @@ class Calendar extends React.Component{
 
   renderMarkedDates = () => {
     let marked = {};
+    let theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    if (theme === colors.LightBackground) {
     this.props.taskList.forEach(task => {
-      marked[extractDate(task.dueTime)] = {marked: true, dotColor: 'blue', activeOpacity: 0};
+      marked[extractDate(task.dueTime)] = {marked: true, dotColor: "#5172cf", activeOpacity: 0};
     });
-    marked[this.state.pickedDate] = {...marked[this.state.pickedDate], selected: true};
-    return JSON.parse(JSON.stringify(marked));
+    marked[this.state.pickedDate] = {...marked[this.state.pickedDate], selected: true, selectedColor: "#5172cf"};
+    }
+    else {
+      this.props.taskList.forEach(task => {
+        marked[extractDate(task.dueTime)] = {marked: true, dotColor: '#6c7c96'};
+      });
+      marked[this.state.pickedDate] = {...marked[this.state.pickedDate], selected: true, selectedColor: "#3c3a3d"};
+    }
+      return JSON.parse(JSON.stringify(marked));
   }
 
   toggleDrawer = () => {
@@ -37,19 +46,8 @@ class Calendar extends React.Component{
   }
   
   onDayPress = date => {
-    this.setState({ pickedDate: date });
+    this.setState({ pickedDate: date});
   }
-
-  // static getDerivedStateFromProps(nextProps) {
-  //   const [{key, theme}, setTheme] = useState({key: 'light', theme: {
-  //     calendarBackground: colors.LightBackground,
-  //     dayTextColor: "grey",
-  //     monthTextColor: "grey",
-  //     textDayFontSize: 18,
-  //     textDayHeaderFontSize: 16,
-  //     textMonthFontSize: 20,
-  //   }})
-  // }
 
   render() {
     const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;

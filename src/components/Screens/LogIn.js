@@ -45,15 +45,21 @@ class LogIn extends React.Component {
   }
   
   render() {
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const text2ndColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
+    const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={[screenStyles.screenContainer, styles.container]}>
-          <Text style={styles.title}>SIGN IN</Text>
+        <View style={[screenStyles.screenContainer, styles.container, {backgroundColor: theme}]}>
+          <Text style={[styles.title, {color: textColor, fontFamily: font, fontSize: fontSize}]}>SIGN IN</Text>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Username</Text>
-            <TextInput style={styles.input}
+            <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Username</Text>
+            <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
               placeholder="Enter username"
-              placeholderTextColor={colors.SecondaryText}
+              placeholderTextColor={text2ndColor}
               onChangeText={this.onChangeUserName}
               defaultValue={this.state.username}
               onFocus={this.turnOffAlert}
@@ -61,10 +67,10 @@ class LogIn extends React.Component {
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Password</Text>
-            <TextInput style={styles.input}
+            <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Password</Text>
+            <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
               placeholder="Enter password"
-              placeholderTextColor={colors.SecondaryText}
+              placeholderTextColor={text2ndColor}
               onChangeText={this.onChangePassword}
               defaultValue={this.state.password}
               onFocus={this.turnOffAlert}
@@ -76,23 +82,23 @@ class LogIn extends React.Component {
             style={styles.submitButton}
             onPress={this.handleSubmit}
           >
-            <Text style={styles.submitText}>LOGIN</Text>
+            <Text style={[styles.submitText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>LOGIN</Text>
           </TouchableOpacity>
           <View style={styles.otherOptions}>
             <TouchableOpacity style={styles.otherOptionsButton}>
-              <Text style={styles.resetPassword}>Forgot password?</Text>
+              <Text style={[styles.resetPassword, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Forgot password?</Text>
             </TouchableOpacity>
             <Text>|</Text>
             <TouchableOpacity 
               style={styles.otherOptionsButton}
               onPress={() => this.props.navigation.navigate("SignUp")}
             >
-              <Text style={styles.signUp}>Sign up</Text>
+              <Text style={[styles.signUp, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Sign up</Text>
             </TouchableOpacity>
           </View>
           {(this.state.error) ? 
             <View style={styles.alertBox}>
-              <Text style={styles.alertText}>Username or password is incorrect</Text>
+              <Text style={[styles.alertText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Username or password is incorrect</Text>
             </View> : null
           }
         </View>
@@ -172,6 +178,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  customize: state.customize,
   appData: state.userData,
 });
 

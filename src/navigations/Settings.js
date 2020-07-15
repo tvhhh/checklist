@@ -14,7 +14,7 @@ class Settings extends React.Component {
   constructor (props) {
     super(props);
     this.state={
-      switchValue: false,
+      switchValue: this.props.customize.switchValue,
       fontOverlayShown: false,
       fontSizeOverlayShown: false,
     }

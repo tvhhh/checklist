@@ -1,7 +1,16 @@
+import { fetchCustomization } from '../../api';
+
 export const CHANGE_THEME = "CHANGE_THEME";
 export const CHANGE_FONT = "CHANGE_FONT";
 export const CHANGE_SIZE = "CHANGE_SIZE";
-export const GET_THEME = "GET_THEME";
+export const GET_CUSTOMIZATION = "GET_CUSTOMIZATION";
+
+export const getCustomization = customization => ({
+  type: GET_CUSTOMIZATION,
+  payload: {
+    customization,
+  }
+});
 
 export const changeTheme = () => ({
   type: CHANGE_THEME,
@@ -20,4 +29,13 @@ export const changeSize = size => ({
     size,
   },
 });
+
+export const fetchCustomData = () => async (dispatch) => {
+  try {
+    let customization = await fetchCustomization();
+    dispatch(getCustomization(customization));
+  } catch(error) {
+    console.log(`Fetch error: ${error}`);
+  }
+};
 

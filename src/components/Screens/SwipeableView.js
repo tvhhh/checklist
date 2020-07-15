@@ -28,11 +28,11 @@ class SwipeableView extends React.Component {
       case "week":
         return <List title={route.title} navigation={this.props.navigation} />
       case "pinned":
-        return <List title={route.title} navigation={this.props.navigatiom} />
+        return <List title={route.title} navigation={this.props.navigation} />
       case "calendar":
-        return  <Calendar title={route.title} navigation={this.props.navigatiom} />
+        return  <Calendar title={route.title} navigation={this.props.navigation} />
       case "categories":
-        return <Categories title={route.title} navigation={this.props.navigatiom} />
+        return <Categories title={route.title} navigation={this.props.navigation} />
       default:
         return null;
     }
