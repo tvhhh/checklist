@@ -106,6 +106,7 @@ class TaskList extends React.Component {
     }, {});
   }
 
+
   filter = (option, taskList) => {
     switch(option) {
       case FILTER_TODAY:
@@ -116,7 +117,7 @@ class TaskList extends React.Component {
         return this.filterByPinned(taskList);
       case FILTER_DATE:
         return this.filterByDate(taskList, this.props.date);
-      default:
+
         return taskList;
     }
   }

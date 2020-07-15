@@ -4,11 +4,11 @@ import { Text, View } from 'react-native';
 import screenStyles from './screenStyles';
 
 
-export default class Notification extends React.Component {
+export default class Filter extends React.Component {
   render() {
     return (
       <View style={screenStyles.screenContainer}>
-        <Text>Notification here</Text>
+        <Text>Filter here</Text>
       </View>
     );
   }

@@ -2,6 +2,9 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View, FlatList } from 'react-native';
 import { SearchBar, ListItem } from 'react-native-elements';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Task from '../Task'
@@ -11,15 +14,15 @@ import colors from '../../styles/colors';
 import { Overlay } from 'react-native-elements';
 import 'react-native-gesture-handler';
 
+import { createTask, editTask, removeTask } from '../../redux/actions/TaskActions';
 
-export default class Search extends React.Component {
+class Search extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoading : true,
       search: "",
-      taskList: props.route.params.taskList,
-      tempTaskList: props.route.params.taskList,
+      fullTaskList: this.props.taskList,
+      tempTaskList: this.props.taskList,
       showForm: false,
       selected: {},
     };
@@ -36,18 +39,18 @@ export default class Search extends React.Component {
   }
   handleFormSubmit = task => {
     this.setState({ showForm: false });
-    this.onEditTask(task, this.state.selected);
+    this.props.editTask(task, this.state.selected);
     this.setState({ selected: {} });
   }
 
   handleRemoval = () => {
-    this.props.onRemoveTask(this.state.selected);
-    this.setState({ showForm: false, selected: {} });
+    this.props.removeTask(this.state.selected);
+    this.setState({ showForm: false, selected: {}});
   }
 
 
   searchFilterFunction = text => {    
-    const newData = this.state.taskList.filter(item => {      
+    const newData = this.props.taskList.filter(item => {      
       const itemData = `${item.title.toUpperCase()}`;
       const textData = text.toUpperCase();
       if (itemData.includes(textData)){
@@ -71,17 +74,20 @@ export default class Search extends React.Component {
           value={this.state.search}
           searchIcon={<EvilIcons name="search" size={25} />}
           />
-        <MaterialCommunityIcons name="filter-variant" size={30} color={colors.Button} onPress={() => {}} />
+        <MaterialCommunityIcons name="filter-variant" size={30} color={colors.Button} onPress={() => this.props.navigation.navigate("Filter")} />
       </View>
     );
   };
   renderItem = ({ item }) => <Task {...item} onSelect={() => this.onSelectedTaskPress(item)} />
   render() {
-    return (    
+    if((this.state.tempTaskList.length - this.props.taskList.length > 0)){
+      this.setState({tempTaskList: this.props.taskList});
+    }
+     return (    
       <View style={screenStyles.screenContainer}>
         <FlatList
           data={this.state.tempTaskList}
-          keyExtractor={item => item.title}
+          keyExtractor={(item,index) => item + index}
           renderItem={this.renderItem}
           ListHeaderComponent={this.renderHeader}
         />
@@ -135,3 +141,14 @@ const styles =StyleSheet.create({
     borderColor: colors.Background,
   },
 });
+const mapStateToProps = state => ({
+  taskList: state.tasks,
+});
+
+const mapDispatchToProps = dispatch => ({
+  createTask: bindActionCreators(createTask, dispatch),
+  editTask: bindActionCreators(editTask, dispatch),
+  removeTask: bindActionCreators(removeTask, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search);
