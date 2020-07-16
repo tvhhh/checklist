@@ -13,6 +13,7 @@ import { Create } from './Button';
 
 import colors from '../styles/colors';
 
+import DatePicker from 'react-native-datepicker';
 import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateTime';
 
 import { createTask, editTask, removeTask } from '../redux/actions/TaskActions';
@@ -105,12 +106,12 @@ class TaskList extends React.Component {
       }
     }, {});
   }
-  filterSearch = (taskList, quiry, category, pinned) => {
+  filterSearch = (taskList, query, category, pinned, interval) => {
     const filtedList = taskList.filter(item => {      
     const itemTitle = `${item.title.toUpperCase()}`;
     const itemCategory = `${item.category}`
     const itemPinned = `${item.pinned}`;
-    const textData = quiry.toUpperCase();
+    const textData = query.toUpperCase();
     if (category === "default"){
       if (itemTitle.includes(textData)){
         return true;
@@ -142,7 +143,7 @@ class TaskList extends React.Component {
       case FILTER_DATE:
         return this.filterByDate(taskList, this.props.date);
       case FILTER_SEARCH:
-        return this.filterSearch(taskList, this.props.quiry, this.props.category, this.props.pinned);
+        return this.filterSearch(taskList, this.props.query, this.props.category, this.props.pinned, this.props.interval);
       default:  
         return taskList;
     }
