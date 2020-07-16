@@ -20,7 +20,8 @@ const colors = {
   Study: "rgba(128, 0, 128, 1.0)",
   Payment: "rgba(0, 100, 0, 1.0)",
   Entertainment: "rgba(47, 79, 79, 1.0)",
-  Uncategorized: "#ffffff",
+  Uncategorized: "rgba(0, 0, 0, 1.0)",
+  Default: "rgba(247, 170, 28, 1.0)",
 };
 
 export default colors;

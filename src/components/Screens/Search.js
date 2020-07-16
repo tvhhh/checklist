@@ -1,112 +1,201 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View, FlatList } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert} from 'react-native';
 import { SearchBar, ListItem } from 'react-native-elements';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import CategoryPicker from './../Form/CategoryPicker';
+import { Overlay } from 'react-native-elements';
+import Category from '../Category';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import Task from '../Task'
-import TaskForm from '../Form/TaskForm';
 import screenStyles from './screenStyles';
 import colors from '../../styles/colors';
-import { Overlay } from 'react-native-elements';
 import 'react-native-gesture-handler';
+import TaskList, {FILTER_SEARCH} from './../TaskList'
 
+import { createTask, editTask, removeTask } from '../../redux/actions/TaskActions';
+import { Value } from 'react-native-reanimated';
 
-export default class Search extends React.Component {
+class Search extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoading : true,
-      search: "",
-      taskList : props.route.params.taskList,
-      tempTaskList: props.route.params.taskList,
-      showForm: false,
-      selected: {},
+      isCategoryPickerVisible: false,
+      isCategoryPressed: false,
+      isPinnedPressed: false,
+      isCalendarPressed: false,
+      quiry: "",
+      category: "default",
+      pinned: false,
+      interval: "",
+      showFilter: false,
     };
   }
 
-  updateState = search => {
-    this.setState({search: search});
-  };
-  onSelectedTaskPress = task => {
-    this.setState({ showForm: true, selected: task });
-  }
-  onFormBackdropPress = () => {
-    this.setState({ showForm: false, selected: {} });
-  }
-  handleFormSubmit = task => {
-    this.setState({ showForm: false });
-    this.onEditTask(task, this.state.selected);
-    this.setState({ selected: {} });
-  }
-
-  handleRemoval = () => {
-    this.props.onRemoveTask(this.state.selected);
-    this.setState({ showForm: false, selected: {} });
-  }
-
-
-  searchFilterFunction = text => {    
-    const newData = this.state.taskList.filter(item => {      
-      const itemData = `${item.title.toUpperCase()}`;
-      const textData = text.toUpperCase();
-      if (itemData.includes(textData)){
-        return true;
-      }    
-      return false;
-    });    
-    this.setState({ tempTaskList: newData, search: text });
+  updateState = quiry => {
+    this.setState({quiry: quiry});
   };
 
-  renderHeader = () => {
-    return(
-      <View style={styles.searchBoxContainer}>
+  updateCategory = category => {
+    this.setState({ category: category });
+  }
+
+  onPinnedPress = () => {
+    this.setState({isPinnedPressed: !this.state.isPinnedPressed,  pinned: !this.state.pinned});
+  }
+
+  onCalendarPress = (interval) => {
+    this.setState({isCalendarPressed: !this.state.isCalendarPressed, interval: interval})
+  }
+
+  onResetPress = () => {
+    this.setState({
+      category: "default",
+      pinned: false,
+      interval: ""
+    });
+  }
+  
+  toggleCategoryPicker = () => {
+    this.setState({ isCategoryPickerVisible: !this.state.isCategoryPickerVisible,isCategoryPressed: !this.state.isCategoryPressed });
+  }
+
+  toggleFilter = () => {
+    this.setState({showFilter: !this.state.showFilter});
+  }
+
+  renderCategoryBox = () => {
+    if (this.state.category){
+      return(
+        <View style = {this.state.isCategoryPressed ? styles.filterButtonContainerPressed:styles.filterButtonContainerUnpressed}>
+          <Category name = {this.state.category} size = {15}/>
+          <Text style = {this.state.isCategoryPressed ? styles.filterBoxTextPressed:styles.filterBoxTextUnpressed}
+          > {this.state.category.charAt(0).toUpperCase() + this.state.category.slice(1)}
+          </Text>
+        </View>
+      );
+      }
+      else{
+        return (
+          <View style = {this.state.isCategoryPressed ? styles.filterButtonContainerPressed:styles.filterButtonContainerUnpressed}> 
+          <Category name = {this.state.category} size = {15}/>
+            <Text style = {this.state.isCategoryPressed ? styles.filterBoxTextPressed:styles.filterBoxTextUnpressed}
+            > {this.state.category}
+            </Text>
+          </View>
+        );
+      }
+  }
+
+  renderFilter = () => {
+    if(this.state.showFilter){
+      return(
+        <View style = {styles.filterBoxContainer}>
+        <TouchableOpacity onPress = {this.toggleCategoryPicker} >
+          {this.renderCategoryBox()}
+        </TouchableOpacity>
+  
+        <TouchableOpacity onPress = {this.onPinnedPress}>
+          <View style = {this.state.isPinnedPressed ? styles.filterButtonContainerPressed:styles.filterButtonContainerUnpressed}>
+            <MaterialCommunityIcons name="pin" size={15} color='#2bd1ea' />  
+            <Text style = {this.state.isPinnedPressed ? styles.filterBoxTextPressed:styles.filterBoxTextUnpressed}> Pinned Task</Text>
+          </View>
+        </TouchableOpacity>
+  
+        <TouchableOpacity onPress = {this.onCalendarPress}>
+          <View style = {this.state.isCalendarPressed ? styles.filterButtonContainerPressed:styles.filterButtonContainerUnpressed}>
+            <AntDesign name="calendar" size={15} color= {this.state.isCalendarPressed === true ? "#FD66FF" : 'brown'} />  
+            <Text style = {this.state.isCalendarPressed ? styles.filterBoxTextPressed:styles.filterBoxTextUnpressed}> Interval</Text>
+          </View>
+        </TouchableOpacity>
+          
+        <TouchableOpacity onPress = {this.onResetPress}>
+        <View style = {styles.resetButton}>
+          <MaterialCommunityIcons name = "restart"/>
+        </View>
+        </TouchableOpacity>
+      </View>
+      );    
+    }
+    else{
+      return null;
+    }
+  }
+  render() {
+    const filterOption = FILTER_SEARCH;
+     return (    
+      <View style={screenStyles.screenContainer}>
+        <View style={styles.searchBoxContainer}>
         <SearchBar
           round
           containerStyle={styles.barContainer}
           inputContainerStyle={styles.inputContainer}
           inputStyle={styles.inputText}
           placeholder="Search your task here..."
-          onChangeText={text => this.searchFilterFunction(text)}
-          value={this.state.search}
+          onChangeText={quiry => this.updateState(quiry)}
+          value={this.state.quiry}
           searchIcon={<EvilIcons name="search" size={25} />}
           />
-        <MaterialCommunityIcons name="filter-variant" size={30} color={colors.Button} onPress={() => {}} />
-      </View>
-    );
-  };
-  renderItem = ({ item }) => <Task {...item} onSelect={() => this.onSelectedTaskPress(item)} />
-  render() {
-    return (    
-      <View style={screenStyles.screenContainer}>
-        <FlatList
-          data={this.state.tempTaskList}
-          keyExtractor={item => item.title}
-          renderItem={this.renderItem}
-          ListHeaderComponent={this.renderHeader}
-        />
+          <TouchableOpacity onPress={this.toggleFilter}>
+          <MaterialCommunityIcons name="filter-variant" size={30} color={colors.Button}/>     
+          </TouchableOpacity>
+           
+        </View>
+        {this.renderFilter()}        
         <Overlay
-          isVisible={this.state.showForm} 
-          onBackdropPress={this.onFormBackdropPress}
-          overlayStyle={[styles.taskForm, { height: Object.keys(this.state.selected).length ? 350 : 300 }]}
-        >
-          <TaskForm
-            {...this.state.selected}
-            isOnSelected={Object.keys(this.state.selected).length > 0} 
-            onSubmit={this.handleFormSubmit}
-            onRemove={this.handleRemoval}
-          />
-        </Overlay>
+            isVisible={this.state.isCategoryPickerVisible}
+            onBackdropPress={this.toggleCategoryPicker}
+            overlayStyle={styles.categoryPickerForm}
+          >
+            <CategoryPicker onBack={this.toggleCategoryPicker} onSubmit={this.updateCategory} hasDefault = {true} />
+          </Overlay>
+        <TaskList 
+          filterOption = {filterOption}
+          quiry = {this.state.quiry}
+          category = {this.state.category}
+          pinned = {this.state.pinned}
+        />
+
       </View>
     );
   }
 };
 
-const styles =StyleSheet.create({
+const styles = StyleSheet.create({
   searchBoxContainer: {
     flexDirection: "row",
     alignItems: "center",
     padding: 5,
+  },
+  filterBoxContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "stretch",
+  },
+  filterButtonContainerUnpressed: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 3,
+    borderRadius: 9,
+    borderWidth: 1,
+    borderColor: colors.Button ,
+    marginHorizontal: 14,
+  },
+  filterButtonContainerPressed: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 3,
+    borderRadius: 9,
+    borderWidth: 1,
+    borderColor: colors.Button ,
+    backgroundColor: colors.Button,
+    marginHorizontal: 14,
   },
   barContainer: {
     flex: 1,
@@ -123,15 +212,44 @@ const styles =StyleSheet.create({
     color: colors.PrimaryText,
     fontSize: 18,
   },
-  itemFormat: {
-    marginRight:10,
-    marginLeft:10,
-    marginTop:10,
-    paddingTop:8,
-    paddingBottom:8,
-    backgroundColor: colors.Overlay,
-    borderRadius:16,
-    borderWidth: 8,
-    borderColor: colors.Background,
+  filterBoxTextUnpressed: {
+    color: colors.SecondaryText,
+    fontSize: 13,
+  },
+  filterBoxTextPressed: {
+    color: colors.Background,
+    fontSize: 13,
+  },
+  categoryPickerButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 15,
+  },
+  categoryPickerForm: { 
+    padding: 0,
+    height: 280,
+    width: 300,
+    borderRadius: 5,
+  },
+  resetButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 3,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: colors.Button ,
+    marginHorizontal: 14,
   },
 });
+const mapStateToProps = state => ({
+  taskList: state.tasks,
+});
+
+const mapDispatchToProps = dispatch => ({
+  createTask: bindActionCreators(createTask, dispatch),
+  editTask: bindActionCreators(editTask, dispatch),
+  removeTask: bindActionCreators(removeTask, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search);
