@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -17,6 +18,12 @@ export default class Category extends React.Component {
     
     let icon;
     switch (name) {
+      case "default":
+        icon = <AntDesign name="switcher" color={colors.Default} size={0.625 * size} />;
+        break;
+      case "uncategorized":
+        icon = <FontAwesome5 name="question" color={colors.Uncategorized} size={0.625 * size} />;
+        break;
       case "health":
         icon = <FontAwesome name="heartbeat" color={colors.Health} size={0.625 * size} />;
         break;

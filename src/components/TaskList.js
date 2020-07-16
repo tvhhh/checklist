@@ -22,7 +22,7 @@ export const FILTER_TODAY = "FILTER_TODAY";
 export const FILTER_WEEK = "FILTER_WEEK";
 export const FILTER_PINNED = "FILTER_PINNED";
 export const FILTER_DATE = "FILTER_DATE";
-export const FILTER_NAME = "FILTER_NAME";
+export const FILTER_SEARCH = "FILTER_SEARCH";
 
 class TaskList extends React.Component {
   constructor(props) {
@@ -105,7 +105,31 @@ class TaskList extends React.Component {
       }
     }, {});
   }
-
+  filterSearch = (taskList, quiry, category, pinned) => {
+    const filtedList = taskList.filter(item => {      
+    const itemTitle = `${item.title.toUpperCase()}`;
+    const itemCategory = `${item.category}`
+    const itemPinned = `${item.pinned}`;
+    const textData = quiry.toUpperCase();
+    if (category === "default"){
+      if (itemTitle.includes(textData)){
+        return true;
+      }   
+    }
+    if (itemTitle.includes(textData) && itemCategory === category){
+      return true;
+    }    
+      return false;
+    });
+    
+    return filtedList.reduce((obj, task) => {
+      const title = "";
+      return {
+        ...obj,
+        [title]: [...(obj[title] || []), task],
+      };
+    }, {});
+  }
 
   filter = (option, taskList) => {
     switch(option) {
@@ -117,7 +141,9 @@ class TaskList extends React.Component {
         return this.filterByPinned(taskList);
       case FILTER_DATE:
         return this.filterByDate(taskList, this.props.date);
-
+      case FILTER_SEARCH:
+        return this.filterSearch(taskList, this.props.quiry, this.props.category, this.props.pinned);
+      default:  
         return taskList;
     }
   }

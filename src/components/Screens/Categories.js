@@ -13,7 +13,7 @@ export default class Categories extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categories: ["health", "workout", "work", "study", "payment", "entertainment"],
+      categories: ["uncategorized","health", "workout", "work", "study", "payment", "entertainment"],
     };
   }
 
@@ -28,7 +28,7 @@ export default class Categories extends React.Component {
         <Menu onPress={this.toggleDrawer} />
         <Search
           position={{ position: "absolute", top: 12, right: 45, }}
-          onPress={() => this.props.navigation.navigate("Search",{taskList: this.props.taskList})}
+          onPress={() => this.props.navigation.navigate("Search")}
         />
         <Notice onPress={() => this.props.navigation.navigate("Notice")} />
         <FlatList 
