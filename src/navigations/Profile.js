@@ -4,19 +4,32 @@ import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ProfileManagement from '../components/Screens/ProfileManagement';
+import UpcomingTasks from '../components/Screens/UpcomingTasks';
 import LogIn from '../components/Screens/LogIn';
 import SignUp from '../components/Screens/SignUp';
 
 
-const Stack = createStackNavigator();
+const GuestStack = createStackNavigator();
+const RegisteredStack = createStackNavigator();
 
 class GuestScreen extends React.Component {
   render() {
     return (
-      <Stack.Navigator headerMode="none">
-        <Stack.Screen name="LogIn" component={LogIn} />
-        <Stack.Screen name="SignUp" component={SignUp} />
-      </Stack.Navigator>
+      <GuestStack.Navigator headerMode="none">
+        <GuestStack.Screen name="LogIn" component={LogIn} />
+        <GuestStack.Screen name="SignUp" component={SignUp} />
+      </GuestStack.Navigator>
+    );
+  }
+};
+
+class RegisteredUserScreen extends React.Component {
+  render() {
+    return (
+      <RegisteredStack.Navigator headerMode="none">
+        <RegisteredStack.Screen name="Profile" component={ProfileManagement} />
+        <RegisteredStack.Screen name="UpcomingTasks" component={UpcomingTasks} />
+      </RegisteredStack.Navigator>
     );
   }
 };
@@ -25,10 +38,7 @@ class Profile extends React.Component {
   render() {
     return (
       <>
-        {this.props.loggedIn ? 
-          <ProfileManagement navigation={this.props.navigation} /> : 
-          <GuestScreen />
-        }
+        {this.props.loggedIn ? <RegisteredUserScreen /> : <GuestScreen />}
       </>
     );
   }

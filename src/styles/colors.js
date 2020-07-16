@@ -2,8 +2,8 @@ const colors = {
   Background: "#f0f0f0",
   Overlay: "#ffffff",
 
-  PrimaryColor: "#1e90ff",
-  SecondaryColor: "#4169e1",
+  PrimaryColor: "#00b2ff",
+  SecondaryColor: "#006aff",
   DisabledColor: "#808080",
 
   Button: "#696969",

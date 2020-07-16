@@ -7,7 +7,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesgin from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import TaskForm from '../components/Form/TaskForm';
+import TaskForm from '../components/Forms/TaskForm';
 
 import { StackNavigator } from 'react-navigation'
 import { createStackNavigator } from '@react-navigation/stack';
@@ -833,16 +833,15 @@ export default class Groups extends React.Component {
     }
   }
 
-  toggleDrawer = () => {
-    this.props.navigation.toggleDrawer();
-  }
-
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: colors.Background }}>
-        <Header title={"GROUPS"} />
-        <Menu onPress={() => this.props.navigation.toggleDrawer()} />
-        <Notice />
+        <Header
+          navigation={this.props.navigation}
+          title="GROUPS"
+          search={true}
+          notice={true}
+        />
 
         <Stack.Navigator>
           <Stack.Screen 

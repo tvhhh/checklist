@@ -14,26 +14,21 @@ export default class CategoryPicker extends React.Component {
     };
   }
 
-  handleSubmit = picked => {
-    this.props.onSubmit(picked);
-    this.props.onBack();
-  }
-
   render() {
     return (
       <View style={styles.container}>
         <FlatList 
           data={this.state.categories}
           keyExtractor={(item, index) => item + index}
-          renderItem={obj => (
+          renderItem={({ item }) => (
             <View style={styles.categoryContainer}>
               <Category 
-                name={obj.item}
+                name={item}
                 size={80} 
-                onPress={() => this.handleSubmit(obj.item)} 
+                onPress={() => this.props.onSubmit(item)} 
               />
               <Text style={styles.categoryName} >
-                {obj.item.charAt(0).toUpperCase() + obj.item.slice(1)}
+                {item.charAt(0).toUpperCase() + item.slice(1)}
               </Text>
             </View>
           )}

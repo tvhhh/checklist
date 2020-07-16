@@ -1,12 +1,14 @@
 import React from 'react';
 import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import Header from '../Header';
 
 import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
 
-import { fetchData } from '../../redux/actions/UserDataActions';
-import { authorize, storeUsername } from '../../api';
+import { logIn, getData } from '../../redux/actions/UserDataActions';
 
 
 class LogIn extends React.Component {
@@ -17,10 +19,6 @@ class LogIn extends React.Component {
       password: "",
       error: false,
     };
-  }
-
-  toggleDrawer = () => {
-    this.props.navigation.toggleDrawer();
   }
 
   onChangeUserName = text => {
@@ -36,65 +34,66 @@ class LogIn extends React.Component {
   }
 
   handleSubmit = async () => {
-    if (await authorize(this.state.username, this.state.password)) {
-      await storeUsername(this.state.username);
-      this.props.fetchData();
+    const data = await this.props.logIn(this.state.username, this.state.password);
+    if (data === null) {
+      this.setState({ error: true });
     } else {
-      this.setState({ error: false });
+      this.props.getData(data);
     }
   }
   
   render() {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={[screenStyles.screenContainer, styles.container]}>
-          <Text style={styles.title}>SIGN IN</Text>
-          <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Username</Text>
-            <TextInput style={styles.input}
-              placeholder="Enter username"
-              placeholderTextColor={colors.SecondaryText}
-              onChangeText={this.onChangeUserName}
-              defaultValue={this.state.username}
-              onFocus={this.turnOffAlert}
-              autoCapitalize="none"
-            />
-          </View>
-          <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Password</Text>
-            <TextInput style={styles.input}
-              placeholder="Enter password"
-              placeholderTextColor={colors.SecondaryText}
-              onChangeText={this.onChangePassword}
-              defaultValue={this.state.password}
-              onFocus={this.turnOffAlert}
-              secureTextEntry={true}
-              autoCapitalize="none"
-            />
-          </View>
-          <TouchableOpacity 
-            style={styles.submitButton}
-            onPress={this.handleSubmit}
-          >
-            <Text style={styles.submitText}>LOGIN</Text>
-          </TouchableOpacity>
-          <View style={styles.otherOptions}>
-            <TouchableOpacity style={styles.otherOptionsButton}>
-              <Text style={styles.resetPassword}>Forgot password?</Text>
-            </TouchableOpacity>
-            <Text>|</Text>
+        <View style={screenStyles.screenContainer}>
+          <Header navigation={this.props.navigation} />
+          <View style={styles.container}>
+            <Text style={styles.title}>SIGN IN</Text>
+            <View style={styles.inputField}>
+              <Text style={styles.inputTitle}>Username</Text>
+              <TextInput style={styles.input}
+                placeholder="Enter username"
+                onChangeText={this.onChangeUserName}
+                defaultValue={this.state.username}
+                onFocus={this.turnOffAlert}
+                autoCapitalize="none"
+              />
+            </View>
+            <View style={styles.inputField}>
+              <Text style={styles.inputTitle}>Password</Text>
+              <TextInput style={styles.input}
+                placeholder="Enter password"
+                onChangeText={this.onChangePassword}
+                defaultValue={this.state.password}
+                onFocus={this.turnOffAlert}
+                secureTextEntry={true}
+                autoCapitalize="none"
+              />
+            </View>
             <TouchableOpacity 
-              style={styles.otherOptionsButton}
-              onPress={() => this.props.navigation.navigate("SignUp")}
+              style={styles.submitButton}
+              onPress={this.handleSubmit}
             >
-              <Text style={styles.signUp}>Sign up</Text>
+              <Text style={styles.submitText}>LOGIN</Text>
             </TouchableOpacity>
+            <View style={styles.otherOptions}>
+              <TouchableOpacity style={styles.otherOptionsButton}>
+                <Text style={styles.resetPassword}>Forgot password?</Text>
+              </TouchableOpacity>
+              <Text>|</Text>
+              <TouchableOpacity 
+                style={styles.otherOptionsButton}
+                onPress={() => this.props.navigation.navigate("SignUp")}
+              >
+                <Text style={styles.signUp}>Sign up</Text>
+              </TouchableOpacity>
+            </View>
+            {this.state.error ?
+              <View style={styles.alertBox}>
+                <Text style={styles.alertText}>Username or password is incorrect</Text>
+              </View> : null
+            }
           </View>
-          {(this.state.error) ? 
-            <View style={styles.alertBox}>
-              <Text style={styles.alertText}>Username or password is incorrect</Text>
-            </View> : null
-          }
         </View>
       </TouchableWithoutFeedback>
     );
@@ -103,6 +102,7 @@ class LogIn extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     borderColor: colors.Border,
     borderWidth: 1,
     borderRadius: 5,
-    paddingHorizontal: 10,
+    padding: 10,
   },
   submitButton: {
     backgroundColor: colors.SecondaryColor,
@@ -176,7 +176,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchData: () => dispatch(fetchData()),
+  logIn: (username, password) => dispatch(logIn(username, password)),
+  getData: bindActionCreators(getData, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogIn);

@@ -50,8 +50,7 @@ export default class TaskForm extends React.Component {
 
   handleDateTimeConfirm = time => {
     time.setSeconds(0, 0);
-    this.setState({ task: {...(this.state.task), dueTime: time} });
-    this.setState({ isDateTimePickerVisible: false });
+    this.setState({ task: {...(this.state.task), dueTime: time}, isDateTimePickerVisible: false });
   }
 
   toggleCategoryPicker = () => {
@@ -59,7 +58,7 @@ export default class TaskForm extends React.Component {
   }
 
   updateCategory = category => {
-    this.setState({ task: {...(this.state.task), category: category} });
+    this.setState({ task: {...(this.state.task), category: category}, isCategoryPickerVisible: false });
   }
 
   toggleConfirmationBox = () => {
@@ -151,14 +150,14 @@ export default class TaskForm extends React.Component {
             onBackdropPress={this.toggleCategoryPicker}
             overlayStyle={styles.categoryPickerForm}
           >
-            <CategoryPicker onBack={this.toggleCategoryPicker} onSubmit={this.updateCategory} />
+            <CategoryPicker onSubmit={this.updateCategory} />
           </Overlay>
           <Overlay
             isVisible={this.state.isConfirmationBoxVisible}
             onBackdropPress={this.toggleConfirmationBox}
             overlayStyle={styles.confirmationBox}
           >
-            <ConfirmationBox onCancel={this.toggleConfirmationBox} onConfirm={this.handleRemoveConfirm} />
+            <ConfirmationBox title="Delete this task?" onCancel={this.toggleConfirmationBox} onConfirm={this.handleRemoveConfirm} />
           </Overlay>
         </View>
       </TouchableWithoutFeedback>
