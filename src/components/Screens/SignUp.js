@@ -99,7 +99,6 @@ export default class SignUp extends React.Component {
             <Text style={styles.inputTitle}>Username</Text>
             <TextInput style={styles.input}
               placeholder="Enter username"
-              placeholderTextColor={colors.SecondaryText}
               onChangeText={this.onChangeUserName}
               defaultValue={this.state.username}
               onFocus={this.turnOffAlert}
@@ -110,7 +109,6 @@ export default class SignUp extends React.Component {
             <Text style={styles.inputTitle}>Email</Text>
             <TextInput style={styles.input}
               placeholder="Enter email"
-              placeholderTextColor={colors.SecondaryText}
               onChangeText={this.onChangeEmail}
               defaultValue={this.state.email}
               onFocus={this.turnOffAlert}
@@ -121,7 +119,6 @@ export default class SignUp extends React.Component {
             <Text style={styles.inputTitle}>Password</Text>
             <TextInput style={styles.input}
               placeholder="Enter password"
-              placeholderTextColor={colors.SecondaryText}
               onChangeText={this.onChangePassword}
               defaultValue={this.state.password}
               onFocus={this.turnOffAlert}
@@ -133,7 +130,6 @@ export default class SignUp extends React.Component {
             <Text style={styles.inputTitle}>Confirm password</Text>
             <TextInput style={styles.input}
               placeholder="Re-enter password"
-              placeholderTextColor={colors.SecondaryText}
               onChangeText={this.onConfirmPassword}
               defaultValue={this.state.confirmedPassword}
               onFocus={this.turnOffAlert}
@@ -153,7 +149,7 @@ export default class SignUp extends React.Component {
           >
             <Text style={styles.otherOptionsText}>Back to Login</Text>
           </TouchableOpacity>
-          {(this.state.error) ? 
+          {this.state.error ?
             <View style={styles.alertBox}>
               <Text style={styles.alertText}>{this.state.errorText}</Text>
             </View> : null
@@ -189,7 +185,7 @@ const styles = StyleSheet.create({
     borderColor: colors.Border,
     borderWidth: 1,
     borderRadius: 5,
-    paddingHorizontal: 10,
+    padding: 10,
   },
   submitButton: {
     backgroundColor: colors.SecondaryColor,

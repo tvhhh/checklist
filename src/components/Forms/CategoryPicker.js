@@ -10,13 +10,12 @@ export default class CategoryPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categories: ["health", "workout", "work", "study", "payment", "entertainment"],
+      categories: [
+        "health", "workout", "ideas",
+        "work", "payment", "entertainment",
+        "meeting", "study", "event",
+      ],
     };
-  }
-
-  handleSubmit = picked => {
-    this.props.onSubmit(picked);
-    this.props.onBack();
   }
 
   render() {
@@ -25,15 +24,18 @@ export default class CategoryPicker extends React.Component {
         <FlatList 
           data={this.state.categories}
           keyExtractor={(item, index) => item + index}
-          renderItem={obj => (
+          renderItem={({ item }) => (
             <View style={styles.categoryContainer}>
               <Category 
-                name={obj.item}
+                name={item}
                 size={80} 
-                onPress={() => this.handleSubmit(obj.item)} 
+                onPress={() => this.props.onSubmit(item)} 
               />
-              <Text style={styles.categoryName} >
-                {obj.item.charAt(0).toUpperCase() + obj.item.slice(1)}
+              <Text style={[
+                styles.categoryName,
+                { color: colors[item.charAt(0).toUpperCase() + item.slice(1)] }
+              ]}>
+                {item.toUpperCase()}
               </Text>
             </View>
           )}
@@ -59,6 +61,6 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     color: colors.PrimaryText,
-    fontSize: 12,
+    fontSize: 10,
   },
 });

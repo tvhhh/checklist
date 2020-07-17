@@ -3,14 +3,14 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 const firebaseConfig = {
-  apiKey: "<API-KEY>",
-  authDomain: "<AUTH-DOMAIN>",
-  databaseURL: "<DATABASE-URL>",
-  projectId: "<PROJECT-ID>",
-  storageBucket: "<STORAGE-BUCKET>",
-  messagingSenderId: "<SENDER-ID>",
-  appId: "<APP-ID>",
-  measurementId: "<MEASUREMENT-ID>",
+  apiKey: "AIzaSyBfZjRzGXUE3hpv718gFxr1Ir5pvFKWkmY",
+  authDomain: "todos-f0b71.firebaseapp.com",
+  databaseURL: "https://todos-f0b71.firebaseio.com",
+  projectId: "todos-f0b71",
+  storageBucket: "todos-f0b71.appspot.com",
+  messagingSenderId: "32907944673",
+  appId: "1:32907944673:web:3b0c27a619f044eb978da0",
+  measurementId: "G-YVR9FCCVND"
 };
 
 const USER_ASYNC_STORAGE_KEY = '@TodoApp:UserDB';
@@ -20,31 +20,37 @@ export const initializeApp = () => {
   firebase.initializeApp(firebaseConfig);
 };
 
-export const createUser = async (data) => {
+export const createUser = data => {
   var ref = firebase.database().ref(`users/${data.username}`);
-  return ref.set({ ...data, tasks: "[]", groups: "[]" });
+  ref.set({ ...data, tasks: "[]", groups: "[]" });
 };
 
-export const isUsernameExisting = async (username) => {
+export const removeUser = username => {
+  var ref = firebase.database().ref(`users/${username}`);
+  ref.remove()
+  .catch(error => console.log(`Firebase - Remove user: ${error}`));
+};
+
+export const isUsernameExisting = username => {
   var ref = firebase.database().ref(`users/${username}`);
   return ref.once('value')
   .then(snapshot => snapshot.exists());
 };
 
-export const isEmailExisting = async (email) => {
+export const isEmailExisting = email => {
   var ref = firebase.database().ref('users');
   return ref.orderByChild('email').equalTo(email).once('value')
   .then(snapshot => snapshot.exists());
 };
 
-export const authorize = async (username, password) => {
+export const authorize = (username, password) => {
   var ref = firebase.database().ref(`users/${username}`);
   return ref.once('value')
   .then(snapshot => snapshot.exists() && snapshot.child('password').val() === password)
   .catch(error => console.log(`Firebase - Authorize: ${error}`));
 };
 
-export const fetchUserData = async (username) => {
+export const fetchUserData = username => {
   var ref = firebase.database().ref(`users/${username}`);
   return ref.once('value')
   .then(snapshot => snapshot.val())
@@ -57,31 +63,32 @@ export const fetchUserData = async (username) => {
       pinned: item.pinned == 'true',
       done: item.done == 'true',
     })),
+    groups: JSON.parse(data.groups),
   }))
   .catch(error => console.log(`Firebase - Fetch user data: ${error}`));
 };
 
-export const updateUserData = async (username, key, value) => {
+export const updateUserData = (username, key, value) => {
   var ref = firebase.database().ref(`users/${username}/${key}`);
-  return ref.set(value);
+  ref.set(value);
 };
 
-export const fetchUsername = async () => {
+export const fetchUsername = () => {
   return AsyncStorage.getItem(USER_ASYNC_STORAGE_KEY)
   .catch(error => console.log(`AsyncStorage - Fetch username: ${error}`));
 };
 
-export const storeUsername = async (username) => {
-  return await AsyncStorage.setItem(USER_ASYNC_STORAGE_KEY, username)
+export const storeUsername = username => {
+  AsyncStorage.setItem(USER_ASYNC_STORAGE_KEY, username)
   .catch(error => console.log(`AsyncStorage - Store username: ${error}`));
 };
 
-export const clearUserData = async () => {
-  return await AsyncStorage.clear()
+export const clearUsername = () => {
+  AsyncStorage.clear()
   .catch(error => console.log(`AsyncStorage - Clear userdata: ${error}`));
 }
 
-export const fetchTaskList = async () => {
+export const fetchTaskList = () => {
   return AsyncStorage.getItem(TASKS_ASYNC_STORAGE_KEY)
   .then(response => (response !== null) ? JSON.parse(response) : null)
   .then(data => (data !== null) ? 
@@ -95,7 +102,7 @@ export const fetchTaskList = async () => {
   .catch(error => console.log(`AsyncStorage - Fetch tasklist: ${error}`));
 };
 
-export const storeTaskList = async (taskList) => {
-  return await AsyncStorage.setItem(TASKS_ASYNC_STORAGE_KEY, taskList)
+export const storeTaskList = taskList => {
+  AsyncStorage.setItem(TASKS_ASYNC_STORAGE_KEY, taskList)
   .catch(error => console.log(`AsyncStorage - Save tasklist: ${error}`));
 };

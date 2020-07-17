@@ -1,4 +1,4 @@
-import { GET_DATA, CREATE_TASK, EDIT_TASK, REMOVE_TASK, EDIT_PINNED } from '../actions/UserDataActions';
+import { GET_DATA, CLEAR_DATA, CREATE_TASK, EDIT_TASK, EDIT_PINNED, REMOVE_TASK, SET_NAME, SET_PHONE, SET_PASSWORD, SET_AVATAR } from '../actions/UserDataActions';
 import { storeTaskList, updateUserData } from '../../api';
 
 
@@ -21,6 +21,8 @@ export default function userDataReducers(state = initialState, action) {
         loggedIn: payload.data.username !== null,
         data: { ...payload.data },
       };
+    case CLEAR_DATA:
+      return initialState;
     case CREATE_TASK:
       newTaskList = [
         { id: (currentTaskList.length == 0) ? 0 : currentTaskList[0].id + 1, ...payload.task },
@@ -70,6 +72,30 @@ export default function userDataReducers(state = initialState, action) {
       return {
         ...state,
         data: { ...state.data, tasks: newTaskList },
+      };
+    case SET_AVATAR:
+      updateUserData(state.data.username, 'avatar', payload.color);
+      return {
+        ...state,
+        data: { ...state.data, avatar: payload.color },
+      };
+    case SET_NAME:
+      updateUserData(state.data.username, 'name', payload.name);
+      return {
+        ...state,
+        data: { ...state.data, name: payload.name },
+      };
+    case SET_PHONE:
+      updateUserData(state.data.username, 'phone', payload.phone);
+      return {
+        ...state,
+        data: { ...state.data, phone: payload.phone },
+      };
+    case SET_PASSWORD:
+      updateUserData(state.data.username, 'password', payload.password);
+      return {
+        ...state,
+        data: { ...state.data, password: payload.password },
       };
     default:
       return state;

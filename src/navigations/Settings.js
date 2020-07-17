@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, } from 'react-native';
 
-import { Menu } from '../components/Button';
+import Header from '../components/Header';
 
 import colors from '../styles/colors';
 
@@ -11,14 +11,10 @@ export default class Settings extends React.Component {
     super(props);
   }
 
-  toggleDrawer = () => {
-    this.props.navigation.toggleDrawer();
-  }
-
   render() {
     return (
       <View style={styles.screenContainer}>
-        <Menu onPress={this.toggleDrawer} />
+        <Header navigation={this.props.navigation} />
       </View>
     );
   }
