@@ -164,19 +164,20 @@ class TaskList extends React.Component {
 
     return (
       <>
+        {this.props.isNotFilter ? null:
         <SectionList
-          sections={sections}
-          keyExtractor={(item, index) => item + index}
-          renderItem={this.renderItem}
-          renderSectionHeader={this.renderSectionHeader}
-          ListEmptyComponent={this.props.calendarView ? null : (
-            <View style={styles.emptyComponentContainer}>
-              <Text style={styles.emptyComponentLargeText}>You're all done now!</Text>
-              <Text style={styles.emptyComponentSmallText}>Tap + to create a new task</Text>
-              <FontAwesome5 name="tasks" color="grey" size={40} />
-            </View>
-          )}
-        />
+        sections={sections}
+        keyExtractor={(item, index) => item + index}
+        renderItem={this.renderItem}
+        renderSectionHeader={this.renderSectionHeader}
+        ListEmptyComponent={this.props.calendarView ? null : (
+          <View style={styles.emptyComponentContainer}>
+            <Text style={styles.emptyComponentLargeText}>You're all done now!</Text>
+            <Text style={styles.emptyComponentSmallText}>Tap + to create a new task</Text>
+            <FontAwesome5 name="tasks" color="grey" size={40} />
+          </View>
+        )}
+      />}
         <Create
           position={{ position: "absolute", bottom: 15, right: 15, }}
           onPress={this.onAddButtonPress} 
