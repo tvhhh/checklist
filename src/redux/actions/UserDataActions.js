@@ -5,6 +5,7 @@ export const GET_DATA = "GET_DATA";
 export const CREATE_TASK = "CREATE_TASK";
 export const EDIT_TASK = "EDIT_TASK";
 export const REMOVE_TASK = "REMOVE_TASK";
+export const EDIT_PINNED = "EDIT_PINNED";
 
 export const getData = data => ({
   type: GET_DATA,
@@ -30,6 +31,13 @@ export const editTask = (task, selected) => ({
 
 export const removeTask = selected => ({
   type: REMOVE_TASK,
+  payload: {
+    selected,
+  },
+});
+
+export const editPinned = selected => ({
+  type: EDIT_PINNED,
   payload: {
     selected,
   },

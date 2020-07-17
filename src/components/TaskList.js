@@ -15,7 +15,7 @@ import colors from '../styles/colors';
 
 import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateTime';
 
-import { createTask, editTask, removeTask } from '../redux/actions/UserDataActions';
+import { createTask, editTask, removeTask, editPinned } from '../redux/actions/UserDataActions';
 
 
 export const FILTER_TODAY = "FILTER_TODAY";
@@ -33,7 +33,7 @@ class TaskList extends React.Component {
     };
   }
 
-  renderItem = ({ item }) => <Task {...item} onSelect={() => this.onSelectedTaskPress(item)} />
+  renderItem = ({ item }) => <Task {...item} onSelect={() => this.onSelectedTaskPress(item)} togglePinned={() => this.togglePinned(item)} />
 
   renderSectionHeader = ({ section }) => <Text style={styles.listTitle}>{section.title}</Text>
 
@@ -47,6 +47,10 @@ class TaskList extends React.Component {
 
   onFormBackdropPress = () => {
     this.setState({ showForm: false, selected: {} });
+  }
+
+  togglePinned = selected => {
+    this.props.editPinned(selected);
   }
 
   handleFormSubmit = task => {
@@ -202,6 +206,7 @@ const mapDispatchToProps = dispatch => ({
   createTask: bindActionCreators(createTask, dispatch),
   editTask: bindActionCreators(editTask, dispatch),
   removeTask: bindActionCreators(removeTask, dispatch),
+  editPinned: bindActionCreators(editPinned, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskList);

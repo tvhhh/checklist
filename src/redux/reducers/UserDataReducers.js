@@ -1,4 +1,4 @@
-import { GET_DATA, CREATE_TASK, EDIT_TASK, REMOVE_TASK } from '../actions/UserDataActions';
+import { GET_DATA, CREATE_TASK, EDIT_TASK, REMOVE_TASK, EDIT_PINNED } from '../actions/UserDataActions';
 import { storeTaskList, updateUserData } from '../../api';
 
 
@@ -51,6 +51,17 @@ export default function userDataReducers(state = initialState, action) {
       };
     case REMOVE_TASK:
       newTaskList = currentTaskList.filter(task => task.id !== payload.selected.id);
+      if (state.data.username !== null) {
+        updateUserData(state.data.username, 'tasks', JSON.stringify(newTaskList));
+      } else {
+        storeTaskList(JSON.stringify(newTaskList));
+      }
+      return {
+        ...state,
+        data: { ...state.data, tasks: newTaskList },
+      };
+    case EDIT_PINNED:
+      newTaskList = currentTaskList.map(task => (task.id === payload.selected.id) ? { ...task, pinned: !task.pinned } : task);
       if (state.data.username !== null) {
         updateUserData(state.data.username, 'tasks', JSON.stringify(newTaskList));
       } else {
