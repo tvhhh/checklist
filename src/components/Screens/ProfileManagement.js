@@ -8,8 +8,6 @@ import Header from '../Header';
 import { AvatarPicker, NameBox, PhoneBox, PasswordBox, ConfirmPasswordBox } from '../Forms/UserInformationForm';
 import ConfirmationBox from '../Forms/ConfirmationBox';
 
-import { LineChart } from 'react-native-chart-kit';
-
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontTisto from 'react-native-vector-icons/Fontisto';
@@ -21,19 +19,6 @@ import colors from '../../styles/colors';
 
 import { setAvatar, setName, setPhone, setPassword, logOut, removeAccount } from '../../redux/actions/UserDataActions';
 
-
-// const screenWidth = Dimensions.get("window").width;
-
-// const chartConfig = {
-//   backgroundGradientFrom: "#1E2923",
-//   backgroundGradientFromOpacity: 0,
-//   backgroundGradientTo: "#08130D",
-//   backgroundGradientToOpacity: 0.5,
-//   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-//   strokeWidth: 2, // optional, default 3
-//   barPercentage: 0.5,
-//   useShadowColorFromDataset: false // optional
-// };
 
 class ProfileManagement extends React.Component {
   constructor(props) {
@@ -119,45 +104,25 @@ class ProfileManagement extends React.Component {
           <TouchableOpacity style={styles.statisticBox}>
             <Text style={[styles.statisticText, {color: colors.DisabledColor}]}>You have</Text>
             <Text style={[styles.statisticNumber, {color: colors.DisabledColor}]}>
-              {data.tasks.filter(task => task.dueTime < new Date()).length}
+              {data.tasks.filter(task => task.dueTime < new Date() && !task.done).length}
             </Text>
             <Text style={[styles.statisticText, {color: colors.DisabledColor}]}>OVERDUED</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.statisticBox} onPress={() => this.props.navigation.navigate("UpcomingTasks")}>
             <Text style={[styles.statisticText, {color: colors.PrimaryColor}]}>You have</Text>
             <Text style={[styles.statisticNumber, {color: colors.PrimaryColor}]}>
-              {data.tasks.filter(task => task.dueTime > new Date()).length}
+              {data.tasks.filter(task => task.dueTime > new Date() && !task.done).length}
             </Text>
             <Text style={[styles.statisticText, {color: colors.PrimaryColor}]}>UPCOMING</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.statisticBox}>
-            <Text style={[styles.statisticText, {color: colors.SecondaryColor}]}>You're in</Text>
+            <Text style={[styles.statisticText, {color: colors.SecondaryColor}]}>You have</Text>
             <Text style={[styles.statisticNumber, {color: colors.SecondaryColor}]}>
-              {data.groups.length}
+              {data.tasks.filter(task => task.done).length}
             </Text>
-            <Text style={[styles.statisticText, {color: colors.SecondaryColor}]}>GROUPS</Text>
+            <Text style={[styles.statisticText, {color: colors.SecondaryColor}]}>COMPLETED</Text>
           </TouchableOpacity>
         </View>
-        {/* <LineChart
-          data={{
-            labels: ["January", "February", "March", "April", "May", "June"],
-            datasets: [
-              {
-                data: [
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100
-                ]
-              }
-            ]
-          }}
-          width={screenWidth}
-          height={220}
-          chartConfig={chartConfig}
-        /> */}
         <TouchableOpacity style={styles.infoField} onPress={this.toggleNameBox}>
           <AntDesign name="contacts" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>

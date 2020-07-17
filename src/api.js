@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 const firebaseConfig = {
-  apiKey: "<FIREBASE-CONFIG> (ask me if you want)",
+  
 };
 
 const USER_ASYNC_STORAGE_KEY = '@TodoApp:UserDB';

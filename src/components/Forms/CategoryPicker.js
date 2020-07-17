@@ -10,7 +10,11 @@ export default class CategoryPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categories: ["health", "workout", "work", "study", "payment", "entertainment"],
+      categories: [
+        "health", "workout", "ideas",
+        "work", "payment", "entertainment",
+        "meeting", "study", "event",
+      ],
     };
   }
 
@@ -27,8 +31,11 @@ export default class CategoryPicker extends React.Component {
                 size={80} 
                 onPress={() => this.props.onSubmit(item)} 
               />
-              <Text style={styles.categoryName} >
-                {item.charAt(0).toUpperCase() + item.slice(1)}
+              <Text style={[
+                styles.categoryName,
+                { color: colors[item.charAt(0).toUpperCase() + item.slice(1)] }
+              ]}>
+                {item.toUpperCase()}
               </Text>
             </View>
           )}
@@ -54,6 +61,6 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     color: colors.PrimaryText,
-    fontSize: 12,
+    fontSize: 10,
   },
 });

@@ -12,12 +12,12 @@ export default class Categories extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categories: ["health", "workout", "work", "study", "payment", "entertainment"],
+      categories: [
+        "health", "workout", "ideas",
+        "work", "payment", "entertainment",
+        "meeting", "study", "event",
+      ],
     };
-  }
-
-  toggleDrawer = () => {
-    this.props.navigation.toggleDrawer();
   }
 
   render() {
@@ -35,8 +35,11 @@ export default class Categories extends React.Component {
           renderItem={({ item }) => (
             <View style={styles.categoryContainer}>
               <Category name={item} size={100} />
-              <Text style={styles.categoryName}>
-                {item.charAt(0).toUpperCase() + item.slice(1)}
+              <Text style={[
+                styles.categoryName,
+                { color: colors[item.charAt(0).toUpperCase() + item.slice(1)] }
+              ]}>
+                {item.toUpperCase()}
               </Text>
             </View>
           )}
@@ -58,6 +61,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   categoryName: {
-    color: colors.PrimaryText,
+    fontSize: 12,
   },
 });

@@ -32,7 +32,12 @@ class UpcomingTasks extends React.Component {
   }
 
   getCategoriesCount = taskList => {
-    var categories = ["health", "workout", "work", "study", "payment", "entertainment", "uncategorized"];
+    var categories = [
+      "health", "workout", "ideas",
+      "work", "payment", "entertainment",
+      "meeting", "study", "event",
+      "uncategorized",
+    ];
     var tasks = {};
     categories.forEach(category => {
       tasks[category.charAt(0).toUpperCase() + category.slice(1)] = 0;
@@ -55,8 +60,6 @@ class UpcomingTasks extends React.Component {
         { data: weekCounts },
       ],
     };
-
-    // console.log(Math.max(...weekCounts));
 
     const categoriesTasks = this.getCategoriesCount(this.props.taskList);
     const categories = Object.keys(categoriesTasks);

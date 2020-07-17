@@ -123,13 +123,13 @@ export default class TaskForm extends React.Component {
               </Text> : null
             }
             <View style={styles.categoryPickerButton}>
-              {(this.state.task.category === "uncategorized") ? 
-                (<TouchableOpacity onPress={this.toggleCategoryPicker} >
-                  <AntDesign name="questioncircleo" size={59} color="grey" />
-                </TouchableOpacity>) :
-                <Category name={this.state.task.category} onPress={this.toggleCategoryPicker} />
-              }
-              <Text style={styles.categoryName}>{this.state.task.category.toUpperCase()}</Text>
+              <Category name={this.state.task.category} onPress={this.toggleCategoryPicker} />
+              <Text style={[
+                styles.categoryName,
+                { color: colors[this.state.task.category.charAt(0).toUpperCase() + this.state.task.category.slice(1)] }
+              ]}>
+                {this.state.task.category.toUpperCase()}
+              </Text>
             </View>
             {this.props.isOnSelected ?
               <View style={styles.taskFormFooter}>
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   },
   categoryPickerForm: { 
     padding: 0,
-    height: 280,
+    height: 380,
     width: 300,
     borderRadius: 5,
   },
