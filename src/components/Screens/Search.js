@@ -38,7 +38,6 @@ class Search extends React.Component {
       endInterval: "",
       showFilter: false,
       errorInterval:false,
-      date: "",
     };
   }
 
