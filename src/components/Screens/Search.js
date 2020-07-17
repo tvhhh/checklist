@@ -15,28 +15,34 @@ import screenStyles from './screenStyles';
 import colors from '../../styles/colors';
 import 'react-native-gesture-handler';
 import TaskList, {FILTER_SEARCH} from './../TaskList'
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { createTask, editTask, removeTask } from '../../redux/actions/TaskActions';
-import { Value } from 'react-native-reanimated';
+import { extractDate } from '../../utils/DateTime';
 
 class Search extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      isDatePickerVisible: false,
+      isStartIntervalPickerVisible: false,
+      isEndIntervalPickerVisible: false,
       isCategoryPickerVisible: false,
       isCategoryPressed: false,
       isPinnedPressed: false,
       isCalendarPressed: false,
-      quiry: "",
+      query: "",
       category: "default",
       pinned: false,
-      interval: "",
+      startInterval: "",
+      endInterval: "",
       showFilter: false,
+      date: "",
     };
   }
 
-  updateState = quiry => {
-    this.setState({quiry: quiry});
+  updateState = query => {
+    this.setState({query: query});
   };
 
   updateCategory = category => {
@@ -48,23 +54,54 @@ class Search extends React.Component {
   }
 
   onCalendarPress = (interval) => {
-    this.setState({isCalendarPressed: !this.state.isCalendarPressed, interval: interval})
+    this.toggleDatePicker();
   }
 
   onResetPress = () => {
     this.setState({
+      isPinnedPressed: false,
+      isCategoryPressed:false,
+      isCalendarPressed: false,
       category: "default",
       pinned: false,
-      interval: ""
+      startInterval: "",
+      endInterval: "",
     });
   }
   
+  handleStartIntervalConfirm = time => {
+    time.setHours(0,0,0,0);
+    this.setState({startInterval: time});
+    this.setState({ isStartIntervalPickerVisible: false });
+  }
+
+  handleEndIntervalConfirm = time => {
+    time.setHours(23,59,59,99);
+    this.setState({endInterval: time});
+    this.setState({ isEndIntervalPickerVisible: false });
+  }
+
+  toggleStartIntervalPicker = () => {
+    this.setState({isStartIntervalPickerVisible: !this.state.isStartIntervalPickerVisible})
+  }
+
+  toggleEndIntervalPicker = () => {
+    this.setState({isEndIntervalPickerVisible: !this.state.isEndIntervalPickerVisible})
+  }
+
+  toggleDatePicker = () => {
+    this.setState({ isDatePickerVisible: !this.state.isDatePickerVisible});
+    if (this.state.startInterval !== "" || this.state.endInterval !== ""){
+      this.setState({isCalendarPressed: true})
+    }
+  }
+
   toggleCategoryPicker = () => {
     this.setState({ isCategoryPickerVisible: !this.state.isCategoryPickerVisible,isCategoryPressed: !this.state.isCategoryPressed });
   }
 
   toggleFilter = () => {
-    this.setState({showFilter: !this.state.showFilter});
+    this.setState({showFilter: !this.state.showFilter, isDatePickerVisible: false});
   }
 
   renderCategoryBox = () => {
@@ -88,6 +125,24 @@ class Search extends React.Component {
           </View>
         );
       }
+  }
+
+  renderDate = (extractedDate, type) => {
+    if (extractedDate !== ""){
+      return(
+        <Text style={styles.datePickerText}>{`${extractedDate}`}</Text>
+      );
+    }
+    if (type === "start"){
+      return (
+        <Text>Start Day</Text>
+      );
+    }
+    else {
+      return (
+        <Text>End Day</Text>
+      );
+    }    
   }
 
   renderFilter = () => {
@@ -126,6 +181,14 @@ class Search extends React.Component {
   }
   render() {
     const filterOption = FILTER_SEARCH;
+    var extractedStartInterval= "";
+    var extractedEndInterval = "";
+    if (this.state.startInterval !== ""){
+      extractedStartInterval =  extractDate(this.state.startInterval);
+    }
+    if(this.state.endInterval !== ""){
+      extractedEndInterval = extractDate(this.state.endInterval);
+    }
      return (    
       <View style={screenStyles.screenContainer}>
         <View style={styles.searchBoxContainer}>
@@ -135,8 +198,8 @@ class Search extends React.Component {
           inputContainerStyle={styles.inputContainer}
           inputStyle={styles.inputText}
           placeholder="Search your task here..."
-          onChangeText={quiry => this.updateState(quiry)}
-          value={this.state.quiry}
+          onChangeText={query => this.updateState(query)}
+          value={this.state.query}
           searchIcon={<EvilIcons name="search" size={25} />}
           />
           <TouchableOpacity onPress={this.toggleFilter}>
@@ -144,7 +207,26 @@ class Search extends React.Component {
           </TouchableOpacity>
            
         </View>
-        {this.renderFilter()}        
+        {this.renderFilter()}
+        {
+          this.state.isDatePickerVisible ? 
+          <View style = {styles.datePickerForm}>
+            <Text style = {{
+              color: colors.SecondaryText,
+              fontSize: 15,
+            }}>From       </Text>
+               <TouchableOpacity style={styles.datePickerButton} onPress={this.toggleStartIntervalPicker}>
+              {this.renderDate(extractedStartInterval,"start")}
+            </TouchableOpacity>
+            <Text style = {{
+              color: colors.SecondaryText,
+              fontSize: 15,
+            }}>     To         </Text>
+               <TouchableOpacity style={styles.datePickerButton} onPress={this.toggleEndIntervalPicker}>
+              {this.renderDate(extractedStartInterval,"end")}
+            </TouchableOpacity>
+            </View>:null
+        }        
         <Overlay
             isVisible={this.state.isCategoryPickerVisible}
             onBackdropPress={this.toggleCategoryPicker}
@@ -154,11 +236,25 @@ class Search extends React.Component {
           </Overlay>
         <TaskList 
           filterOption = {filterOption}
-          quiry = {this.state.quiry}
+          query = {this.state.query}
           category = {this.state.category}
           pinned = {this.state.pinned}
+          startInterval = {this.state.startInterval}
+          endInterval = {this.state.endInterval}
         />
-
+        
+          <DateTimePickerModal
+            isVisible={this.state.isStartIntervalPickerVisible}
+            mode="date"
+            onConfirm={this.handleStartIntervalConfirm}
+            onCancel={this.toggleStartIntervalPicker}
+          />
+          <DateTimePickerModal
+            isVisible={this.state.isEndIntervalPickerVisible}
+            mode="date"
+            onConfirm={this.handleEndIntervalConfirm}
+            onCancel={this.toggleEndIntervalPicker}
+          />
       </View>
     );
   }
@@ -240,6 +336,29 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.Button ,
     marginHorizontal: 14,
+  },
+  datePickerForm:{
+    height: 50,
+    borderRadius: 15,
+    marginHorizontal: 10,
+    marginTop: 10,
+    backgroundColor: 'white',
+    flexDirection: "row",
+    padding: 0,
+    borderRadius: 5,
+    alignSelf: "stretch",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  datePickerText: {
+    fontSize: 16,
+  },
+  datePickerButton: {
+    padding: 5,
+    marginRight: 10,
+    borderColor: colors.Border,
+    borderWidth: 1,
+    borderRadius: 5,
   },
 });
 const mapStateToProps = state => ({

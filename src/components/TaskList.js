@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionList, StyleSheet, Text, View, } from 'react-native';
+import { SectionList, StyleSheet, Text, View, DatePickerIOS, } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
 import { connect } from 'react-redux';
@@ -105,18 +105,21 @@ class TaskList extends React.Component {
       }
     }, {});
   }
-  filterSearch = (taskList, quiry, category, pinned) => {
+  filterSearch = (taskList, query, category, pinned, startInterval,endInterval) => {
     const filtedList = taskList.filter(item => {      
     const itemTitle = `${item.title.toUpperCase()}`;
-    const itemCategory = `${item.category}`
+    const itemCategory = `${item.category}`;
     const itemPinned = `${item.pinned}`;
-    const textData = quiry.toUpperCase();
+    const itemDueTime = item.dueTime;
+    const startIntervalChecker = startInterval === "" ? 1:itemDueTime>= startInterval;
+    const endIntervalChecker = endInterval === "" ? 1:itemDueTime <= endInterval;
+    const textData = query.toUpperCase();
     if (category === "default"){
-      if (itemTitle.includes(textData)){
+      if (itemTitle.includes(textData) && startIntervalChecker && endIntervalChecker){
         return true;
       }   
     }
-    if (itemTitle.includes(textData) && itemCategory === category){
+    if (itemTitle.includes(textData) && itemCategory === category && startIntervalChecker && endIntervalChecker){
       return true;
     }    
       return false;
@@ -142,7 +145,7 @@ class TaskList extends React.Component {
       case FILTER_DATE:
         return this.filterByDate(taskList, this.props.date);
       case FILTER_SEARCH:
-        return this.filterSearch(taskList, this.props.quiry, this.props.category, this.props.pinned);
+        return this.filterSearch(taskList, this.props.query, this.props.category, this.props.pinned,this.props.startInterval,this.props.endInterval);
       default:  
         return taskList;
     }

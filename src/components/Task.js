@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginBottom: 5,
     borderRadius: 15,
+    marginHorizontal: 10,
   },
   textContainer: {
     flex: 1,
