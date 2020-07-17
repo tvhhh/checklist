@@ -16,7 +16,6 @@ import screenStyles from './screenStyles';
 import colors from '../../styles/colors';
 import 'react-native-gesture-handler';
 import TaskList, {FILTER_SEARCH} from './../TaskList'
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { createTask, editTask, removeTask } from '../../redux/actions/TaskActions';
 import { extractDate } from '../../utils/DateTime';
@@ -24,7 +23,6 @@ import { extractDate } from '../../utils/DateTime';
 class Search extends React.Component {
   constructor(props) {
     super(props)
-    let today = getToday();
     this.state = {
       isDatePickerVisible: false,
       isStartIntervalPickerVisible: false,
@@ -39,6 +37,7 @@ class Search extends React.Component {
       startInterval: "",
       endInterval: "",
       showFilter: false,
+      errorInterval:false,
       date: "",
     };
   }
@@ -164,8 +163,6 @@ class Search extends React.Component {
         );
       }
   }
-
-
 
   renderDate = (extractedDate, type) => {
     if (extractedDate !== ""){
@@ -301,12 +298,14 @@ class Search extends React.Component {
           pinned = {this.state.pinned}
           startInterval = {this.state.errorInterval ? "":this.state.startInterval}
           endInterval = {this.state.errorInterval ? "": this.state.endInterval}
-          isNotFilter = {
+          isNotFilter = {this.state.errorInterval === true ? 
+            true:(
             this.state.query === "" &
             this.state.category === "default" &
             this.state.pinned === false &
             this.state.startInterval === "" &
             this.state.endInterval === ""
+            )
           }
         />
         
