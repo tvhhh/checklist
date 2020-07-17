@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionList, StyleSheet, Text, View, } from 'react-native';
+import { SectionList, StyleSheet, Text, View, DatePickerIOS, } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
 import { connect } from 'react-redux';
@@ -106,18 +106,21 @@ class TaskList extends React.Component {
       }
     }, {});
   }
-  filterSearch = (taskList, query, category, pinned, interval) => {
+  filterSearch = (taskList, query, category, pinned, startInterval,endInterval) => {
     const filtedList = taskList.filter(item => {      
     const itemTitle = `${item.title.toUpperCase()}`;
-    const itemCategory = `${item.category}`
+    const itemCategory = `${item.category}`;
     const itemPinned = `${item.pinned}`;
+    const itemDueTime = item.dueTime;
+    const startIntervalChecker = startInterval === "" ? 1:itemDueTime>= startInterval;
+    const endIntervalChecker = endInterval === "" ? 1:itemDueTime <= endInterval;
     const textData = query.toUpperCase();
     if (category === "default"){
-      if (itemTitle.includes(textData)){
+      if (itemTitle.includes(textData) && startIntervalChecker && endIntervalChecker){
         return true;
       }   
     }
-    if (itemTitle.includes(textData) && itemCategory === category){
+    if (itemTitle.includes(textData) && itemCategory === category && startIntervalChecker && endIntervalChecker){
       return true;
     }    
       return false;
@@ -143,7 +146,7 @@ class TaskList extends React.Component {
       case FILTER_DATE:
         return this.filterByDate(taskList, this.props.date);
       case FILTER_SEARCH:
-        return this.filterSearch(taskList, this.props.query, this.props.category, this.props.pinned, this.props.interval);
+        return this.filterSearch(taskList, this.props.query, this.props.category, this.props.pinned,this.props.startInterval,this.props.endInterval);
       default:  
         return taskList;
     }
@@ -162,19 +165,20 @@ class TaskList extends React.Component {
 
     return (
       <>
+        {this.props.isNotFilter ? null:
         <SectionList
-          sections={sections}
-          keyExtractor={(item, index) => item + index}
-          renderItem={this.renderItem}
-          renderSectionHeader={this.renderSectionHeader}
-          ListEmptyComponent={this.props.calendarView ? null : (
-            <View style={styles.emptyComponentContainer}>
-              <Text style={styles.emptyComponentLargeText}>You're all done now!</Text>
-              <Text style={styles.emptyComponentSmallText}>Tap + to create a new task</Text>
-              <FontAwesome5 name="tasks" color="grey" size={40} />
-            </View>
-          )}
-        />
+        sections={sections}
+        keyExtractor={(item, index) => item + index}
+        renderItem={this.renderItem}
+        renderSectionHeader={this.renderSectionHeader}
+        ListEmptyComponent={this.props.calendarView ? null : (
+          <View style={styles.emptyComponentContainer}>
+            <Text style={styles.emptyComponentLargeText}>You're all done now!</Text>
+            <Text style={styles.emptyComponentSmallText}>Tap + to create a new task</Text>
+            <FontAwesome5 name="tasks" color="grey" size={40} />
+          </View>
+        )}
+      />}
         <Create
           position={{ position: "absolute", bottom: 15, right: 15, }}
           onPress={this.onAddButtonPress} 
