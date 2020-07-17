@@ -12,12 +12,8 @@ import Category from '../Category';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-<<<<<<< HEAD
-import screenStyles from './screenStyles';
-=======
 
 import screenStyles from './ScreenStyles';
->>>>>>> 0ee3df3a12c85502f1c030477b4315b9aee7ce78
 import colors from '../../styles/colors';
 import 'react-native-gesture-handler';
 import TaskList, {FILTER_SEARCH} from './../TaskList'

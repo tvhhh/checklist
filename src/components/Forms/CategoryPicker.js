@@ -26,7 +26,7 @@ export default class CategoryPicker extends React.Component {
 
   dataPicker = () => {
     if (typeof this.props.hasDefault === "undefined"){
-      return this.state.categories.slice(1);
+      return this.state.categories.slice(2,this.state.categories.length - 1);
     }
     return this.state.categories;
   }

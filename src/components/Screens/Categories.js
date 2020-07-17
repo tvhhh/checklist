@@ -12,34 +12,22 @@ export default class Categories extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-<<<<<<< HEAD
-      categories: ["uncategorized","health", "workout", "work", "study", "payment", "entertainment"],
-=======
       categories: [
         "health", "workout", "ideas",
         "work", "payment", "entertainment",
-        "meeting", "study", "event",
+        "meeting", "study", "event","uncategorized","default"
       ],
->>>>>>> 0ee3df3a12c85502f1c030477b4315b9aee7ce78
     };
   }
 
   render() {
     return (
       <View style={[screenStyles.screenContainer, styles.container]}>
-<<<<<<< HEAD
-        <Header title={this.props.title} />
-        <Menu onPress={this.toggleDrawer} />
-        <Search
-          position={{ position: "absolute", top: 12, right: 45, }}
-          onPress={() => this.props.navigation.navigate("Search")}
-=======
         <Header
           navigation={this.props.navigation} 
           title={this.props.title}
           search={true}
           notice={true}
->>>>>>> 0ee3df3a12c85502f1c030477b4315b9aee7ce78
         />
         <FlatList 
           data={this.state.categories}
