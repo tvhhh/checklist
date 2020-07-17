@@ -5,6 +5,7 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import CategoryPicker from './../Form/CategoryPicker';
 import { Overlay } from 'react-native-elements';
 import Category from '../Category';
@@ -23,6 +24,7 @@ import { extractDate } from '../../utils/DateTime';
 class Search extends React.Component {
   constructor(props) {
     super(props)
+    let today = getToday();
     this.state = {
       isDatePickerVisible: false,
       isStartIntervalPickerVisible: false,
@@ -111,6 +113,19 @@ class Search extends React.Component {
 
   toggleCategoryPicker = () => {
     this.setState({ isCategoryPickerVisible: !this.state.isCategoryPickerVisible,isCategoryPressed: !this.state.isCategoryPressed });
+  }
+  toggleDateTimePicker = () => {
+    this.setState({isDateTimePickerVisible: !this.state.isDateTimePickerVisible});
+    if (this.state.startInterval !== "" || this.state.endInterval !== "")
+    {
+      this.setState({isCalendarPressed: true});
+    }
+  }
+  toggleStartIntervalPicker = () => {
+    this.setState({isStartIntervalPickerVisible: !this.state.isStartIntervalPickerVisible});
+  }
+  toggleEndIntervalPicker = () => {
+    this.setState({isEndIntervalPickerVisible: !this.state.isEndIntervalPickerVisible});
   }
 
   toggleFilter = () => {

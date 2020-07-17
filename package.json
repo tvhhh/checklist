@@ -23,7 +23,10 @@
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-calendars": "^1.265.0",
+<<<<<<< HEAD
     "react-native-date-picker": "^3.0.2",
+=======
+>>>>>>> master
     "react-native-datepicker": "^1.7.2",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.6.1",
