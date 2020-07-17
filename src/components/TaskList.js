@@ -13,7 +13,6 @@ import { Create } from './Button';
 
 import colors from '../styles/colors';
 
-import DatePicker from 'react-native-datepicker';
 import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateTime';
 
 import { createTask, editTask, removeTask } from '../redux/actions/UserDataActions';

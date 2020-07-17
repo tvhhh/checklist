@@ -15,7 +15,7 @@ export default class Categories extends React.Component {
       categories: [
         "health", "workout", "ideas",
         "work", "payment", "entertainment",
-        "meeting", "study", "event","uncategorized","default"
+        "meeting", "study", "event",
       ],
     };
   }

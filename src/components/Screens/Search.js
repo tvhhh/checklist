@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import CategoryPicker from './../Form/CategoryPicker';
+import CategoryPicker from './../Forms/CategoryPicker';
 import { Overlay } from 'react-native-elements';
 import Category from '../Category';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,7 +18,7 @@ import colors from '../../styles/colors';
 import 'react-native-gesture-handler';
 import TaskList, {FILTER_SEARCH} from './../TaskList'
 
-import { createTask, editTask, removeTask } from '../../redux/actions/TaskActions';
+import { createTask, editTask, removeTask } from '../../redux/actions/UserDataActions';
 import { extractDate } from '../../utils/DateTime';
 
 class Search extends React.Component {
@@ -47,7 +47,7 @@ class Search extends React.Component {
   };
 
   updateCategory = category => {
-    this.setState({ category: category });
+    this.setState({ category: category, isCategoryPickerVisible: !this.state.isCategoryPickerVisible });
   }
 
   onPinnedPress = () => {
