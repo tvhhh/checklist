@@ -66,18 +66,31 @@ class Search extends React.Component {
       pinned: false,
       startInterval: "",
       endInterval: "",
+      errorInterval: false,
     });
   }
   
   handleStartIntervalConfirm = time => {
     time.setHours(0,0,0,0);
     this.setState({startInterval: time});
+    if (this.state.startInterval > this.state.endInterval && this.state.endInterval !== ""){
+      this.setState({errorInterval: true})
+    }
+    else{
+      this.setState({errorInterval: false})
+    }
     this.setState({ isStartIntervalPickerVisible: false });
   }
 
   handleEndIntervalConfirm = time => {
     time.setHours(23,59,59,99);
     this.setState({endInterval: time});
+    if (this.state.startInterval > this.state.endInterval && this.state.startInterval !== ""){
+      this.setState({errorInterval: true})
+    }
+    else{
+      this.setState({errorInterval: false})
+    }
     this.setState({ isEndIntervalPickerVisible: false });
   }
 
@@ -104,6 +117,16 @@ class Search extends React.Component {
     this.setState({showFilter: !this.state.showFilter, isDatePickerVisible: false});
   }
 
+  toggleIntervalChecker = () => {
+    
+    if (this.state.startInterval > this.state.endInterval){
+      this.setState({errorInterval: true})
+    }
+    else{
+      this.setState({errorInterval: false})
+    }
+  }
+
   renderCategoryBox = () => {
     if (this.state.category){
       return(
@@ -126,6 +149,8 @@ class Search extends React.Component {
         );
       }
   }
+
+
 
   renderDate = (extractedDate, type) => {
     if (extractedDate !== ""){
@@ -169,7 +194,7 @@ class Search extends React.Component {
           
         <TouchableOpacity onPress = {this.onResetPress}>
         <View style = {styles.resetButton}>
-          <MaterialCommunityIcons name = "restart"/>
+          <MaterialCommunityIcons name = "restart" size = {17}/>
         </View>
         </TouchableOpacity>
       </View>
@@ -214,19 +239,39 @@ class Search extends React.Component {
             <Text style = {{
               color: colors.SecondaryText,
               fontSize: 15,
-            }}>From       </Text>
+              marginHorizontal: 10
+            }}>From</Text>
                <TouchableOpacity style={styles.datePickerButton} onPress={this.toggleStartIntervalPicker}>
               {this.renderDate(extractedStartInterval,"start")}
             </TouchableOpacity>
             <Text style = {{
               color: colors.SecondaryText,
               fontSize: 15,
-            }}>     To         </Text>
+              marginHorizontal: 10
+            }}>To</Text>
                <TouchableOpacity style={styles.datePickerButton} onPress={this.toggleEndIntervalPicker}>
-              {this.renderDate(extractedStartInterval,"end")}
+              {this.renderDate(extractedEndInterval,"end")}
             </TouchableOpacity>
             </View>:null
-        }        
+        }
+        {this.state.isDatePickerVisible ?
+        <View style = {{
+          flexDirection: "row",
+          marginTop: 5,
+          borderRadius: 5,
+          alignSelf: 'stretch',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {this.state.errorInterval ? 
+          <Text style = {{
+              color: 'red',
+              fontSize: 15
+            }}>The start day should not be larger than the end day
+            </Text> :null
+            }          
+        </View>: null
+      }        
         <Overlay
             isVisible={this.state.isCategoryPickerVisible}
             onBackdropPress={this.toggleCategoryPicker}
@@ -239,8 +284,8 @@ class Search extends React.Component {
           query = {this.state.query}
           category = {this.state.category}
           pinned = {this.state.pinned}
-          startInterval = {this.state.startInterval}
-          endInterval = {this.state.endInterval}
+          startInterval = {this.state.errorInterval ? "":this.state.startInterval}
+          endInterval = {this.state.errorInterval ? "": this.state.endInterval}
         />
         
           <DateTimePickerModal
@@ -355,7 +400,7 @@ const styles = StyleSheet.create({
   },
   datePickerButton: {
     padding: 5,
-    marginRight: 10,
+    marginHorizontal: 10,
     borderColor: colors.Border,
     borderWidth: 1,
     borderRadius: 5,
