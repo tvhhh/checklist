@@ -7,18 +7,17 @@
  */
 
 import React from 'react';
+import { YellowBox } from 'react-native';
 import { connect } from 'react-redux';
 
 import TodoApp from './src/index';
 
-import { fetchData } from './src/redux/actions/TaskActions';
+import { fetchData } from './src/redux/actions/UserDataActions';
 
+
+YellowBox.ignoreWarnings(["Setting a timer"]);
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount = () => {
     this.props.fetchData();
   }
@@ -29,7 +28,7 @@ class App extends React.Component {
 };
 
 const mapStateToProps = state => ({
-  taskList: state.tasks,
+  appData: state.userData,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -6,9 +6,8 @@ import { connect } from 'react-redux';
 import Header from '../Header';
 import CalendarPicker from '../CalendarPicker';
 import TaskList, { FILTER_DATE } from '../TaskList';
-import { Menu, Notice, Search } from '../Button';
 
-import screenStyles from './screenStyles';
+import screenStyles from './ScreenStyles';
 
 import { extractDate } from '../../utils/DateTime';
 
@@ -41,13 +40,12 @@ class Calendar extends React.Component{
   render() {
     return(
       <View style={screenStyles.screenContainer}>
-        <Header title={this.props.title} />
-        <Menu onPress={this.toggleDrawer} />
-        <Search
-          position={{ position: "absolute", top: 12, right: 45, }}
-          onPress={() => this.props.navigation.navigate("Search",{taskList: this.props.taskList})}
+        <Header
+          navigation={this.props.navigation} 
+          title={this.props.title}
+          search={true}
+          notice={true}
         />
-        <Notice onPress={() => this.props.navigation.navigate("Notice")} />
         <CalendarPicker 
           onDayPress={this.onDayPress}
           renderMarkedDates={this.renderMarkedDates}
@@ -63,7 +61,7 @@ class Calendar extends React.Component{
 };
 
 const mapStateToProps = state => ({
-  taskList: state.tasks,
+  taskList: state.userData.data.tasks,
 });
 
 export default connect(mapStateToProps)(Calendar);
