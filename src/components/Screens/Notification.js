@@ -2,21 +2,31 @@ import React from 'react';
 import {Text, View, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import screenStyles from './ScreenStyles';
-import Header from '../Header';
 
-export default class Notification extends React.Component {
+import CheckButton from '../CheckBox';
+import Header from '../Header';
+import {connect} from 'react-redux';
+
+class Notification extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      taskList: props.route.params.taskList,
-      show: true,
+      showMNote: true,
+      showTNote: true,
     };
   }
-  onPress = () => {
-    if (this.state.show === true) {
-      this.setState({show: false});
+  onPressM = () => {
+    if (this.state.showMNote === true) {
+      this.setState({showMNote: false});
     } else {
-      this.setState({show: true});
+      this.setState({showMNote: true});
+    }
+  };
+  onPressT = () => {
+    if (this.state.showTNote === true) {
+      this.setState({showTNote: false});
+    } else {
+      this.setState({showTNote: true});
     }
   };
   render() {
@@ -24,40 +34,41 @@ export default class Notification extends React.Component {
       <View style={screenStyles.screenContainer}>
         <Header title={'NOTIFICATION'} />
         <View style={styles.container}>
-          <TouchableOpacity onPress={this.onPress}>
-            <Text style={styles.cateContainer}>
-              My note
+          <TouchableOpacity onPress={this.onPressM}>
+            <Text style={styles.myNoteContainer}>
+              {this.state.showMNote ? <AntDesign name="down" /> : null}
+              {!this.state.showMNote ? <AntDesign name="right" /> : null}
               <Text> </Text>
-              {this.state.show ? <AntDesign name="down" /> : null}
-              {!this.state.show ? <AntDesign name="right" /> : null}
+              My note
             </Text>
           </TouchableOpacity>
-          {this.state.show ? (
+          {this.state.showMNote ? (
             <FlatList
-              data={[
-                {key: 'Devin', date: '1'},
-                {key: 'Dan', date: '1'},
-                {key: 'Dominic', date: '1'},
-                {key: 'Jackson', date: '1'},
-                {key: 'James', date: '1'},
-                {key: 'Joel', date: '1'},
-                {key: 'John', date: '1'},
-                {key: 'Jillian', date: '1'},
-                {key: 'Jimmy', date: '1'},
-                {key: 'Julie', date: '1'},
-                {key: 'Julie', date: '1'},
-                {key: 'Julie', date: '1'},
-                {key: 'Julie', date: '1'},
-                {key: 'Julie', date: '1'},
-              ]}
+              data={this.props.taskList}
+              keyExtractor={item => item.id}
               renderItem={({item}) => (
-                <Text style={styles.item}>
-                  {item.key} {'\n'}
-                  {item.date}
-                </Text>
+                <View style={styles.item}>
+                  <CheckButton
+                    name="done"
+                    checked={this.props.done}
+                    onPress={this.props.toggleDone}
+                  />
+                  <View style={styles.textContainer}>
+                    <Text style={styles.title}>{item.title} </Text>
+                    <Text style={styles.description}>| {item.description}</Text>
+                  </View>
+                </View>
               )}
             />
           ) : null}
+          <TouchableOpacity onPress={this.onPressT}>
+            <Text style={styles.myTNoteContainer}>
+              {this.state.showTNote ? <AntDesign name="down" /> : null}
+              {!this.state.showTNote ? <AntDesign name="right" /> : null}
+              <Text> </Text>
+              My team's note
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -68,9 +79,9 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     alignItems: 'center',
-    flexDirection: 'column',
+    flexDirection: 'row',
     paddingTop: 10,
-    paddingLeft: 20,
+    paddingLeft: 0,
     paddingBottom: 10,
     margin: 20,
     marginBottom: 10,
@@ -78,12 +89,35 @@ const styles = StyleSheet.create({
     backgroundColor: '#c9f1fd',
     fontSize: 13,
   },
-  cateContainer: {
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  description: {
+    fontSize: 15,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  CheckButton: {
+    paddingLeft: 5,
+  },
+  myNoteContainer: {
     borderRadius: 10,
     marginLeft: 10,
     fontSize: 15,
     width: 100,
     marginTop: 20,
+    padding: 10,
+    backgroundColor: '#d3e2fb',
+  },
+  myTNoteContainer: {
+    borderRadius: 10,
+    marginLeft: 10,
+    fontSize: 15,
+    width: 150,
+    marginTop: 20,
+    marginBottom: 50,
     padding: 10,
     backgroundColor: '#d3e2fb',
   },
@@ -94,3 +128,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
 });
+
+const mapStateToProps = state => ({
+  taskList: state.userData.data.tasks,
+});
+
+export default connect(mapStateToProps)(Notification);
