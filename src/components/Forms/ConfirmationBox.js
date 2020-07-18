@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, } from 'react-native';
 
 import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 
 export default class ConfirmationBox extends React.Component {
@@ -36,13 +37,13 @@ const styles = StyleSheet.create({
   },
   largeText: {
     color: colors.PrimaryText,
-    fontSize: 20,
+    fontSize: fonts.TitleText,
     fontWeight: "bold",
     marginBottom: 5,
   },
   smallText: {
     color: colors.PrimaryText,
-    fontSize: 14,
+    fontSize: fonts.CaptionText,
   },
   optionContainer: {
     flexDirection: "row",
@@ -53,12 +54,12 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     color: "red",
-    fontSize: 20,
+    fontSize: fonts.ButtonText,
     fontWeight: "bold",
   },
   cancelText: {
     color: "dodgerblue",
-    fontSize: 20,
+    fontSize: fonts.ButtonText,
     fontWeight: "bold",
   },
 });

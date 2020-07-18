@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Menu, Search, Notice } from './Button';
 
 import colors from '../styles/colors';
+import fonts from '../styles/fonts';
 
 import { extractDateTime } from '../utils/DateTime';
 
@@ -72,12 +73,12 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.TitleText,
-    fontSize: 24,
+    fontSize: fonts.HeaderText,
     textAlign: "center",
   },
   time: {
     color: colors.SecondaryText,
-    fontSize: 14,
+    fontSize: fonts.SecondaryText,
     textAlign: "center",
   },
 });

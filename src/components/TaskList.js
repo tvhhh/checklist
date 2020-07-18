@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionList, StyleSheet, Text, View, DatePickerIOS, } from 'react-native';
+import { SectionList, StyleSheet, Text, View, } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
 import { connect } from 'react-redux';
@@ -12,6 +12,7 @@ import TaskForm from './Forms/TaskForm';
 import { Create } from './Button';
 
 import colors from '../styles/colors';
+import fonts from '../styles/fonts';
 
 import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateTime';
 
@@ -176,7 +177,7 @@ class TaskList extends React.Component {
         renderSectionHeader={this.renderSectionHeader}
         ListEmptyComponent={this.props.calendarView ? null : (
           <View style={styles.emptyComponentContainer}>
-            <Text style={styles.emptyComponentLargeText}>You're all done now!</Text>
+            <Text style={styles.emptyComponentLargeText}>Welcome to TODOS!</Text>
             <Text style={styles.emptyComponentSmallText}>Tap + to create a new task</Text>
             <FontAwesome5 name="tasks" color="grey" size={40} />
           </View>
@@ -208,7 +209,7 @@ class TaskList extends React.Component {
 const styles = StyleSheet.create({
   listTitle: {
     color: colors.TitleText,
-    fontSize: 20,
+    fontSize: fonts.TitleText,
     textAlign: "center",
     marginBottom: 5,
   },
@@ -219,11 +220,11 @@ const styles = StyleSheet.create({
   },
   emptyComponentLargeText: {
     color: colors.PrimaryText,
-    fontSize: 24,
+    fontSize: fonts.HeavyText,
   },
   emptyComponentSmallText: {
     color: colors.SecondaryText,
-    fontSize: 16,
+    fontSize: fonts.PrimaryText,
   },
   taskForm: {
     padding: 0,

@@ -19,7 +19,7 @@ const colors = {
   Ideas: "rgba(143, 113, 52, 1.0)",
   Work: "rgba(64, 120, 85, 1.0)",
   Payment: "rgba(3, 131, 135, 1.0)",
-  Entertainment: "rgba(0, 120, 212, 1.0)",
+  Liveliness: "rgba(0, 120, 212, 1.0)",
   Meeting: "rgba(64, 88, 124, 1.0)",
   Study: "rgba(64, 82, 171, 1.0)",
   Event: "rgba(133, 64, 133, 1.0)",

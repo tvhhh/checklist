@@ -10,6 +10,7 @@ import ConfirmationBox from './ConfirmationBox';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 import { getToday, extractDateTime } from '../../utils/DateTime';
 
@@ -177,20 +178,20 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     color: colors.PrimaryColor,
-    fontSize: 20,
+    fontSize: fonts.ButtonText,
   },
   taskFormInputField: {
     flex: 1,
     paddingHorizontal: 10,
   },
   titleInput: {
-    fontSize: 18,
+    fontSize: fonts.TitleText,
     borderColor: colors.Border,
     borderBottomWidth: 1,
     paddingBottom: 3,
   },
   descriptionInput: {
-    fontSize: 14,
+    fontSize: fonts.CaptionText,
     borderColor: colors.Border,
     borderBottomWidth: 1,
     paddingBottom: 3,
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   dateTimePickerText: {
-    fontSize: 16,
+    fontSize: fonts.PrimaryText,
   },
   categoryPickerButton: {
     alignItems: "center",
@@ -219,6 +220,7 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     color: colors.PrimaryText,
+    fontSize: fonts.PrimaryText,
   },
   taskFormFooter: {
     alignItems: "center",
@@ -241,6 +243,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: colors.ErrorText,
-    fontSize: 12,
+    fontSize: fonts.ErrorText,
   },
 });

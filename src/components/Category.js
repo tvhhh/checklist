@@ -40,8 +40,8 @@ export default class Category extends React.Component {
       case "payment":
         icon = <FontAwesome5 name="money-bill-wave" color={colors.Payment} size={0.55*size} />;
         break;
-      case "entertainment":
-        icon = <MaterialCommunityIcons name="theater" color={colors.Entertainment} size={0.625*size} />;
+      case "liveliness":
+        icon = <MaterialCommunityIcons name="theater" color={colors.Liveliness} size={0.625*size} />;
         break;
       case "meeting":
         icon = <MaterialCommunityIcons name="account-group" color={colors.Meeting} size={0.625*size} />;

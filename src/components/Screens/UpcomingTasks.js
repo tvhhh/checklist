@@ -7,6 +7,7 @@ import Header from '../Header';
 
 import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 import { extractDateTime, getWeekDates } from '../../utils/DateTime';
 
@@ -34,7 +35,7 @@ class UpcomingTasks extends React.Component {
   getCategoriesCount = taskList => {
     var categories = [
       "health", "workout", "ideas",
-      "work", "payment", "entertainment",
+      "work", "payment", "liveliness",
       "meeting", "study", "event",
       "uncategorized",
     ];
@@ -68,7 +69,7 @@ class UpcomingTasks extends React.Component {
       population: categoriesTasks[key],
       color: colors[key],
       legendFontColor: "#7F7F7F",
-      legendFontSize: 14,
+      legendFontSize: fonts.CaptionText,
     }));
 
     const chartConfig = {
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
   },
   graphTitle: {
     color: colors.TitleText,
-    fontSize: 20,
+    fontSize: fonts.TitleText,
     fontWeight: "bold",
     marginLeft: 10,
     marginBottom: 5,

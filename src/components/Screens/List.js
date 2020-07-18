@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, } from 'react-native';
+import { View } from 'react-native';
 
 import Header from '../Header';
 import TaskList, { FILTER_TODAY, FILTER_WEEK, FILTER_PINNED } from '../TaskList';

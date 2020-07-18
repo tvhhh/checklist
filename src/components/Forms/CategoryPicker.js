@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, Text, View, } from 'react-native';
 import Category from '../Category';
 
 import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 
 export default class CategoryPicker extends React.Component {
@@ -12,8 +13,9 @@ export default class CategoryPicker extends React.Component {
     this.state = {
       categories: [
         "health", "workout", "ideas",
-        "work", "payment", "entertainment",
-        "meeting", "study", "event", "uncategorized","default"
+        "work", "payment", "liveliness",
+        "meeting", "study", "event", 
+        "uncategorized", "default",
       ],
     };
   }
@@ -72,6 +74,6 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     color: colors.PrimaryText,
-    fontSize: 10,
+    fontSize: fonts.TertiaryText,
   },
 });

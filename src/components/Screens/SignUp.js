@@ -7,6 +7,7 @@ import { ErrorBox, NoInternetAlert } from './LogIn';
 
 import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 import { createUser, isUsernameExisting, isEmailExisting } from '../../api';
 
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.PrimaryColor,
-    fontSize: 30,
+    fontSize: fonts.HeavyText,
     fontWeight: "bold",
   },
   inputField: {
@@ -191,11 +192,11 @@ const styles = StyleSheet.create({
   },
   inputTitle: {
     color: colors.TitleText,
-    fontSize: 20,
+    fontSize: fonts.TitleText,
     marginBottom: 5,
   },
   input: {
-    fontSize: 16,
+    fontSize: fonts.PrimaryText,
     borderColor: colors.Border,
     borderWidth: 1,
     borderRadius: 5,
@@ -212,27 +213,14 @@ const styles = StyleSheet.create({
   },
   submitText: {
     color: "white",
-    fontSize: 20,
+    fontSize: fonts.ButtonText,
   },
   otherOptionsButton: {
     paddingHorizontal: 5,
   },
   otherOptionsText: {
     color: colors.PrimaryColor,
-  },
-  errorBox: {
-    backgroundColor: colors.ErrorText,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 5,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    position: "absolute",
-    bottom: 0,
-  },
-  errorText: {
-    color: "white",
-    fontSize: 14,
+    fontSize: fonts.SecondaryText,
   },
   alertBox: {
     height: 150,

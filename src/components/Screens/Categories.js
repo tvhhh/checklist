@@ -6,6 +6,7 @@ import Category from '../Category';
 
 import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 
 export default class Categories extends React.Component {
@@ -14,7 +15,7 @@ export default class Categories extends React.Component {
     this.state = {
       categories: [
         "health", "workout", "ideas",
-        "work", "payment", "entertainment",
+        "work", "payment", "liveliness",
         "meeting", "study", "event",
       ],
     };
@@ -61,6 +62,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   categoryName: {
-    fontSize: 12,
+    fontSize: fonts.CaptionText,
   },
 });

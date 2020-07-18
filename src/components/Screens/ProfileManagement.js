@@ -16,6 +16,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 import { setAvatar, setName, setPhone, setPassword, logOut, removeAccount } from '../../redux/actions/UserDataActions';
 
@@ -225,13 +226,6 @@ class ProfileManagement extends React.Component {
             onConfirm={this.handleRemoveAccountConfirm}
           />
         </Overlay>
-        {/* <Overlay
-            isVisible={this.state.alert}
-            onBackdropPress={this.toggleAlert}
-            overlayStyle={styles.alertBox}
-          >
-          <NoInternetAlert />
-        </Overlay> */}
       </ScrollView>
     );
   }
@@ -245,7 +239,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   username: {
-    fontSize: 20,
+    fontSize: fonts.TitleText,
   },
   userAvatar: {
     backgroundColor: "white",
@@ -264,10 +258,10 @@ const styles = StyleSheet.create({
     borderRightWidth: 0.5,
   },
   statisticNumber: {
-    fontSize: 30,
+    fontSize: fonts.HeavyText,
   },
   statisticText: {
-    fontSize: 12,
+    fontSize: fonts.TertiaryText,
   },
   infoField: {
     flexDirection: "row",
@@ -282,12 +276,12 @@ const styles = StyleSheet.create({
   },
   infoTitle: {
     color: colors.TitleText,
-    fontSize: 16,
+    fontSize: fonts.PrimaryText,
     fontWeight: "bold",
   },
   info: {
     color: colors.PrimaryText,
-    fontSize: 16,
+    fontSize: fonts.PrimaryText,
   },
   logOut: {
     flexDirection: "row",

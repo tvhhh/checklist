@@ -4,6 +4,7 @@ import { FlatList, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, Touc
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 
 export class AvatarPicker extends React.Component {
@@ -292,12 +293,12 @@ const styles = StyleSheet.create({
   },
   infoTitleText: {
     color: colors.TitleText,
-    fontSize: 16,
+    fontSize: fonts.PrimaryText,
     fontWeight: "bold",
   },
   informationText: {
     color: colors.PrimaryText,
-    fontSize: 16,
+    fontSize: fonts.PrimaryText,
   },
   inputField: {
     flex: 1,
@@ -305,19 +306,19 @@ const styles = StyleSheet.create({
   },
   inputTitle: {
     color: colors.TitleText,
-    fontSize: 16,
+    fontSize: fonts.PrimaryText,
     fontWeight: "bold",
     marginBottom: 5,
   },
   input: {
-    fontSize: 16,
+    fontSize: fonts.PrimaryText,
     borderColor: colors.Border,
     borderBottomWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 0,
   },
   passwordInput: {
-    fontSize: 16,
+    fontSize: fonts.PrimaryText,
     borderColor: colors.Border,
     borderWidth: 1,
     borderRadius: 5,
@@ -343,10 +344,10 @@ const styles = StyleSheet.create({
   },
   saveText: {
     color: "white",
-    fontSize: 18,
+    fontSize: fonts.ButtonText,
   },
   errorText: {
     color: colors.ErrorText,
-    fontSize: 12,
+    fontSize: fonts.ErrorText,
   },
 });

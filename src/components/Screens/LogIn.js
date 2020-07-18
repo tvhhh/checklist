@@ -10,6 +10,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 import { logIn, getData } from '../../redux/actions/UserDataActions';
 
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.PrimaryColor,
-    fontSize: 30,
+    fontSize: fonts.HeavyText,
     fontWeight: "bold",
   },
   inputField: {
@@ -154,11 +155,11 @@ const styles = StyleSheet.create({
   },
   inputTitle: {
     color: colors.TitleText,
-    fontSize: 20,
+    fontSize: fonts.TitleText,
     marginBottom: 5,
   },
   input: {
-    fontSize: 16,
+    fontSize: fonts.PrimaryText,
     borderColor: colors.Border,
     borderWidth: 1,
     borderRadius: 5,
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   },
   submitText: {
     color: "white",
-    fontSize: 20,
+    fontSize: fonts.ButtonText,
   },
   otherOptions: {
     flexDirection: "row",
@@ -187,9 +188,11 @@ const styles = StyleSheet.create({
   },
   resetPassword: {
     color: colors.SecondaryColor,
+    fontSize: fonts.SecondaryText,
   },
   signUp: {
     color: colors.PrimaryColor,
+    fontSize: fonts.SecondaryText,
   },
   errorBox: {
     backgroundColor: colors.ErrorText,
@@ -203,7 +206,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "white",
-    fontSize: 14,
+    fontSize: fonts.ErrorText,
   },
   alertBox: {
     height: 150,
@@ -217,7 +220,7 @@ const styles = StyleSheet.create({
   },
   alertText: {
     color: colors.DisabledColor,
-    fontSize: 14,
+    fontSize: fonts.CaptionText,
     marginTop: 10,
   },
 });

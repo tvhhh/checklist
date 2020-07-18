@@ -5,6 +5,7 @@ import CheckButton from './CheckBox';
 import Category from './Category';
 
 import colors from '../styles/colors';
+import fonts from '../styles/fonts';
 
 import { extractDateTime } from '../utils/DateTime';
 
@@ -43,11 +44,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   taskTitle: {
-    fontSize: 14,
+    fontSize: fonts.PrimaryText,
     color: colors.PrimaryText,
   },
   taskTime: {
-    fontSize: 12,
+    fontSize: fonts.SecondaryText,
     color: colors.SecondaryText,
   },
 });

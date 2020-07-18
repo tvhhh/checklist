@@ -27,7 +27,7 @@ export default class CalendarPicker extends React.Component{
     return(
       <Calendar
         hideExtraDays={true}
-        onDayPress={(day) =>  this.setMarkedDates(day.dateString)}
+        onDayPress={(day) => this.setMarkedDates(day.dateString)}
         markedDates={this.state.markedDates()}
         theme={{
           calendarBackground: colors.Background,
