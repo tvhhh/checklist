@@ -7,6 +7,7 @@ export const SET_CONNECTION = "SET_CONNECTION";
 export const CREATE_TASK = "CREATE_TASK";
 export const EDIT_TASK = "EDIT_TASK";
 export const REMOVE_TASK = "REMOVE_TASK";
+export const EDIT_PINNED = "EDIT_PINNED";
 export const SET_AVATAR = "SET_AVATAR";
 export const SET_NAME = "SET_NAME";
 export const SET_PHONE = "SET_PHONE";
@@ -47,6 +48,13 @@ export const editTask = (task, selected) => ({
 
 export const removeTask = selected => ({
   type: REMOVE_TASK,
+  payload: {
+    selected,
+  },
+});
+
+export const editPinned = selected => ({
+  type: EDIT_PINNED,
   payload: {
     selected,
   },

@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { GET_DATA, CLEAR_DATA, SET_CONNECTION, CREATE_TASK, EDIT_TASK, REMOVE_TASK, SET_NAME, SET_PHONE, SET_PASSWORD, SET_AVATAR } from '../actions/UserDataActions';
 import { storeTaskList, storeUserData, updateUserData } from '../../api';
+=======
+import { GET_DATA, CLEAR_DATA, CREATE_TASK, EDIT_TASK, EDIT_PINNED, REMOVE_TASK, SET_NAME, SET_PHONE, SET_PASSWORD, SET_AVATAR } from '../actions/UserDataActions';
+import { storeTaskList, updateUserData } from '../../api';
+>>>>>>> category-huy
 
 
 const initialState = {
@@ -69,7 +74,25 @@ export default function userDataReducers(state = initialState, action) {
       } else {
         storeTaskList(JSON.stringify(newTaskList));
       }
+<<<<<<< HEAD
       return { ...state, data: newData };
+=======
+      return {
+        ...state,
+        data: { ...state.data, tasks: newTaskList },
+      };
+    case EDIT_PINNED:
+      newTaskList = currentTaskList.map(task => (task.id === payload.selected.id) ? { ...task, pinned: !task.pinned } : task);
+      if (state.data.username !== null) {
+        updateUserData(state.data.username, 'tasks', JSON.stringify(newTaskList));
+      } else {
+        storeTaskList(JSON.stringify(newTaskList));
+      }
+      return {
+        ...state,
+        data: { ...state.data, tasks: newTaskList },
+      };
+>>>>>>> category-huy
     case SET_AVATAR:
       newData = { ...state.data, avatar: payload.color };
       updateUserData(state.data.username, payload.color, 'avatar');
