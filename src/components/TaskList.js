@@ -199,6 +199,7 @@ class TaskList extends React.Component {
         {this.props.create ?
           <Create
             style={styles.addButton}
+            buttonColor={buttonColor}
             onPress={this.onAddButtonPress} 
           /> : null
         }
