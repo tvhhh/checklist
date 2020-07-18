@@ -109,13 +109,13 @@ class TaskList extends React.Component {
       }
     }, {});
   }
-  filterSearch = (taskList, query, category, pinned, startInterval,endInterval) => {
+  filterSearch = (taskList, query, category, pinned, startInterval, endInterval) => {
     const filtedList = taskList.filter(item => {      
     const itemTitle = `${item.title.toUpperCase()}`;
     const itemCategory = `${item.category}`;
     const itemPinned = `${item.pinned}`;
     const itemDueTime = item.dueTime;
-    const startIntervalChecker = startInterval === "" ? 1:itemDueTime>= startInterval;
+    const startIntervalChecker = startInterval === "" ? 1:itemDueTime >= startInterval;
     const endIntervalChecker = endInterval === "" ? 1:itemDueTime <= endInterval;
     const textData = query.toUpperCase();
     if (category === "default"){
@@ -149,7 +149,7 @@ class TaskList extends React.Component {
       case FILTER_DATE:
         return this.filterByDate(taskList, this.props.date);
       case FILTER_SEARCH:
-        return this.filterSearch(taskList, this.props.query, this.props.category, this.props.pinned,this.props.startInterval,this.props.endInterval);
+        return this.filterSearch(taskList, this.props.query, this.props.category, this.props.pinned, this.props.startInterval, this.props.endInterval);
       default:  
         return taskList;
     }
@@ -181,11 +181,13 @@ class TaskList extends React.Component {
             <FontAwesome5 name="tasks" color="grey" size={40} />
           </View>
         )}
-      />}
-        <Create
-          style={styles.addButton}
-          onPress={this.onAddButtonPress} 
-        />
+        />}
+        {this.props.create ?
+          <Create
+            style={styles.addButton}
+            onPress={this.onAddButtonPress} 
+          /> : null
+        }
         <Overlay
           isVisible={this.state.showForm} 
           onBackdropPress={this.onFormBackdropPress}

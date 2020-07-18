@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import { GET_DATA, CLEAR_DATA, SET_CONNECTION, CREATE_TASK, EDIT_TASK, REMOVE_TASK, SET_NAME, SET_PHONE, SET_PASSWORD, SET_AVATAR } from '../actions/UserDataActions';
+import { GET_DATA, CLEAR_DATA, SET_CONNECTION, CREATE_TASK, EDIT_TASK, EDIT_PINNED, REMOVE_TASK, SET_NAME, SET_PHONE, SET_PASSWORD, SET_AVATAR } from '../actions/UserDataActions';
 import { storeTaskList, storeUserData, updateUserData } from '../../api';
-=======
-import { GET_DATA, CLEAR_DATA, CREATE_TASK, EDIT_TASK, EDIT_PINNED, REMOVE_TASK, SET_NAME, SET_PHONE, SET_PASSWORD, SET_AVATAR } from '../actions/UserDataActions';
-import { storeTaskList, updateUserData } from '../../api';
->>>>>>> category-huy
 
 
 const initialState = {
@@ -44,7 +39,7 @@ export default function userDataReducers(state = initialState, action) {
         { id: (currentTaskList.length == 0) ? 0 : currentTaskList[0].id + 1, ...payload.task },
         ...currentTaskList,
       ];
-      newData = { ...state.data, tasks: newTaskList }
+      newData = { ...state.data, tasks: newTaskList };
       if (state.data.username !== null) {
         updateUserData(state.data.username, JSON.stringify(newTaskList), 'tasks');
         storeUserData(JSON.stringify(newData));
@@ -53,11 +48,11 @@ export default function userDataReducers(state = initialState, action) {
       }
       return { ...state, data: newData };
     case EDIT_TASK:
-      newTaskList = currentTaskList.map(task => (
-        task.id === payload.selected.id) ? 
+      newTaskList = currentTaskList.map(task => 
+        (task.id === payload.selected.id) ? 
         { id: payload.selected.id, ...payload.task } : task
       );
-      newData = { ...state.data, tasks: newTaskList }
+      newData = { ...state.data, tasks: newTaskList };
       if (state.data.username !== null) {
         updateUserData(state.data.username, JSON.stringify(newTaskList), 'tasks');
         storeUserData(JSON.stringify(newData));
@@ -67,32 +62,27 @@ export default function userDataReducers(state = initialState, action) {
       return { ...state, data: newData };
     case REMOVE_TASK:
       newTaskList = currentTaskList.filter(task => task.id !== payload.selected.id);
-      newData = { ...state.data, tasks: newTaskList }
+      newData = { ...state.data, tasks: newTaskList };
       if (state.data.username !== null) {
         updateUserData(state.data.username, JSON.stringify(newTaskList), 'tasks');
         storeUserData(JSON.stringify(newData));
       } else {
         storeTaskList(JSON.stringify(newTaskList));
       }
-<<<<<<< HEAD
       return { ...state, data: newData };
-=======
-      return {
-        ...state,
-        data: { ...state.data, tasks: newTaskList },
-      };
     case EDIT_PINNED:
-      newTaskList = currentTaskList.map(task => (task.id === payload.selected.id) ? { ...task, pinned: !task.pinned } : task);
+      newTaskList = currentTaskList.map(task => 
+        (task.id === payload.selected.id) ? 
+        { ...task, pinned: !task.pinned } : task
+      );
+      newData = { ...state.data, tasks: newTaskList };
       if (state.data.username !== null) {
-        updateUserData(state.data.username, 'tasks', JSON.stringify(newTaskList));
+        updateUserData(state.data.username, JSON.stringify(newTaskList), 'tasks');
+        storeUserData(JSON.stringify(newData));
       } else {
         storeTaskList(JSON.stringify(newTaskList));
       }
-      return {
-        ...state,
-        data: { ...state.data, tasks: newTaskList },
-      };
->>>>>>> category-huy
+      return { ...state, data: newData };
     case SET_AVATAR:
       newData = { ...state.data, avatar: payload.color };
       updateUserData(state.data.username, payload.color, 'avatar');

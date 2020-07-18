@@ -7,7 +7,6 @@ import CategoryPicker from './CategoryPicker';
 import Category from '../Category';
 import ConfirmationBox from './ConfirmationBox';
 
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import colors from '../../styles/colors';

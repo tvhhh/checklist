@@ -58,10 +58,7 @@ export const fetchUserData = username => {
     ...data,
     tasks: JSON.parse(data.tasks).map(item => ({
       ...item,
-      id: parseInt(item.id),
       dueTime: new Date(item.dueTime),
-      pinned: item.pinned == 'true',
-      done: item.done == 'true',
     })),
     groups: JSON.parse(data.groups),
   }))
@@ -90,18 +87,15 @@ export const fetchLocalUserData = () => {
       ...data,
       tasks: data.tasks.map(item => ({
         ...item,
-        id: parseInt(item.id),
         dueTime: new Date(item.dueTime),
-        pinned: item.pinned == 'true',
-        done: item.done == 'true',
       })),
     } : null)
-  .catch(error => console.log(`AsyncStorage - Fetch username: ${error}`));
+  .catch(error => console.log(`AsyncStorage - Fetch user data: ${error}`));
 };
 
 export const storeUserData = data => {
   AsyncStorage.setItem(USER_ASYNC_STORAGE_KEY, data)
-  .catch(error => console.log(`AsyncStorage - Store username: ${error}`));
+  .catch(error => console.log(`AsyncStorage - Store user data: ${error}`));
 };
 
 export const clearLocalUserData = () => {
@@ -115,10 +109,7 @@ export const fetchTaskList = () => {
   .then(data => (data !== null) ? 
     data.map(item => ({
       ...item,
-      id: parseInt(item.id),
       dueTime: new Date(item.dueTime),
-      pinned: item.pinned == 'true',
-      done: item.done == 'true',
     })) : [])
   .catch(error => console.log(`AsyncStorage - Fetch tasklist: ${error}`));
 };

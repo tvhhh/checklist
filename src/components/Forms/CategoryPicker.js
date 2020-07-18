@@ -20,7 +20,6 @@ export default class CategoryPicker extends React.Component {
 
   handleSubmit = picked => {
     this.props.onSubmit(picked);
-    this.props.onBack();
   }
 
   dataPicker = () => {

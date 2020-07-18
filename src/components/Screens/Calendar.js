@@ -52,8 +52,9 @@ class Calendar extends React.Component{
         />
         <TaskList
           filterOption={FILTER_DATE}
-          calendarView={true}
           date={this.state.pickedDate}
+          calendarView={true}
+          create={true}
         />
       </View>
     );

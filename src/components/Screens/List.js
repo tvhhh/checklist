@@ -32,7 +32,7 @@ export default class List extends React.Component {
           search={true}
           notice={true}
         />
-        <TaskList filterOption={filterOption} />
+        <TaskList filterOption={filterOption} create={true} />
       </View>
     );
   }
