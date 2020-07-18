@@ -3,11 +3,14 @@ import { View, } from 'react-native';
 
 import Header from '../Header';
 import TaskList, { FILTER_TODAY, FILTER_WEEK, FILTER_PINNED } from '../TaskList';
+import { connect } from 'react-redux';
+import colors from '../../styles/colors';
+
 
 import screenStyles from './ScreenStyles';
 
 
-export default class List extends React.Component {
+class List extends React.Component {
   getFilterOption = () => {
     switch(this.props.title) {
       case "MY DAY":
@@ -22,10 +25,10 @@ export default class List extends React.Component {
   }
 
   render() {
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground: colors.LightBackground;
     const filterOption = this.getFilterOption();
-
     return (
-      <View style={screenStyles.screenContainer}>
+      <View style={{flex: 1, backgroundColor: theme}}>
         <Header
           navigation={this.props.navigation} 
           title={this.props.title}
@@ -37,3 +40,9 @@ export default class List extends React.Component {
     );
   }
 };
+
+const mapStateToProps = state => ({
+  customize: state.customize,
+});
+
+export default connect(mapStateToProps)(List);

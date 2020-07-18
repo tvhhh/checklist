@@ -4,11 +4,13 @@ import { FlatList, StyleSheet, Text, View, } from 'react-native';
 import Header from '../Header';
 import Category from '../Category';
 
+import { connect } from 'react-redux';
+
 import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
 
 
-export default class Categories extends React.Component {
+class Categories extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,8 +23,12 @@ export default class Categories extends React.Component {
   }
 
   render() {
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
-      <View style={[screenStyles.screenContainer, styles.container]}>
+<View style={[screenStyles.screenContainer, styles.container, {backgroundColor: theme}]}>
         <Header
           navigation={this.props.navigation} 
           title={this.props.title}
@@ -37,7 +43,7 @@ export default class Categories extends React.Component {
               <Category name={item} size={100} />
               <Text style={[
                 styles.categoryName,
-                { color: colors[item.charAt(0).toUpperCase() + item.slice(1)] }
+                { color: colors[item.charAt(0).toUpperCase() + item.slice(1)] , fontFamily: font}
               ]}>
                 {item.toUpperCase()}
               </Text>
@@ -64,3 +70,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
+
+const mapStateToProps = state => ({
+  customize: state.customize,
+});
+export default connect(mapStateToProps)(Categories);

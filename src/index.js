@@ -1,9 +1,8 @@
 import React from 'react';
 import { Text } from 'react-native';
 
-import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
+import { NavigationContainer } from '@react-navigation/native';
 import DrawerIcon from './components/DrawerIcon';
 
 import Profile from './navigations/Profile';
@@ -14,23 +13,29 @@ import Settings from './navigations/Settings';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { connect } from 'react-redux';
 import colors from './styles/colors';
 
 
 const Drawer = createDrawerNavigator();
 
-export default class TodoApp extends React.Component {
+class TodoApp extends React.Component {
   render() {
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <NavigationContainer>
-        <Drawer.Navigator 
+        <Drawer.Navigator
           initialRouteName="list"
           drawerContentOptions={{
             activeTintColor: colors.PrimaryColor,
             inactiveTintColor: colors.DisabledColor,
             itemStyle: { marginHorizontal: 0 },
             labelStyle: { fontSize: 16 },
+          }}
+          drawerStyle={{
+            backgroundColor: theme,
           }}
           screenOptions={({ route }) => ({
             drawerIcon: ({ color, size }) => {
@@ -50,13 +55,13 @@ export default class TodoApp extends React.Component {
             drawerLabel: ({ color }) => {
               switch(route.name) {
                 case "profile":
-                  return <Text style={{ color: color, fontSize: 16 }}>PROFILE</Text>;
+                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>PROFILE</Text>;
                 case "list":
-                  return <Text style={{ color: color, fontSize: 16 }}>MY LIST</Text>;
+                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>MY LIST</Text>;
                 case "groups":
-                  return <Text style={{ color: color, fontSize: 16 }}>GROUPS</Text>;
+                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>GROUPS</Text>;
                 case "settings":
-                  return <Text style={{ color: color, fontSize: 16 }}>SETTINGS</Text>;
+                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>SETTINGS</Text>;
                 default:
                   return null;
               }
@@ -72,3 +77,9 @@ export default class TodoApp extends React.Component {
     );
   }
 };
+
+const mapStateToProps = state => ({
+  customize: state.customize,
+});
+
+export default connect(mapStateToProps)(TodoApp);

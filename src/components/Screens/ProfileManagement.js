@@ -87,8 +87,13 @@ class ProfileManagement extends React.Component {
 
   render() {
     const data = this.props.appData.data;
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
-      <ScrollView style={screenStyles.screenContainer}>
+      <ScrollView style={[screenStyles.screenContainer, {backgroundColor: theme}]}>
         <Header navigation={this.props.navigation} />
         <View style={styles.header}>
           <FontAwesome
@@ -98,7 +103,7 @@ class ProfileManagement extends React.Component {
             size={100}
             onPress={this.toggleAvatarPicker}
           />
-          <Text style={[styles.username, {color: data.avatar}]}>{`@${data.username}`}</Text>
+          <Text style={[styles.username, {color: data.avatar, fontFamily: font, fontSize: fontSize}]}>{`@${data.username}`}</Text>
         </View>
         <View style={styles.statisticContainer}>
           <TouchableOpacity style={styles.statisticBox}>
@@ -126,45 +131,45 @@ class ProfileManagement extends React.Component {
         <TouchableOpacity style={styles.infoField} onPress={this.toggleNameBox}>
           <AntDesign name="contacts" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={styles.infoTitle}>Full Name</Text>
-            <Text style={styles.info}>{data.name || "What's your name?"}</Text>
+            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Full Name</Text>
+            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{data.name || "What's your name?"}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField}>
           <FontTisto name="email" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={styles.infoTitle}>Email</Text>
-            <Text style={styles.info}>{data.email}</Text>
+            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Email</Text>
+            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{data.email}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField} onPress={this.togglePhoneBox}>
           <FontTisto name="phone" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={styles.infoTitle}>Phone number</Text>
-            <Text style={styles.info}>{data.phone || "Update your phone number"}</Text>
+            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Phone number</Text>
+            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{data.phone || "Update your phone number"}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField} onPress={this.togglePasswordBox}>
           <FontAwesome name="key" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={styles.infoTitle}>Change password</Text>
-            <Text style={styles.info}>Reset your password</Text>
+            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Change password</Text>
+            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Reset your password</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField} onPress={this.toggleConfirmPasswordBox}>
           <MaterialCommunityIcons name="account-remove" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={styles.infoTitle}>Deactivate account</Text>
-            <Text style={styles.info}>Remove your account</Text>
+            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Deactivate account</Text>
+            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Remove your account</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.logOut} onPress={this.props.logOut}>
-          <Text style={styles.logOutText}>LOG OUT</Text>
+          <Text style={[styles.logOutText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>LOG OUT</Text>
           <MaterialCommunityIcons name="logout" size={25} color="white" />
         </TouchableOpacity>
         <Overlay
@@ -342,6 +347,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  customize: state.customize,
   appData: state.userData,
 });
 

@@ -1,9 +1,12 @@
 import React from 'react';
 
+import { connect } from 'react-redux';
 import screenStyles from './ScreenStyles';
 
 
-export default class Notification extends React.Component {
+
+
+class Notification extends React.Component {
   render() {
     return (
       <View style={screenStyles.screenContainer}>
@@ -12,3 +15,9 @@ export default class Notification extends React.Component {
     );
   }
 };
+
+const mapStateToProps = state => ({
+  customize: state.customize.customize,
+});
+
+export default connect(mapStateToProps)(Notification);

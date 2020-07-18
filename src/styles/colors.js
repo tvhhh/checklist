@@ -1,6 +1,8 @@
 const colors = {
-  Background: "#f0f0f0",
-  Overlay: "#ffffff",
+  LightBackground: "#f0f0f0",
+  DarkBackground: "#0e0f0f",
+  LightOverlay: "#ffffff",
+  DarkOverlay: "#262729",
 
   PrimaryColor: "#00b2ff",
   SecondaryColor: "#006aff",
@@ -9,9 +11,13 @@ const colors = {
   Button: "#696969",
   Border: "#808080",
 
-  TitleText: "rgba(0, 0, 0, 1.0)",
-  PrimaryText: "rgba(0, 0, 0, 0.87)",
-  SecondaryText: "rgba(0, 0, 0, 0.60)",
+  LightTitleText: "rgba(0, 0, 0, 1.0)",
+  LightPrimaryText: "rgba(0, 0, 0, 0.87)",
+  LightSecondaryText: "rgba(0, 0, 0, 0.60)",
+
+  DarkTitleText: "#f2f6f7",
+  DarkPrimaryText: "#f2f6f7",
+  DarkSecondaryText: "grey",
   ErrorText: "rgba(255, 0, 0, 1.0)",
   
   Health: "rgba(164, 38, 44, 1.0)",
