@@ -111,7 +111,7 @@ class SignUp extends React.Component {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={[screenStyles.screenContainer, styles.container, {backgroundColor: theme}]}>
-          <Text style={[styles.title, {color: textColor, fontFamily: font, fontSize: fontSize}]}>SIGN UP</Text>
+          <Text style={[styles.title, {fontFamily: font, fontSize: fontSize}]}>SIGN UP</Text>
           <View style={styles.inputField}>
             <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Username</Text>
             <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
@@ -162,13 +162,13 @@ class SignUp extends React.Component {
             style={styles.submitButton}
             onPress={this.handleSubmit}
           >
-            <Text style={[styles.submitText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>SIGN UP</Text>
+            <Text style={[styles.submitText, {fontFamily: font, fontSize: fontSize}]}>SIGN UP</Text>
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.otherOptionsButton}
             onPress={() => this.props.navigation.goBack()}
           >
-            <Text style={[styles.otherOptionsText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Back to Login</Text>
+            <Text style={[styles.otherOptionsText, {fontFamily: font, fontSize: fontSize}]}>Back to Login</Text>
           </TouchableOpacity>
           {this.state.error ? <ErrorBox error={this.state.errorText} /> : null}
           <Overlay
