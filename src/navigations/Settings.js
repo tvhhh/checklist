@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Switch, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Menu } from '../components/Button';
+import Header from '../components/Header';
+
 import colors from '../styles/colors';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../redux/actions/CustomizeActions';
 import { Overlay } from 'react-native-elements';
-import { FontSizeForm, FontForm } from '../components/Form/CustomizeForm';
+import { FontSizeForm, FontForm } from '../components/Forms/CustomizeForm';
 
 
 class Settings extends React.Component {
@@ -67,8 +68,8 @@ class Settings extends React.Component {
     return (
       <>
         <View style={{ flex: 1, backgroundColor: theme }}>
-          <Menu onPress={this.toggleDrawer} />
-          <ScrollView style={{flex: 1, marginTop: 80,}}>
+          <Header navigation={this.props.navigation} title="SETTINGS"/>
+          <ScrollView style={{flex: 1}}>
             <TouchableOpacity style={styles.container} onPress={this.toggleSwitch} >
               <Text style={[styles.options, {color: textColor, fontSize: fontSize, fontFamily: font}]}>Dark Theme</Text>
               <Switch

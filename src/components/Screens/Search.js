@@ -6,7 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import Task from '../Task'
-import TaskForm from '../Form/TaskForm';
+import TaskForm from '../Forms/TaskForm';
 import screenStyles from './ScreenStyles';
 
 import colors from '../../styles/colors';

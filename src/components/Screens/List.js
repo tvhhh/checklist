@@ -3,7 +3,6 @@ import { View, } from 'react-native';
 
 import Header from '../Header';
 import TaskList, { FILTER_TODAY, FILTER_WEEK, FILTER_PINNED } from '../TaskList';
-import { Menu, Notice, Search } from '../Button';
 import { connect } from 'react-redux';
 import colors from '../../styles/colors';
 
@@ -12,10 +11,6 @@ import screenStyles from './ScreenStyles';
 
 
 class List extends React.Component {
-  toggleDrawer = () => {
-    this.props.navigation.toggleDrawer();
-  }
-
   getFilterOption = () => {
     switch(this.props.title) {
       case "MY DAY":
@@ -34,16 +29,12 @@ class List extends React.Component {
     const filterOption = this.getFilterOption();
     return (
       <View style={{flex: 1, backgroundColor: theme}}>
-        <Header title={this.props.title} />
-        <Menu onPress={this.toggleDrawer} />
-        <Search
-          position={{ position: "absolute", top: 12, right: 45, }}
-          onPress={() => this.props.navigation.navigate("Search",{
-            taskList: this.props.taskList,
-          })}
-          {...this.props.onRemoveTask}
+        <Header
+          navigation={this.props.navigation} 
+          title={this.props.title}
+          search={true}
+          notice={true}
         />
-        <Notice onPress={() => this.props.navigation.navigate("Notice")} />
         <TaskList filterOption={filterOption} />
       </View>
     );

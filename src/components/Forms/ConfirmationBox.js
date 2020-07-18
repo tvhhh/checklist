@@ -11,7 +11,7 @@ class ConfirmationBox extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.content}>
-          <Text style={[styles.largeText, {fontFamily: font, fontSize: fontSize}]}>Delete this task?</Text>
+          <Text style={[styles.largeText, {fontFamily: font, fontSize: fontSize}]}>{this.props.title}</Text>
           <Text style={[styles.smallText, {fontFamily: font, fontSize: fontSize - 5}]}>You cannot undo this action</Text>
         </View>
         <View style={styles.optionContainer}>
@@ -37,6 +37,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   largeText: {
+    color: colors.PrimaryText,
+    fontSize: 20,
+    fontWeight: "bold",
     marginBottom: 5,
   },
   smallText: {
@@ -51,9 +54,13 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     color: "red",
+    fontSize: 20,
+    fontWeight: "bold",
   },
   cancelText: {
     color: "dodgerblue",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
 

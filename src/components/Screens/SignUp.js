@@ -159,7 +159,7 @@ class SignUp extends React.Component {
           >
             <Text style={[styles.otherOptionsText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Back to Login</Text>
           </TouchableOpacity>
-          {(this.state.error) ? 
+          {this.state.error ?
             <View style={styles.alertBox}>
               <Text style={[styles.alertText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{this.state.errorText}</Text>
             </View> : null
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     borderColor: colors.Border,
     borderWidth: 1,
     borderRadius: 5,
-    paddingHorizontal: 10,
+    padding: 10,
   },
   submitButton: {
     backgroundColor: colors.SecondaryColor,

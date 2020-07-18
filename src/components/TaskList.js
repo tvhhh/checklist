@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import Task from './Task';
-import TaskForm from './Form/TaskForm';
+import TaskForm from './Forms/TaskForm';
 import { Create } from './Button';
 
 import colors from '../styles/colors';
@@ -161,7 +161,7 @@ class TaskList extends React.Component {
           )}
         />
         <Create
-          position={{ position: "absolute", bottom: 15, right: 15, }}
+          style={styles.addButton}
           buttonColor={buttonColor}
           onPress={this.onAddButtonPress} 
         />
@@ -198,6 +198,11 @@ const styles = StyleSheet.create({
     padding: 0,
     borderWidth: 3,
     borderRadius: 10,
+  },
+  addButton: {
+    position: "absolute",
+    bottom: 15,
+    right: 15,
   },
 });
 

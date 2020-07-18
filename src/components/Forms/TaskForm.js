@@ -50,8 +50,7 @@ class TaskForm extends React.Component {
 
   handleDateTimeConfirm = time => {
     time.setSeconds(0, 0);
-    this.setState({ task: {...(this.state.task), dueTime: time} });
-    this.setState({ isDateTimePickerVisible: false });
+    this.setState({ task: {...(this.state.task), dueTime: time}, isDateTimePickerVisible: false });
   }
 
   toggleCategoryPicker = () => {
@@ -59,7 +58,7 @@ class TaskForm extends React.Component {
   }
 
   updateCategory = category => {
-    this.setState({ task: {...(this.state.task), category: category} });
+    this.setState({ task: {...(this.state.task), category: category}, isCategoryPickerVisible: false });
   }
 
   toggleConfirmationBox = () => {
@@ -127,13 +126,13 @@ class TaskForm extends React.Component {
               </Text> : null
             }
             <View style={styles.categoryPickerButton}>
-              {(this.state.task.category === "uncategorized") ? 
-                (<TouchableOpacity onPress={this.toggleCategoryPicker} >
-                  <AntDesign name="questioncircleo" size={59} color="grey" />
-                </TouchableOpacity>) :
-                <Category name={this.state.task.category} onPress={this.toggleCategoryPicker} />
-              }
-              <Text style={{color: text2ndColor, fontSize: fontSize - 5, fontFamily: font}}>{this.state.task.category.toUpperCase()}</Text>
+              <Category name={this.state.task.category} onPress={this.toggleCategoryPicker} />
+              <Text style={[
+                styles.categoryName,
+                { color: colors[this.state.task.category.charAt(0).toUpperCase() + this.state.task.category.slice(1)] , fontSize: fontSize - 5, fontFamily: font}
+              ]}>
+                {this.state.task.category.toUpperCase()}
+              </Text>
             </View>
             {this.props.isOnSelected ?
               <View style={styles.taskFormFooter}>
@@ -154,14 +153,14 @@ class TaskForm extends React.Component {
             onBackdropPress={this.toggleCategoryPicker}
             overlayStyle={styles.categoryPickerForm}
           >
-            <CategoryPicker onBack={this.toggleCategoryPicker} onSubmit={this.updateCategory} />
+            <CategoryPicker onSubmit={this.updateCategory} />
           </Overlay>
           <Overlay
             isVisible={this.state.isConfirmationBoxVisible}
             onBackdropPress={this.toggleConfirmationBox}
             overlayStyle={styles.confirmationBox}
           >
-            <ConfirmationBox onCancel={this.toggleConfirmationBox} onConfirm={this.handleRemoveConfirm} />
+            <ConfirmationBox title="Delete this task?" onCancel={this.toggleConfirmationBox} onConfirm={this.handleRemoveConfirm} />
           </Overlay>
         </View>
       </TouchableWithoutFeedback>
@@ -217,7 +216,7 @@ const styles = StyleSheet.create({
   },
   categoryPickerForm: { 
     padding: 0,
-    height: 280,
+    height: 380,
     width: 300,
     borderRadius: 5,
   },

@@ -15,7 +15,7 @@ export class Create extends React.Component {
       <TouchableOpacity 
         style={[
           styles.createButton,
-          this.props.position,
+          this.props.style,
           {
             height: size,
             width: size,
@@ -34,7 +34,7 @@ export class Create extends React.Component {
 export class Menu extends React.Component {
   render() {
     return (
-      <TouchableOpacity style={styles.menuButton} onPress={this.props.onPress}>
+      <TouchableOpacity style={this.props.style} onPress={this.props.onPress}>
         <Feather
           name="menu"
           color={colors.Button}
@@ -48,7 +48,7 @@ export class Menu extends React.Component {
 export class Notice extends React.Component {
   render() {
     return (
-      <TouchableOpacity style={styles.noticeButton} onPress={this.props.onPress}>
+      <TouchableOpacity style={this.props.style} onPress={this.props.onPress}>
         <Ionicons 
           name="ios-notifications-outline"
           color={colors.Button}
@@ -62,7 +62,7 @@ export class Notice extends React.Component {
 export class Search extends React.Component {
   render() {
     return (
-      <TouchableOpacity style={this.props.position} onPress={this.props.onPress}>
+      <TouchableOpacity style={this.props.style} onPress={this.props.onPress}>
         <EvilIcons 
           name="search"
           color={colors.Button}
@@ -78,15 +78,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.SecondaryColor,
     alignItems: "center",
     justifyContent: "center",
-  },
-  menuButton: {
-    position: "absolute",
-    top: 20,
-    left: 10,
-  },
-  noticeButton: {
-    position: "absolute",
-    top: 10,
-    right: 15,
   },
 });
