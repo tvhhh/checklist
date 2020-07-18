@@ -13,8 +13,10 @@ const firebaseConfig = {
   measurementId: "G-YVR9FCCVND"
 };
 
+
 const USER_ASYNC_STORAGE_KEY = '@TodoApp:UserDB';
 const TASKS_ASYNC_STORAGE_KEY = '@TodoApp:TaskDB';
+const CUSTOM_ASYNC_STORAGE_KEY = '@TodoApp:CustomDB'
 
 export const initializeApp = () => {
   firebase.initializeApp(firebaseConfig);
@@ -117,4 +119,14 @@ export const fetchTaskList = () => {
 export const storeTaskList = taskList => {
   AsyncStorage.setItem(TASKS_ASYNC_STORAGE_KEY, taskList)
   .catch(error => console.log(`AsyncStorage - Save tasklist: ${error}`));
+};
+
+export const fetchCustomization = async () => {
+  return AsyncStorage.getItem(CUSTOM_ASYNC_STORAGE_KEY)
+  .catch(error => console.log(`AsyncStorage - Fetch customization: ${error}`));
+}
+
+export const storeCustomization = async (customize) => {
+  return await AsyncStorage.setItem(CUSTOM_ASYNC_STORAGE_KEY, customize)
+  .catch(error => console.log(`AsyncStorage - Save customization: ${error}`));
 };

@@ -35,7 +35,12 @@ class TaskList extends React.Component {
 
   renderItem = ({ item }) => <Task {...item} onSelect={() => this.onSelectedTaskPress(item)} togglePinned={() => this.togglePinned(item)} />
 
-  renderSectionHeader = ({ section }) => <Text style={styles.listTitle}>{section.title}</Text>
+  renderSectionHeader = ({ section }) => 
+    <Text style={[styles.listTitle, {
+      color: this.props.customize.darkTheme === false ? colors.LightTitleText : colors.DarkTitleText,
+      fontFamily: this.props.customize.font,
+      fontSize: this.props.customize.fontSize,
+    }]}>{section.title}</Text>
 
   onAddButtonPress = () => {
     this.setState({ showForm: true });
@@ -166,32 +171,42 @@ class TaskList extends React.Component {
       title: key,
     }));
 
+    const largeTextColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const smallTextColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
+    const buttonColor = this.props.customize.darkTheme ? "#91a5c7" : colors.SecondaryColor;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
+    
     return (
       <>
         {this.props.isNotFilter ? null:
-        <SectionList
-        sections={sections}
-        keyExtractor={(item, index) => item + index}
-        renderItem={this.renderItem}
-        renderSectionHeader={this.renderSectionHeader}
-        ListEmptyComponent={this.props.calendarView ? null : (
-          <View style={styles.emptyComponentContainer}>
-            <Text style={styles.emptyComponentLargeText}>You're all done now!</Text>
-            <Text style={styles.emptyComponentSmallText}>Tap + to create a new task</Text>
-            <FontAwesome5 name="tasks" color="grey" size={40} />
-          </View>
-        )}
-        />}
+          <SectionList
+          sections={sections}
+          keyExtractor={(item, index) => item + index}
+          renderItem={this.renderItem}
+          renderSectionHeader={this.renderSectionHeader}
+          ListEmptyComponent={this.props.calendarView ? null : (
+            <View style={styles.emptyComponentContainer}>
+              <Text style={{color: largeTextColor, fontSize: fontSize, fontFamily: font}}>You're all done now!</Text>
+              <Text style={{color: smallTextColor, fontSize: fontSize, fontFamily: font}}>Tap + to create a new task</Text>
+              <FontAwesome5 name="tasks" color="grey" size={40} />
+            </View>
+          )}
+          />
+        }
         {this.props.create ?
           <Create
             style={styles.addButton}
+            buttonColor={buttonColor}
             onPress={this.onAddButtonPress} 
           /> : null
         }
         <Overlay
           isVisible={this.state.showForm} 
           onBackdropPress={this.onFormBackdropPress}
-          overlayStyle={[styles.taskForm, { height: Object.keys(this.state.selected).length ? 350 : 300 }]}
+          overlayStyle={[styles.taskForm, { height: Object.keys(this.state.selected).length ? 380 : 320 , backgroundColor: theme, borderColor: overlayBorderColor}]}
         >
           <TaskForm
             {...this.state.selected}
@@ -217,16 +232,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 220,
   },
-  emptyComponentLargeText: {
-    color: colors.PrimaryText,
-    fontSize: 24,
-  },
-  emptyComponentSmallText: {
-    color: colors.SecondaryText,
-    fontSize: 16,
-  },
   taskForm: {
     padding: 0,
+    borderWidth: 3,
     borderRadius: 10,
   },
   addButton: {
@@ -237,6 +245,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  customize: state.customize,
   taskList: state.userData.data.tasks,
 });
 

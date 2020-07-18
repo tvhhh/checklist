@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -21,6 +20,7 @@ export class Create extends React.Component {
             height: size,
             width: size,
             borderRadius: size/2,
+            backgroundColor: this.props.buttonColor,
           }
         ]}
         onPress={this.props.onPress}

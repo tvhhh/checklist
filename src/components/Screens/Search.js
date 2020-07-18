@@ -15,6 +15,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
+import Task from '../Task'
+import TaskForm from '../Forms/TaskForm';
 import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
 
@@ -132,7 +134,6 @@ class Search extends React.Component {
   }
 
   toggleIntervalChecker = () => {
-    
     if (this.state.startInterval > this.state.endInterval){
       this.setState({errorInterval: true})
     }
@@ -151,17 +152,17 @@ class Search extends React.Component {
           </Text>
         </View>
       );
-      }
-      else{
-        return (
-          <View style = {this.state.isCategoryPressed ? styles.filterButtonContainerPressed:styles.filterButtonContainerUnpressed}> 
-          <Category name = {this.state.category} size = {15}/>
-            <Text style = {this.state.isCategoryPressed ? styles.filterBoxTextPressed:styles.filterBoxTextUnpressed}
-            > {this.state.category}
-            </Text>
-          </View>
-        );
-      }
+    }
+    else{
+      return (
+        <View style = {this.state.isCategoryPressed ? styles.filterButtonContainerPressed:styles.filterButtonContainerUnpressed}> 
+        <Category name = {this.state.category} size = {15}/>
+          <Text style = {this.state.isCategoryPressed ? styles.filterBoxTextPressed:styles.filterBoxTextUnpressed}
+          > {this.state.category}
+          </Text>
+        </View>
+      );
+    }
   }
 
   renderDate = (extractedDate, type) => {
@@ -226,34 +227,32 @@ class Search extends React.Component {
     if(this.state.endInterval !== ""){
       extractedEndInterval = extractDate(this.state.endInterval);
     }
-     return (    
+    return (    
       <View style={screenStyles.screenContainer}>
         <View style={styles.searchBoxContainer}>
-        <SearchBar
-          round
-          containerStyle={styles.barContainer}
-          inputContainerStyle={styles.inputContainer}
-          inputStyle={styles.inputText}
-          placeholder="Search your task here..."
-          onChangeText={query => this.updateState(query)}
-          value={this.state.query}
-          searchIcon={<EvilIcons name="search" size={25} />}
-          />
+          <SearchBar
+            round
+            containerStyle={[styles.barContainer, {backgroundColor: theme}]}
+            inputContainerStyle={[styles.inputContainer, {backgroundColor: theme}]}
+            inputStyle={[styles.inputText, {color: inputText, fontFamily: font, fontSize: fontSize}]}
+            placeholder="Search your task here..."
+            onChangeText={query => this.updateState(query)}
+            value={this.state.query}
+            searchIcon={<EvilIcons name="search" size={25} />}
+            />
           <TouchableOpacity onPress={this.toggleFilter}>
-          <MaterialCommunityIcons name="filter-variant" size={30} color={colors.Button}/>     
-          </TouchableOpacity>
-           
+            <MaterialCommunityIcons name="filter-variant" size={30} color={colors.Button}/>     
+          </TouchableOpacity>           
         </View>
         {this.renderFilter()}
-        {
-          this.state.isDatePickerVisible ? 
+        {this.state.isDatePickerVisible ? 
           <View style = {styles.datePickerForm}>
             <Text style = {{
               color: colors.SecondaryText,
               fontSize: 15,
               marginHorizontal: 10
             }}>From</Text>
-               <TouchableOpacity style={styles.datePickerButton} onPress={this.toggleStartIntervalPicker}>
+            <TouchableOpacity style={styles.datePickerButton} onPress={this.toggleStartIntervalPicker}>
               {this.renderDate(extractedStartInterval,"start")}
             </TouchableOpacity>
             <Text style = {{
@@ -261,29 +260,29 @@ class Search extends React.Component {
               fontSize: 15,
               marginHorizontal: 10
             }}>To</Text>
-               <TouchableOpacity style={styles.datePickerButton} onPress={this.toggleEndIntervalPicker}>
+            <TouchableOpacity style={styles.datePickerButton} onPress={this.toggleEndIntervalPicker}>
               {this.renderDate(extractedEndInterval,"end")}
             </TouchableOpacity>
-            </View>:null
+          </View> : null
         }
         {this.state.isDatePickerVisible ?
-        <View style = {{
-          flexDirection: "row",
-          marginTop: 5,
-          borderRadius: 5,
-          alignSelf: 'stretch',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          {this.state.errorInterval ? 
-          <Text style = {{
-              color: 'red',
-              fontSize: 15
-            }}>The start day should not be larger than the end day
-            </Text> :null
+          <View style = {{
+            flexDirection: "row",
+            marginTop: 5,
+            borderRadius: 5,
+            alignSelf: 'stretch',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            {this.state.errorInterval ? 
+              <Text style = {{
+                color: 'red',
+                fontSize: 15
+              }}>The start day should not be larger than the end day
+              </Text> :null
             }          
-        </View>: null
-      }        
+          </View> : null
+        }        
         <Overlay
             isVisible={this.state.isCategoryPickerVisible}
             onBackdropPress={this.toggleCategoryPicker}
@@ -307,20 +306,19 @@ class Search extends React.Component {
             this.state.endInterval === ""
             )
           }
+        />        
+        <DateTimePickerModal
+          isVisible={this.state.isStartIntervalPickerVisible}
+          mode="date"
+          onConfirm={this.handleStartIntervalConfirm}
+          onCancel={this.toggleStartIntervalPicker}
         />
-        
-          <DateTimePickerModal
-            isVisible={this.state.isStartIntervalPickerVisible}
-            mode="date"
-            onConfirm={this.handleStartIntervalConfirm}
-            onCancel={this.toggleStartIntervalPicker}
-          />
-          <DateTimePickerModal
-            isVisible={this.state.isEndIntervalPickerVisible}
-            mode="date"
-            onConfirm={this.handleEndIntervalConfirm}
-            onCancel={this.toggleEndIntervalPicker}
-          />
+        <DateTimePickerModal
+          isVisible={this.state.isEndIntervalPickerVisible}
+          mode="date"
+          onConfirm={this.handleEndIntervalConfirm}
+          onCancel={this.toggleEndIntervalPicker}
+        />
       </View>
     );
   }
@@ -361,17 +359,14 @@ const styles = StyleSheet.create({
   },
   barContainer: {
     flex: 1,
-    backgroundColor: colors.Background,
     borderBottomColor: "transparent",
     borderTopColor: "transparent",
   },
   inputContainer: {
-    backgroundColor: colors.Background,
     borderBottomWidth: 1,
     borderWidth: 1,
   },
   inputText: {
-    color: colors.PrimaryText,
     fontSize: 18,
   },
   filterBoxTextUnpressed: {
@@ -426,15 +421,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
   },
+  itemFormat: {
+    marginRight:10,
+    marginLeft:10,
+    marginTop:10,
+    paddingTop:8,
+    paddingBottom:8,
+    borderRadius:16,
+    borderWidth: 8,
+  },
 });
+
 const mapStateToProps = state => ({
   taskList: state.tasks,
+  customize: state.customize,
 });
 
-const mapDispatchToProps = dispatch => ({
-  createTask: bindActionCreators(createTask, dispatch),
-  editTask: bindActionCreators(editTask, dispatch),
-  removeTask: bindActionCreators(removeTask, dispatch),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Search);
+export default connect(mapStateToProps)(Search);

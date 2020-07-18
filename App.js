@@ -16,6 +16,7 @@ import NetInfo from '@react-native-community/netinfo';
 import TodoApp from './src/index';
 
 import { fetchData, setConnectionStatus } from './src/redux/actions/UserDataActions';
+import { fetchCustomData } from './src/redux/actions/CustomizeActions';
 import { updateUserData } from './src/api';
 
 
@@ -23,6 +24,7 @@ YellowBox.ignoreWarnings(["Setting a timer"]);
 
 class App extends React.Component {
   componentDidMount = async () => {
+    await this.props.fetchCustomData();
     await this.props.fetchData();
     NetInfo.addEventListener(state => {
       this.props.setConnectionStatus(state.isConnected);
@@ -40,9 +42,11 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
   appData: state.userData,
+  customize: state.customize,
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchCustomData: () => dispatch(fetchCustomData()),
   fetchData: () => dispatch(fetchData()),
   setConnectionStatus: bindActionCreators(setConnectionStatus, dispatch),
 });
