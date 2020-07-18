@@ -87,7 +87,7 @@ class LogIn extends React.Component {
         <View style={[screenStyles.screenContainer, styles.container, {backgroundColor: theme}]}>
           <Header navigation={this.props.navigation} />
           <View style={styles.container}>
-          <Text style={[styles.title, {color: textColor, fontFamily: font, fontSize: fontSize}]}>SIGN IN</Text>
+          <Text style={[styles.title, {fontFamily: font, fontSize: fontSize}]}>SIGN IN</Text>
             <View style={styles.inputField}>
               <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Username</Text>
               <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
@@ -114,18 +114,18 @@ class LogIn extends React.Component {
               style={styles.submitButton}
               onPress={this.handleSubmit}
             >
-              <Text style={[styles.submitText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>LOGIN</Text>
+              <Text style={[styles.submitText, {fontFamily: font, fontSize: fontSize}]}>LOGIN</Text>
             </TouchableOpacity>
             <View style={styles.otherOptions}>
               <TouchableOpacity style={styles.otherOptionsButton}>
-                <Text style={[styles.resetPassword, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Forgot password?</Text>
+                <Text style={[styles.resetPassword, {fontFamily: font, fontSize: fontSize}]}>Forgot password?</Text>
               </TouchableOpacity>
               <Text>|</Text>
               <TouchableOpacity 
                 style={styles.otherOptionsButton}
                 onPress={() => this.props.navigation.navigate("SignUp")}
               >
-                <Text style={[styles.signUp, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Sign up</Text>
+                <Text style={[styles.signUp, {fontFamily: font, fontSize: fontSize}]}>Sign up</Text>
               </TouchableOpacity>
             </View>
             {this.state.error ? <ErrorBox error="Username or password is incorrect" /> : null}

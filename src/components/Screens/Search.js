@@ -218,6 +218,10 @@ class Search extends React.Component {
     }
   }
   render() {
+    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const inputText = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
+    const fontSize = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     const filterOption = FILTER_SEARCH;
     var extractedStartInterval= "";
     var extractedEndInterval = "";

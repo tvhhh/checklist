@@ -169,7 +169,7 @@ class ProfileManagement extends React.Component {
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.logOut} onPress={this.props.logOut}>
-          <Text style={[styles.logOutText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>LOG OUT</Text>
+          <Text style={[styles.logOutText, {fontFamily: font, fontSize: fontSize}]}>LOG OUT</Text>
           <MaterialCommunityIcons name="logout" size={25} color="white" />
         </TouchableOpacity>
         <Overlay
@@ -230,13 +230,6 @@ class ProfileManagement extends React.Component {
             onConfirm={this.handleRemoveAccountConfirm}
           />
         </Overlay>
-        {/* <Overlay
-            isVisible={this.state.alert}
-            onBackdropPress={this.toggleAlert}
-            overlayStyle={styles.alertBox}
-          >
-          <NoInternetAlert />
-        </Overlay> */}
       </ScrollView>
     );
   }
