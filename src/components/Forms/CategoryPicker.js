@@ -13,16 +13,28 @@ export default class CategoryPicker extends React.Component {
       categories: [
         "health", "workout", "ideas",
         "work", "payment", "entertainment",
-        "meeting", "study", "event",
+        "meeting", "study", "event", "uncategorized","default"
       ],
     };
+  }
+
+  handleSubmit = picked => {
+    this.props.onSubmit(picked);
+    this.props.onBack();
+  }
+
+  dataPicker = () => {
+    if (typeof this.props.hasDefault === "undefined"){
+      return this.state.categories.slice(0,this.state.categories.length - 1);
+    }
+    return this.state.categories;
   }
 
   render() {
     return (
       <View style={styles.container}>
         <FlatList 
-          data={this.state.categories}
+          data={this.dataPicker()}
           keyExtractor={(item, index) => item + index}
           renderItem={({ item }) => (
             <View style={styles.categoryContainer}>

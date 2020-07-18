@@ -24,6 +24,7 @@ const colors = {
   Study: "rgba(64, 82, 171, 1.0)",
   Event: "rgba(133, 64, 133, 1.0)",
   Uncategorized: "rgba(115, 115, 115, 1.0)",
+  Default: "rgba(247, 170, 28, 1.0)",
 };
 
 export default colors;

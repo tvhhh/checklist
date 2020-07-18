@@ -31,7 +31,7 @@ export default class Header extends React.Component {
           </View> : null
         }
         {(this.props.search) ?
-          <Search style={styles.searchButton} /> : null
+          <Search style={styles.searchButton} onPress={() => this.props.navigation.navigate("Search")}/> : null
         }
         {(this.props.notice) ?
           <Notice style={styles.noticeButton} /> : null
