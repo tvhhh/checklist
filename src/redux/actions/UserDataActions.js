@@ -1,8 +1,9 @@
-import { authorize, fetchTaskList, fetchUsername, fetchUserData, storeUsername, clearUsername, removeUser } from '../../api';
+import { authorize, fetchTaskList, fetchLocalUserData, fetchUserData, storeUserData, clearLocalUserData, removeUser } from '../../api';
 
 
 export const GET_DATA = "GET_DATA";
 export const CLEAR_DATA = "CLEAR_DATA";
+export const SET_CONNECTION = "SET_CONNECTION";
 export const CREATE_TASK = "CREATE_TASK";
 export const EDIT_TASK = "EDIT_TASK";
 export const REMOVE_TASK = "REMOVE_TASK";
@@ -21,6 +22,13 @@ export const getData = data => ({
 export const clearData = () => ({
   type: CLEAR_DATA,
 });
+
+export const setConnectionStatus = status => ({
+  type: SET_CONNECTION,
+  payload: {
+    status,
+  }
+})
 
 export const createTask = task => ({
   type: CREATE_TASK,
@@ -75,20 +83,21 @@ export const setPassword = password => ({
 export const logIn = (username, password) => async (dispatch) => {
   try {
     if (await authorize(username, password)) {
-      storeUsername(username);
-      return await fetchUserData(username);
+      const data = await fetchUserData(username);
+      storeUserData(JSON.stringify(data));
+      return data;
     } else {
       return null;
     }
-  } catch (error) {
+  } catch(error) {
     console.log(`Login error: ${error}`);
   }
 };
 
-export const logOut = () => dispatch => {
+export const logOut = () => async (dispatch) => {
   try {
     dispatch(clearData());
-    clearUsername();
+    clearLocalUserData();
   } catch(error) {
     console.log(`Logout error: ${error}`);
   }
@@ -96,10 +105,8 @@ export const logOut = () => dispatch => {
 
 export const fetchData = () => async (dispatch) => {
   try {
-    const username = await fetchUsername();
-    if (username !== null) {
-      var data = await fetchUserData(username);
-    } else {
+    var data = await fetchLocalUserData();
+    if (data === null) {
       let taskList = await fetchTaskList();
       data = { username: null, tasks: taskList };
     }
@@ -109,10 +116,10 @@ export const fetchData = () => async (dispatch) => {
   }
 };
 
-export const removeAccount = username => dispatch => {
+export const removeAccount = username => async (dispatch) => {
   try {
     dispatch(clearData());
-    clearUsername();
+    clearLocalUserData();
     removeUser(username);
   } catch (error) {
     console.log(`Remove account error: ${error}`);

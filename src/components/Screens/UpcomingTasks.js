@@ -68,14 +68,14 @@ class UpcomingTasks extends React.Component {
       population: categoriesTasks[key],
       color: colors[key],
       legendFontColor: "#7F7F7F",
-      legendFontSize: 16,
+      legendFontSize: 14,
     }));
 
     const chartConfig = {
       backgroundGradientFromOpacity: 0,
       backgroundGradientToOpacity: 0,
       color: () => colors.PrimaryColor,
-      strokeWidth: 2,
+      strokeWidth: 1,
     };
 
     return (

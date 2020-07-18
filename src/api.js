@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 const firebaseConfig = {
-  
+
 };
 
 const USER_ASYNC_STORAGE_KEY = '@TodoApp:UserDB';
@@ -61,22 +61,43 @@ export const fetchUserData = username => {
   .catch(error => console.log(`Firebase - Fetch user data: ${error}`));
 };
 
-export const updateUserData = (username, key, value) => {
-  var ref = firebase.database().ref(`users/${username}/${key}`);
-  ref.set(value);
+export const updateUserData = (username, value, key) => {
+  var ref = firebase.database().ref(`users/${username}`);
+  if (key) {
+    ref.child(key).set(value);
+  } else {
+    var data = {
+      ...value,
+      tasks: JSON.stringify(value.tasks),
+      groups: JSON.stringify(value.groups),
+    };
+    ref.set(data);
+  }
 };
 
-export const fetchUsername = () => {
+export const fetchLocalUserData = () => {
   return AsyncStorage.getItem(USER_ASYNC_STORAGE_KEY)
+  .then(response => (response !== null) ? JSON.parse(response) : null)
+  .then(data => (data !== null) ?
+    {
+      ...data,
+      tasks: data.tasks.map(item => ({
+        ...item,
+        id: parseInt(item.id),
+        dueTime: new Date(item.dueTime),
+        pinned: item.pinned == 'true',
+        done: item.done == 'true',
+      })),
+    } : null)
   .catch(error => console.log(`AsyncStorage - Fetch username: ${error}`));
 };
 
-export const storeUsername = username => {
-  AsyncStorage.setItem(USER_ASYNC_STORAGE_KEY, username)
+export const storeUserData = data => {
+  AsyncStorage.setItem(USER_ASYNC_STORAGE_KEY, data)
   .catch(error => console.log(`AsyncStorage - Store username: ${error}`));
 };
 
-export const clearUsername = () => {
+export const clearLocalUserData = () => {
   AsyncStorage.clear()
   .catch(error => console.log(`AsyncStorage - Clear userdata: ${error}`));
 }

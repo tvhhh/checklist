@@ -1,5 +1,9 @@
 import React from 'react';
 import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Overlay } from 'react-native-elements';
+import { connect } from 'react-redux';
+
+import { ErrorBox, NoInternetAlert } from './LogIn';
 
 import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
@@ -7,7 +11,7 @@ import colors from '../../styles/colors';
 import { createUser, isUsernameExisting, isEmailExisting } from '../../api';
 
 
-export default class SignUp extends React.Component {
+class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,6 +23,7 @@ export default class SignUp extends React.Component {
       },
       errorText: "",
       error: false,
+      alert: false,
     };
   }
 
@@ -66,12 +71,18 @@ export default class SignUp extends React.Component {
     });
   }
 
-  turnOffAlert = () => {
+  turnOffError = () => {
     this.setState({ error: false });
   }
 
+  toggleAlert = () => {
+    this.setState({ alert: !this.state.alert });
+  }
+
   handleSubmit = async () => {
-    if (await isUsernameExisting(this.state.user.username)) {
+    if (!this.props.appData.connection) {
+      this.setState({ alert: true });
+    } else if (await isUsernameExisting(this.state.user.username)) {
       this.setState({ error: true, errorText: "Sorry, this username has existed." });
     } else if (await isEmailExisting(this.state.user.email)) {
       this.setState({ error: true, errorText: "Sorry, this email has existed." })
@@ -101,7 +112,7 @@ export default class SignUp extends React.Component {
               placeholder="Enter username"
               onChangeText={this.onChangeUserName}
               defaultValue={this.state.username}
-              onFocus={this.turnOffAlert}
+              onFocus={this.turnOffError}
               autoCapitalize="none"
             />
           </View>
@@ -111,7 +122,7 @@ export default class SignUp extends React.Component {
               placeholder="Enter email"
               onChangeText={this.onChangeEmail}
               defaultValue={this.state.email}
-              onFocus={this.turnOffAlert}
+              onFocus={this.turnOffError}
               autoCapitalize="none"
             />
           </View>
@@ -121,7 +132,7 @@ export default class SignUp extends React.Component {
               placeholder="Enter password"
               onChangeText={this.onChangePassword}
               defaultValue={this.state.password}
-              onFocus={this.turnOffAlert}
+              onFocus={this.turnOffError}
               secureTextEntry={true}
               autoCapitalize="none"
             />
@@ -132,7 +143,7 @@ export default class SignUp extends React.Component {
               placeholder="Re-enter password"
               onChangeText={this.onConfirmPassword}
               defaultValue={this.state.confirmedPassword}
-              onFocus={this.turnOffAlert}
+              onFocus={this.turnOffError}
               secureTextEntry={true}
               autoCapitalize="none"
             />
@@ -149,11 +160,14 @@ export default class SignUp extends React.Component {
           >
             <Text style={styles.otherOptionsText}>Back to Login</Text>
           </TouchableOpacity>
-          {this.state.error ?
-            <View style={styles.alertBox}>
-              <Text style={styles.alertText}>{this.state.errorText}</Text>
-            </View> : null
-          }
+          {this.state.error ? <ErrorBox error={this.state.errorText} /> : null}
+          <Overlay
+            isVisible={this.state.alert}
+            onBackdropPress={this.toggleAlert}
+            overlayStyle={styles.alertBox}
+          >
+            <NoInternetAlert />
+          </Overlay>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -206,7 +220,7 @@ const styles = StyleSheet.create({
   otherOptionsText: {
     color: colors.PrimaryColor,
   },
-  alertBox: {
+  errorBox: {
     backgroundColor: colors.ErrorText,
     alignItems: "center",
     justifyContent: "center",
@@ -216,8 +230,19 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
   },
-  alertText: {
+  errorText: {
     color: "white",
     fontSize: 14,
   },
+  alertBox: {
+    height: 150,
+    width: 300,
+    borderRadius: 5,
+  },
 });
+
+const mapStateToProps = state => ({
+  appData: state.userData,
+});
+
+export default connect(mapStateToProps)(SignUp);

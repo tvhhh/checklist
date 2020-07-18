@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -225,6 +225,13 @@ class ProfileManagement extends React.Component {
             onConfirm={this.handleRemoveAccountConfirm}
           />
         </Overlay>
+        {/* <Overlay
+            isVisible={this.state.alert}
+            onBackdropPress={this.toggleAlert}
+            overlayStyle={styles.alertBox}
+          >
+          <NoInternetAlert />
+        </Overlay> */}
       </ScrollView>
     );
   }
@@ -323,6 +330,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   confirmationBox: {
+    height: 150,
+    width: 300,
+    borderRadius: 5,
+  },
+  alertBox: {
     height: 150,
     width: 300,
     borderRadius: 5,

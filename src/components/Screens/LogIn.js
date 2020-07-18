@@ -1,15 +1,39 @@
 import React from 'react';
 import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import Header from '../Header';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
 
 import { logIn, getData } from '../../redux/actions/UserDataActions';
 
+
+export class ErrorBox extends React.Component {
+  render() {
+    return (
+      <View style={styles.errorBox}>
+        <Text style={styles.errorText}>{this.props.error}</Text>
+      </View>
+    );
+  }
+};
+
+export class NoInternetAlert extends React.Component {
+  render() {
+    return (
+      <View style={styles.alertContainer}>
+        <MaterialCommunityIcons name="wifi-off" size={60} color={colors.DisabledColor} />
+        <Text style={styles.alertText}>NO INTERNET CONNECTION</Text>
+      </View>
+    );
+  }
+};
 
 class LogIn extends React.Component {
   constructor(props) {
@@ -18,6 +42,7 @@ class LogIn extends React.Component {
       username: "",
       password: "",
       error: false,
+      alert: false,
     };
   }
 
@@ -29,16 +54,24 @@ class LogIn extends React.Component {
     this.setState({ password: text });
   }
 
-  turnOffAlert = () => {
+  turnOffError = () => {
     this.setState({ error: false });
   }
 
+  toggleAlert = () => {
+    this.setState({ alert: !this.state.alert });
+  }
+
   handleSubmit = async () => {
-    const data = await this.props.logIn(this.state.username, this.state.password);
-    if (data === null) {
-      this.setState({ error: true });
+    if (!this.props.appData.connection) {
+      this.setState({ alert: true });
     } else {
-      this.props.getData(data);
+      const data = await this.props.logIn(this.state.username, this.state.password);
+      if (data === null) {
+        this.setState({ error: true });
+      } else {
+        this.props.getData(data);
+      }
     }
   }
   
@@ -55,7 +88,7 @@ class LogIn extends React.Component {
                 placeholder="Enter username"
                 onChangeText={this.onChangeUserName}
                 defaultValue={this.state.username}
-                onFocus={this.turnOffAlert}
+                onFocus={this.turnOffError}
                 autoCapitalize="none"
               />
             </View>
@@ -65,7 +98,7 @@ class LogIn extends React.Component {
                 placeholder="Enter password"
                 onChangeText={this.onChangePassword}
                 defaultValue={this.state.password}
-                onFocus={this.turnOffAlert}
+                onFocus={this.turnOffError}
                 secureTextEntry={true}
                 autoCapitalize="none"
               />
@@ -88,12 +121,15 @@ class LogIn extends React.Component {
                 <Text style={styles.signUp}>Sign up</Text>
               </TouchableOpacity>
             </View>
-            {this.state.error ?
-              <View style={styles.alertBox}>
-                <Text style={styles.alertText}>Username or password is incorrect</Text>
-              </View> : null
-            }
+            {this.state.error ? <ErrorBox error="Username or password is incorrect" /> : null}
           </View>
+          <Overlay
+            isVisible={this.state.alert}
+            onBackdropPress={this.toggleAlert}
+            overlayStyle={styles.alertBox}
+          >
+            <NoInternetAlert />
+          </Overlay>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -155,7 +191,7 @@ const styles = StyleSheet.create({
   signUp: {
     color: colors.PrimaryColor,
   },
-  alertBox: {
+  errorBox: {
     backgroundColor: colors.ErrorText,
     alignItems: "center",
     justifyContent: "center",
@@ -165,9 +201,24 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
   },
-  alertText: {
+  errorText: {
     color: "white",
     fontSize: 14,
+  },
+  alertBox: {
+    height: 150,
+    width: 300,
+    borderRadius: 5,
+  },
+  alertContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  alertText: {
+    color: colors.DisabledColor,
+    fontSize: 14,
+    marginTop: 10,
   },
 });
 
