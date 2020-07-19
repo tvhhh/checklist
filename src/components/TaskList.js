@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionList, StyleSheet, Text, View, DatePickerIOS, } from 'react-native';
+import { SectionList, StyleSheet, Text, View, } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
 import { connect } from 'react-redux';
@@ -11,7 +11,8 @@ import Task from './Task';
 import TaskForm from './Forms/TaskForm';
 import { Create } from './Button';
 
-import colors from '../styles/colors';
+import colors, { lightTheme, darkTheme } from '../styles/colors';
+import { smallFonts, mediumFonts, largeFonts } from '../styles/fonts';
 
 import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateTime';
 
@@ -33,7 +34,14 @@ class TaskList extends React.Component {
     };
   }
 
-  renderItem = ({ item }) => <Task {...item} onSelect={() => this.onSelectedTaskPress(item)} togglePinned={() => this.togglePinned(item)} />
+  renderItem = ({ item }) => (
+    <Task 
+      {...item} 
+      onSelect={() => this.onSelectedTaskPress(item)} 
+      togglePinned={() => this.togglePinned(item)} 
+      customize={this.props.customize}
+    />
+  )
 
   renderSectionHeader = ({ section }) => 
     <Text style={[styles.listTitle, {
@@ -161,6 +169,10 @@ class TaskList extends React.Component {
   }
 
   render() {
+    const theme = this.props.customize.darkTheme ? darkTheme : lightTheme;
+    const fonts = mediumFonts;
+    const font = this.props.customize.font;
+
     const tasks = this.filter(
       this.props.filterOption,
       [...this.props.taskList].sort((a,b) => a.dueTime - b.dueTime),
@@ -170,49 +182,43 @@ class TaskList extends React.Component {
       data: tasks[key],
       title: key,
     }));
-
-    const largeTextColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
-    const smallTextColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
-    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
-    const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
-    const buttonColor = this.props.customize.darkTheme ? "#91a5c7" : colors.SecondaryColor;
-    const fontSize = this.props.customize.fontSize;
-    const font = this.props.customize.font;
     
     return (
       <>
         {this.props.isNotFilter ? null:
-          <SectionList
+        <SectionList
           sections={sections}
           keyExtractor={(item, index) => item + index}
           renderItem={this.renderItem}
           renderSectionHeader={this.renderSectionHeader}
           ListEmptyComponent={this.props.calendarView ? null : (
             <View style={styles.emptyComponentContainer}>
-              <Text style={styles.emptyComponentLargeText}>You're all done now!</Text>
-              <Text style={styles.emptyComponentSmallText}>Tap + to create a new task</Text>
+              <Text style={{ color: theme.PrimaryText, fontSize: fonts.HeavyText, fontFamily: font }}>Welcome to TODOS!</Text>
+              <Text style={{ color: theme.SecondaryText, fontSize: fonts.SecondaryText, fontFamily: font }}>Tap + to create a new task</Text>
               <FontAwesome5 name="tasks" color="grey" size={40} />
             </View>
           )}
-          />
-        }
+        />}
         {this.props.create ?
           <Create
             style={styles.addButton}
-            buttonColor={buttonColor}
             onPress={this.onAddButtonPress} 
           /> : null
         }
         <Overlay
           isVisible={this.state.showForm} 
           onBackdropPress={this.onFormBackdropPress}
-          overlayStyle={[styles.taskForm, { height: Object.keys(this.state.selected).length ? 380 : 320 , backgroundColor: theme, borderColor: overlayBorderColor}]}
+          overlayStyle={[
+            styles.taskForm, 
+            { height: Object.keys(this.state.selected).length ? 350 : 300 , backgroundColor: theme.Overlay, borderColor: theme.Overlay}
+          ]}
         >
           <TaskForm
             {...this.state.selected}
             isOnSelected={Object.keys(this.state.selected).length > 0} 
             onSubmit={this.handleFormSubmit}
             onRemove={this.handleRemoval}
+            customize={this.props.customize}
           />
         </Overlay>
       </>
@@ -222,8 +228,6 @@ class TaskList extends React.Component {
 
 const styles = StyleSheet.create({
   listTitle: {
-    color: colors.TitleText,
-    fontSize: 20,
     textAlign: "center",
     marginBottom: 5,
   },

@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
+import { View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { View } from 'react-native';1
-import colors from '../styles/colors';
-import { connect } from 'react-redux';
+
+import colors, { lightTheme, darkTheme } from '../styles/colors';
+
 
 export default class CalendarPicker extends React.Component{
   constructor(props) {
@@ -23,45 +24,47 @@ export default class CalendarPicker extends React.Component{
   };
 
   render(){
-    if (this.props.theme === colors.LightBackground) {
+    if (this.props.theme === lightTheme.Background) {
       return (
         <Calendar 
-        hideExtraDays={true}
-        onDayPress={(day) =>  this.setMarkedDates(day.dateString)}
-        markedDates={this.state.markedDates()}
-        theme={{
-          calendarBackground: colors.LightBackground,
-          dayTextColor: "grey",
-          todayTextColor: "#4169d9",
-          monthTextColor: '#5172cf',
-          arrowColor: "#5172cf",
-          textDayFontSize: 18,
-          textDayHeaderFontSize: 16,
-          textMonthFontSize: 20,
-        }}
-      />
-      );
-    }
-    else return (
-      <View>
-        <Calendar 
           hideExtraDays={true}
-          onDayPress={(day) =>  this.setMarkedDates(day.dateString)}
+          onDayPress={(day) => this.setMarkedDates(day.dateString)}
           markedDates={this.state.markedDates()}
           theme={{
-            calendarBackground: colors.DarkBackground,
-            todayTextColor: "#91a5c7",
+            calendarBackground: lightTheme.Background,
             dayTextColor: "grey",
-            monthTextColor: "#91a5c7",
-            arrowColor: "#91a5c7",
-            selectedDayTextColor: "#c3cdde",
-            selectedDotColor: '#0e5e9c',
+            todayTextColor: "#4169d9",
+            monthTextColor: '#5172cf',
+            arrowColor: "#5172cf",
             textDayFontSize: 18,
             textDayHeaderFontSize: 16,
             textMonthFontSize: 20,
           }}
         />
-      </View>
-    );
+      );
+    }
+    else {
+      return (
+        <View>
+          <Calendar 
+            hideExtraDays={true}
+            onDayPress={(day) => this.setMarkedDates(day.dateString)}
+            markedDates={this.state.markedDates()}
+            theme={{
+              calendarBackground: darkTheme.Background,
+              todayTextColor: "#91a5c7",
+              dayTextColor: "grey",
+              monthTextColor: "#91a5c7",
+              arrowColor: "#91a5c7",
+              selectedDayTextColor: "#c3cdde",
+              selectedDotColor: '#0e5e9c',
+              textDayFontSize: 18,
+              textDayHeaderFontSize: 16,
+              textMonthFontSize: 20,
+            }}
+          />
+        </View>
+      );
+    }
   }
 };

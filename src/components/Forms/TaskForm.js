@@ -9,12 +9,13 @@ import ConfirmationBox from './ConfirmationBox';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import colors from '../../styles/colors';
+import colors, { lightTheme, darkTheme } from '../../styles/colors';
+import { smallFonts, mediumFonts, largeFonts } from '../../styles/fonts';
 
 import { getToday, extractDateTime } from '../../utils/DateTime';
 
 
-class TaskForm extends React.Component {
+export default class TaskForm extends React.Component {
   constructor(props) {
     super(props);
     let today = getToday();
@@ -81,62 +82,61 @@ class TaskForm extends React.Component {
   }
 
   render() {
-    const extractedDateTime = extractDateTime(this.state.task.dueTime);
-    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
-    const text2ndColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
-    const fontSize = this.props.customize.fontSize;
+    const theme = this.props.customize.darkTheme ? darkTheme : lightTheme;
+    const fonts = mediumFonts;
     const font = this.props.customize.font;
+    
+    const extractedDateTime = extractDateTime(this.state.task.dueTime);
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.taskFormLayout} >
+        <View style={{ flex: 1, backgroundColor: theme.Overlay }}>
           <View style={styles.taskFormHeader}>
-            <TouchableOpacity style={styles.saveButtonContainer} onPress={this.handleSubmit} >
-              <Text style={[styles.saveButtonText, {fontSize: fontSize - 5, fontFamily: font}]}>SAVE</Text>
+            <TouchableOpacity style={styles.saveButtonContainer} onPress={this.handleSubmit}>
+              <Text style={[styles.saveButtonText, {fontSize: fonts.ButtonText, fontFamily: font}]}>SAVE</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.taskFormInputField}>
-            <TextInput style={[styles.titleInput, {fontSize: fontSize - 5, fontFamily: font, color: textColor}]}
+            <TextInput style={[styles.titleInput, {fontSize: fonts.TitleText, fontFamily: font, color: theme.TitleText}]}
               underlineColorAndroid="transparent"
               placeholder="I'm gonna do..."
-              placeholderTextColor={textColor}
+              placeholderTextColor={theme.PrimaryText}
               onChangeText={this.updateTitle}
               defaultValue={this.state.task.title}
               autoCapitalize="none"
             />
             {this.state.errorText ? 
-              <Text style={styles.errorText, {fontSize: fontSize - 5, fontFamily: font}}>
+              <Text style={{ color: colors.Error, fontSize: fonts.ErrorText, fontFamily: font }}>
                 This field is required.
               </Text> : null
             }
-            <TextInput style={[styles.descriptionInput, {fontSize: fontSize - 5, fontFamily: font}]}
+            <TextInput style={[styles.descriptionInput, {fontSize: fonts.CaptionText, fontFamily: font, color: theme.PrimaryText}]}
               underlineColorAndroid="transparent"
               placeholder="DESCRIPTION"
-              placeholderTextColor={text2ndColor}
+              placeholderTextColor={theme.SecondaryText}
               onChangeText={this.updateDescription}
               defaultValue={this.state.task.description}
               autoCapitalize="none"
             />
             <TouchableOpacity style={styles.datetimePicker} onPress={this.toggleDateTimePicker}>
-              <Text style={[styles.dateTimePickerText, {color: textColor, fontSize: fontSize - 5, fontFamily: font}]}>{`${extractedDateTime.date}  ${extractedDateTime.time}`}</Text>
+              <Text style={{color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}}>{`${extractedDateTime.date}  ${extractedDateTime.time}`}</Text>
             </TouchableOpacity>
             {this.state.errorTime ? 
-              <Text style={styles.errorText, {fontSize: fontSize - 5, fontFamily: font}}>
+              <Text style={{ color: colors.Error, fontSize: fonts.ErrorText, fontFamily: font }}>
                 Sorry, your due time should be later than now.
               </Text> : null
             }
             <View style={styles.categoryPickerButton}>
               <Category name={this.state.task.category} onPress={this.toggleCategoryPicker} />
-              <Text style={[
-                styles.categoryName,
-                { color: colors[this.state.task.category.charAt(0).toUpperCase() + this.state.task.category.slice(1)] , fontSize: fontSize - 5, fontFamily: font}
-              ]}>
+              <Text style={
+                { color: colors[this.state.task.category.charAt(0).toUpperCase() + this.state.task.category.slice(1)] , fontSize: fonts.PrimaryText, fontFamily: font}
+              }>
                 {this.state.task.category.toUpperCase()}
               </Text>
             </View>
             {this.props.isOnSelected ?
               <View style={styles.taskFormFooter}>
                 <TouchableOpacity style={styles.removeButton} onPress={this.toggleConfirmationBox} >
-                  <FontAwesome name="trash-o" size={30} color="midnightblue" />
+                  <FontAwesome name="trash-o" size={30} color={colors.SecondaryColor} />
                 </TouchableOpacity>
               </View> : null
             }
@@ -152,14 +152,22 @@ class TaskForm extends React.Component {
             onBackdropPress={this.toggleCategoryPicker}
             overlayStyle={styles.categoryPickerForm}
           >
-            <CategoryPicker onSubmit={this.updateCategory} />
+            <CategoryPicker 
+              onSubmit={this.updateCategory} 
+              customize={this.props.customize}
+            />
           </Overlay>
           <Overlay
             isVisible={this.state.isConfirmationBoxVisible}
             onBackdropPress={this.toggleConfirmationBox}
             overlayStyle={styles.confirmationBox}
           >
-            <ConfirmationBox title="Delete this task?" onCancel={this.toggleConfirmationBox} onConfirm={this.handleRemoveConfirm} />
+            <ConfirmationBox 
+              title="Delete this task?" 
+              onCancel={this.toggleConfirmationBox} 
+              onConfirm={this.handleRemoveConfirm}
+              customize={this.props.customize} 
+            />
           </Overlay>
         </View>
       </TouchableWithoutFeedback>
@@ -168,9 +176,6 @@ class TaskForm extends React.Component {
 };
 
 const styles = StyleSheet.create({
-  taskFormLayout: {
-    flex: 1,
-  },
   taskFormHeader: {
     flexDirection: "row-reverse",
     paddingHorizontal: 15,
@@ -180,7 +185,6 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     color: colors.PrimaryColor,
-    fontSize: 20,
   },
   taskFormInputField: {
     flex: 1,
@@ -192,7 +196,6 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
   },
   descriptionInput: {
-    fontSize: 14,
     borderColor: colors.Border,
     borderBottomWidth: 1,
     paddingBottom: 3,
@@ -204,9 +207,6 @@ const styles = StyleSheet.create({
     borderColor: colors.Border,
     borderWidth: 1,
     borderRadius: 5,
-  },
-  dateTimePickerText: {
-    fontSize: 16,
   },
   categoryPickerButton: {
     alignItems: "center",
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   removeButton: {
     alignItems: "center",
     justifyContent: "center",
-    borderColor: "midnightblue",
+    borderColor: colors.SecondaryColor,
     borderWidth: 1,
     height: 40,
     width: 40,
@@ -238,14 +238,4 @@ const styles = StyleSheet.create({
     width: 300,
     borderRadius: 5,
   },
-  errorText: {
-    color: colors.ErrorText,
-    fontSize: 12,
-  },
 });
-
-const mapStateToProps = state => ({
-  customize: state.customize,
-});
-
-export default connect(mapStateToProps)(TaskForm);
