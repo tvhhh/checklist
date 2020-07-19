@@ -127,17 +127,17 @@ class TaskList extends React.Component {
     const filtedList = taskList.filter(item => {      
     const itemTitle = `${item.title.toUpperCase()}`;
     const itemCategory = `${item.category}`;
-    const itemPinned = `${item.pinned}`;
+    const itemPinned = item.pinned;
     const itemDueTime = item.dueTime;
     const startIntervalChecker = startInterval === "" ? 1:itemDueTime >= startInterval;
     const endIntervalChecker = endInterval === "" ? 1:itemDueTime <= endInterval;
     const textData = query.toUpperCase();
     if (category === "default"){
-      if (itemTitle.includes(textData) && startIntervalChecker && endIntervalChecker){
+      if (itemTitle.includes(textData) && startIntervalChecker && endIntervalChecker && itemPinned === pinned){
         return true;
       }   
     }
-    if (itemTitle.includes(textData) && itemCategory === category && startIntervalChecker && endIntervalChecker){
+    if (itemTitle.includes(textData) && itemCategory === category && startIntervalChecker && endIntervalChecker && itemPinned === pinned){
       return true;
     }    
       return false;

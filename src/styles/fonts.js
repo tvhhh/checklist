@@ -9,6 +9,7 @@ export const smallFonts = {
   CaptionText: 14,
   ButtonText: 19,
   ErrorText: 12,
+  FilterBox: 13,
 };
 
 export const mediumFonts = {
@@ -22,6 +23,7 @@ export const mediumFonts = {
   CaptionText: 19,
   ButtonText: 25,
   ErrorText: 17,
+  FilterBox: 16,
 };
 
 export const largeFonts = {
@@ -35,4 +37,5 @@ export const largeFonts = {
   CaptionText: 24,
   ButtonText: 30,
   ErrorText: 22,
+  FilterBox: 19,
 };

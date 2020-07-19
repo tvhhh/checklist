@@ -42,7 +42,7 @@ class Settings extends React.Component {
   onFontSizePress = size => {
     const actions = this.props.actions;
     actions.changeSize(size);
-    //this.setState({fontSizeOverlayShown: false});
+    this.setState({fontSizeOverlayShown: false});
   }
   
   onFontOverlayPress = () => {

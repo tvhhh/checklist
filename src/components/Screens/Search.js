@@ -140,81 +140,64 @@ class Search extends React.Component {
     }
   }
 
-  renderCategoryBox = () => {
-    if (this.state.category){
-      return(
-        <View style = {this.state.isCategoryPressed ? styles.filterButtonContainerPressed:styles.filterButtonContainerUnpressed}>
-          <Category name = {this.state.category} size = {15}/>
-          <Text style = {this.state.isCategoryPressed ? styles.filterBoxTextPressed:styles.filterBoxTextUnpressed}
-          > {this.state.category.charAt(0).toUpperCase() + this.state.category.slice(1)}
-          </Text>
-        </View>
-      );
-    }
-    else{
-      return (
-        <View style = {this.state.isCategoryPressed ? styles.filterButtonContainerPressed:styles.filterButtonContainerUnpressed}> 
-        <Category name = {this.state.category} size = {15}/>
-          <Text style = {this.state.isCategoryPressed ? styles.filterBoxTextPressed:styles.filterBoxTextUnpressed}
-          > {this.state.category}
-          </Text>
-        </View>
-      );
-    }
-  }
-
   renderDate = (extractedDate, type) => {
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     if (extractedDate !== ""){
       return(
-        <Text style={styles.datePickerText}>{`${extractedDate}`}</Text>
+        <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>{`${extractedDate}`}</Text>
       );
     }
     if (type === "start"){
       return (
-        <Text>Start Day</Text>
+        <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>Start Day</Text>
       );
     }
     else {
       return (
-        <Text>End Day</Text>
+        <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>End Day</Text>
       );
-    }    
+    }
   }
 
   renderFilter = () => {
-    if(this.state.showFilter){
-      return(
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
+    if (this.state.showFilter) {
+      return (
         <View style = {styles.filterBoxContainer}>
-        <TouchableOpacity onPress = {this.toggleCategoryPicker} >
-          {this.renderCategoryBox()}
-        </TouchableOpacity>
+          <TouchableOpacity onPress = {this.toggleCategoryPicker} style = {this.state.isCategoryPressed ? [styles.filterButtonContainerPressed, {backgroundColor: theme.Overlay}] : styles.filterButtonContainerUnpressed}>
+            <Category name = {this.state.category} size = {fonts.FilterBox - 2}/>
+            <Text style = {this.state.isCategoryPressed ? 
+              {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.FilterBox} : {color: theme.SecondaryText, fontFamily: font, fontSize: fonts.FilterBox}}
+            > {this.state.category.charAt(0).toUpperCase() + this.state.category.slice(1)}
+            </Text>
+          </TouchableOpacity>
   
-        <TouchableOpacity onPress = {this.onPinnedPress}>
-          <View style = {this.state.isPinnedPressed ? styles.filterButtonContainerPressed:styles.filterButtonContainerUnpressed}>
-            <MaterialCommunityIcons name="pin" size={15} color='#2bd1ea' />  
-            <Text style = {this.state.isPinnedPressed ? styles.filterBoxTextPressed:styles.filterBoxTextUnpressed}> Pinned Task</Text>
-          </View>
-        </TouchableOpacity>
-  
-        <TouchableOpacity onPress = {this.onCalendarPress}>
-          <View style = {this.state.isCalendarPressed ? styles.filterButtonContainerPressed:styles.filterButtonContainerUnpressed}>
-            <AntDesign name="calendar" size={15} color= {this.state.isCalendarPressed === true ? "#FD66FF" : 'brown'} />  
-            <Text style = {this.state.isCalendarPressed ? styles.filterBoxTextPressed:styles.filterBoxTextUnpressed}> Interval</Text>
-          </View>
-        </TouchableOpacity>
-          
-        <TouchableOpacity onPress = {this.onResetPress}>
-        <View style = {styles.resetButton}>
-          <MaterialCommunityIcons name = "restart" size = {17}/>
+          <TouchableOpacity onPress = {this.onPinnedPress} style = {this.state.isPinnedPressed ? [styles.filterButtonContainerPressed, {backgroundColor: theme.Overlay}] : styles.filterButtonContainerUnpressed}>
+            <MaterialCommunityIcons name="pin" size={fonts.FilterBox - 2} color='#2bd1ea' />  
+            <Text style = {this.state.isPinnedPressed ? 
+              {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.FilterBox} : {color: theme.SecondaryText, fontFamily: font, fontSize: fonts.FilterBox}}
+            >Pinned Task</Text>
+          </TouchableOpacity>
+    
+          <TouchableOpacity onPress = {this.onCalendarPress} style = {this.state.isCalendarPressed ? [styles.filterButtonContainerPressed, {backgroundColor: theme.Overlay}] : styles.filterButtonContainerUnpressed}>
+            <AntDesign name="calendar" size={fonts.FilterBox - 2} color={this.state.isCalendarPressed === true ? "#FD66FF" : 'brown'} />  
+            <Text style = {this.state.isCalendarPressed ? 
+              {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.FilterBox} : {color: theme.SecondaryText, fontFamily: font, fontSize: fonts.FilterBox}}
+            >Interval</Text>
+          </TouchableOpacity>
+            
+          <TouchableOpacity onPress = {this.onResetPress} style = {styles.resetButton}>
+            <MaterialCommunityIcons name="restart" size={fonts.FilterBox - 3} color={"grey"}/>
+          </TouchableOpacity>
         </View>
-        </TouchableOpacity>
-      </View>
       );    
     }
-    else{
-      return null;
-    }
+    else return null;
   }
+
   render() {
     const theme = this.props.customize.theme;
     const fonts = this.props.customize.fontSize;
@@ -223,12 +206,15 @@ class Search extends React.Component {
     const filterOption = FILTER_SEARCH;
     var extractedStartInterval= "";
     var extractedEndInterval = "";
+
     if (this.state.startInterval !== ""){
       extractedStartInterval =  extractDate(this.state.startInterval);
     }
+
     if(this.state.endInterval !== ""){
       extractedEndInterval = extractDate(this.state.endInterval);
     }
+
     return (    
       <View style={{ flex: 1, backgroundColor: theme.Background }}>
         <View style={styles.searchBoxContainer}>
@@ -236,32 +222,24 @@ class Search extends React.Component {
             round
             containerStyle={[styles.barContainer, {backgroundColor: theme.Background}]}
             inputContainerStyle={[styles.inputContainer, {backgroundColor: theme.Background}]}
-            inputStyle={[styles.inputText, {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}]}
+            inputStyle={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}
             placeholder="Search your task here..."
             onChangeText={query => this.updateState(query)}
             value={this.state.query}
-            searchIcon={<EvilIcons name="search" size={25} />}
+            searchIcon={<EvilIcons name="search" size={fonts.PrimaryText} color={"grey"}/>}
             />
           <TouchableOpacity onPress={this.toggleFilter}>
-            <MaterialCommunityIcons name="filter-variant" size={30} color={colors.Button}/>     
+            <MaterialCommunityIcons name="filter-variant" size={fonts.PrimaryText + 5} color={colors.Button}/>     
           </TouchableOpacity>           
         </View>
         {this.renderFilter()}
         {this.state.isDatePickerVisible ? 
-          <View style = {styles.datePickerForm}>
-            <Text style = {{
-              color: colors.SecondaryText,
-              fontSize: 15,
-              marginHorizontal: 10
-            }}>From</Text>
+          <View style = {[styles.datePickerForm, {backgroundColor: theme.Background}]}>
+            <Text style = {{color: theme.SecondaryText, fontSize: fonts.FilterBox}}>From</Text>
             <TouchableOpacity style={styles.datePickerButton} onPress={this.toggleStartIntervalPicker}>
               {this.renderDate(extractedStartInterval,"start")}
             </TouchableOpacity>
-            <Text style = {{
-              color: colors.SecondaryText,
-              fontSize: 15,
-              marginHorizontal: 10
-            }}>To</Text>
+            <Text style={{color: theme.SecondaryText, fontSize: fonts.FilterBox}}>To</Text>
             <TouchableOpacity style={styles.datePickerButton} onPress={this.toggleEndIntervalPicker}>
               {this.renderDate(extractedEndInterval,"end")}
             </TouchableOpacity>
@@ -269,20 +247,10 @@ class Search extends React.Component {
         }
         {this.state.isDatePickerVisible ?
           <View style = {{
-            flexDirection: "row",
-            marginTop: 5,
-            borderRadius: 5,
-            alignSelf: 'stretch',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            {this.state.errorInterval ? 
-              <Text style = {{
-                color: 'red',
-                fontSize: 15
-              }}>The start day should not be larger than the end day
-              </Text> :null
-            }          
+            {this.state.errorInterval ? <Text style = {{ color: 'red', fontSize: fonts.ErrorText}}>The start day should not be larger than the end day</Text> : null}          
           </View> : null
         }        
         <Overlay
@@ -335,30 +303,27 @@ const styles = StyleSheet.create({
   },
   filterBoxContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    alignSelf: "stretch",
   },
   filterButtonContainerUnpressed: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
     padding: 3,
     borderRadius: 9,
     borderWidth: 1,
     borderColor: colors.Button ,
-    marginHorizontal: 14,
   },
   filterButtonContainerPressed: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
     padding: 3,
     borderRadius: 9,
     borderWidth: 1,
-    borderColor: colors.Button ,
-    backgroundColor: colors.Button,
-    marginHorizontal: 14,
+    borderColor: colors.Border,
+    backgroundColor: "#262729",
   },
   barContainer: {
     flex: 1,
@@ -368,17 +333,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     borderBottomWidth: 1,
     borderWidth: 1,
-  },
-  inputText: {
-    fontSize: 18,
-  },
-  filterBoxTextUnpressed: {
-    color: colors.SecondaryText,
-    fontSize: 13,
-  },
-  filterBoxTextPressed: {
-    color: colors.Background,
-    fontSize: 13,
   },
   categoryPickerButton: {
     alignItems: "center",
@@ -392,30 +346,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   resetButton: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 3,
+    padding: 1,
     borderRadius: 50,
     borderWidth: 1,
     borderColor: colors.Button ,
-    marginHorizontal: 14,
   },
   datePickerForm:{
     height: 50,
+    marginTop: 5,
     borderRadius: 15,
-    marginHorizontal: 10,
-    marginTop: 10,
-    backgroundColor: 'white',
     flexDirection: "row",
-    padding: 0,
-    borderRadius: 5,
-    alignSelf: "stretch",
     alignItems: "center",
     justifyContent: "center",
-  },
-  datePickerText: {
-    fontSize: 16,
   },
   datePickerButton: {
     padding: 5,
