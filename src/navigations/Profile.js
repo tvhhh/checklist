@@ -8,11 +8,10 @@ import ProfileManagement from '../components/Screens/ProfileManagement';
 import UpcomingTasks from '../components/Screens/UpcomingTasks';
 import LogIn from '../components/Screens/LogIn';
 import SignUp from '../components/Screens/SignUp';
-import colors from '../styles/colors';
+
 
 const GuestStack = createStackNavigator();
 const RegisteredStack = createStackNavigator();
-
 
 class GuestScreen extends React.Component {
   render() {

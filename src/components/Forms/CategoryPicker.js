@@ -1,19 +1,19 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, View, } from 'react-native';
-import { connect } from 'react-redux';
 import Category from '../Category';
-
 import colors from '../../styles/colors';
 
 
-class CategoryPicker extends React.Component {
+
+export default class CategoryPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       categories: [
         "health", "workout", "ideas",
-        "work", "payment", "entertainment",
-        "meeting", "study", "event", "uncategorized","default"
+        "work", "payment", "liveliness",
+        "meeting", "study", "event", 
+        "uncategorized", "default",
       ],
     };
   }
@@ -30,10 +30,11 @@ class CategoryPicker extends React.Component {
   }
 
   render() {
-    const fontSize = this.props.customize.fontSize;
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: theme.Overlay }]}>
         <FlatList 
           data={this.dataPicker()}
           keyExtractor={(item, index) => item + index}
@@ -44,10 +45,9 @@ class CategoryPicker extends React.Component {
                 size={80} 
                 onPress={() => this.props.onSubmit(item)} 
               />
-              <Text style={[
-                styles.categoryName,
-                { color: colors[item.charAt(0).toUpperCase() + item.slice(1)] , fontFamily: font}
-              ]}>
+              <Text style={
+                { color: colors[item.charAt(0).toUpperCase() + item.slice(1)] , fontFamily: font, fontSize: fonts.TertiaryText }
+              }>
                 {item.toUpperCase()}
               </Text>
             </View>
@@ -64,22 +64,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 20,
-    paddingBottom: 20,
   },
   categoryContainer: {
     alignItems: "center",
     justifyContent: "center",
     padding: 8,
   },
-  categoryName: {
-    color: colors.PrimaryText,
-    fontSize: 10,
-  },
 });
-
-const mapStateToProps = state => ({
-  customize: state.customize,
-});
-
-export default connect(mapStateToProps)(CategoryPicker);

@@ -14,9 +14,6 @@ import FontTisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import screenStyles from './ScreenStyles';
-import colors from '../../styles/colors';
-
 import { setAvatar, setName, setPhone, setPassword, logOut, removeAccount } from '../../redux/actions/UserDataActions';
 
 
@@ -86,14 +83,13 @@ class ProfileManagement extends React.Component {
   }
 
   render() {
-    const data = this.props.appData.data;
-    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
-    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
-    const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
-    const fontSize = this.props.customize.fontSize;
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
+
+    const data = this.props.appData.data;
     return (
-      <ScrollView style={[screenStyles.screenContainer, {backgroundColor: theme}]}>
+      <ScrollView style={{ flex: 1, backgroundColor: theme.Background }}>
         <Header navigation={this.props.navigation} />
         <View style={styles.header}>
           <FontAwesome
@@ -103,73 +99,73 @@ class ProfileManagement extends React.Component {
             size={100}
             onPress={this.toggleAvatarPicker}
           />
-          <Text style={[styles.username, {color: data.avatar, fontFamily: font, fontSize: fontSize}]}>{`@${data.username}`}</Text>
+          <Text style={{color: data.avatar, fontFamily: font, fontSize: fonts.UsernameText}}>{`@${data.username}`}</Text>
         </View>
         <View style={styles.statisticContainer}>
           <TouchableOpacity style={styles.statisticBox}>
-            <Text style={[styles.statisticText, {color: colors.DisabledColor}]}>You have</Text>
-            <Text style={[styles.statisticNumber, {color: colors.DisabledColor}]}>
+            <Text style={{color: colors.DisabledColor, fontFamily: font, fontSize: fonts.TertiaryText}}>You have</Text>
+            <Text style={{color: colors.DisabledColor, fontFamily: font, fontSize: fonts.HeavyText}}>
               {data.tasks.filter(task => task.dueTime < new Date() && !task.done).length}
             </Text>
-            <Text style={[styles.statisticText, {color: colors.DisabledColor}]}>OVERDUED</Text>
+            <Text style={{color: colors.DisabledColor, fontFamily: font, fontSize: fonts.TertiaryText}}>OVERDUED</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.statisticBox} onPress={() => this.props.navigation.navigate("UpcomingTasks")}>
-            <Text style={[styles.statisticText, {color: colors.PrimaryColor}]}>You have</Text>
-            <Text style={[styles.statisticNumber, {color: colors.PrimaryColor}]}>
+            <Text style={{color: colors.PrimaryColor, fontFamily: font, fontSize: fonts.TertiaryText}}>You have</Text>
+            <Text style={{color: colors.PrimaryColor, fontFamily: font, fontSize: fonts.HeavyText}}>
               {data.tasks.filter(task => task.dueTime > new Date() && !task.done).length}
             </Text>
-            <Text style={[styles.statisticText, {color: colors.PrimaryColor}]}>UPCOMING</Text>
+            <Text style={{color: colors.PrimaryColor, fontFamily: font, fontSize: fonts.TertiaryText}}>UPCOMING</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.statisticBox}>
-            <Text style={[styles.statisticText, {color: colors.SecondaryColor}]}>You have</Text>
-            <Text style={[styles.statisticNumber, {color: colors.SecondaryColor}]}>
+            <Text style={{color: colors.SecondaryColor, fontFamily: font, fontSize: fonts.TertiaryText}}>You have</Text>
+            <Text style={{color: colors.SecondaryColor, fontFamily: font, fontSize: fonts.HeavyText}}>
               {data.tasks.filter(task => task.done).length}
             </Text>
-            <Text style={[styles.statisticText, {color: colors.SecondaryColor}]}>COMPLETED</Text>
+            <Text style={{color: colors.SecondaryColor, fontFamily: font, fontSize: fonts.TertiaryText}}>COMPLETED</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.infoField} onPress={this.toggleNameBox}>
           <AntDesign name="contacts" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Full Name</Text>
-            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{data.name || "What's your name?"}</Text>
+            <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Full Name</Text>
+            <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>{data.name || "What's your name?"}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField}>
           <FontTisto name="email" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Email</Text>
-            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{data.email}</Text>
+            <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Email</Text>
+            <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>{data.email}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField} onPress={this.togglePhoneBox}>
           <FontTisto name="phone" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Phone number</Text>
-            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>{data.phone || "Update your phone number"}</Text>
+            <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Phone number</Text>
+            <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>{data.phone || "Update your phone number"}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField} onPress={this.togglePasswordBox}>
           <FontAwesome name="key" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Change password</Text>
-            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Reset your password</Text>
+            <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Change password</Text>
+            <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>Reset your password</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField} onPress={this.toggleConfirmPasswordBox}>
           <MaterialCommunityIcons name="account-remove" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={[styles.infoTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Deactivate account</Text>
-            <Text style={[styles.info, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Remove your account</Text>
+            <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Deactivate account</Text>
+            <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>Remove your account</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.logOut} onPress={this.props.logOut}>
-          <Text style={[styles.logOutText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>LOG OUT</Text>
+          <Text style={[styles.logOutText, {fontFamily: font, fontSize: fonts.ButtonText}]}>LOG OUT</Text>
           <MaterialCommunityIcons name="logout" size={25} color="white" />
         </TouchableOpacity>
         <Overlay
@@ -177,7 +173,10 @@ class ProfileManagement extends React.Component {
           onBackdropPress={this.toggleAvatarPicker}
           overlayStyle={styles.avatarPicker}
         >
-          <AvatarPicker setAvatar={this.handleAvatarSubmit} />
+          <AvatarPicker 
+            setAvatar={this.handleAvatarSubmit} 
+            customize={this.props.customize}
+          />
         </Overlay>
         <Overlay
           isVisible={this.state.isNameBoxVisible}
@@ -187,6 +186,7 @@ class ProfileManagement extends React.Component {
           <NameBox
             name={data.name}
             setName={this.handleNameSubmit}
+            customize={this.props.customize}
           />
         </Overlay>
         <Overlay
@@ -197,6 +197,7 @@ class ProfileManagement extends React.Component {
           <PhoneBox
             phone={data.phone}
             setPhone={this.handlePhoneSubmit}
+            customize={this.props.customize}
           />
         </Overlay>
         <Overlay
@@ -207,6 +208,7 @@ class ProfileManagement extends React.Component {
           <PasswordBox
             currentPassword={data.password}
             setPassword={this.handlePasswordSubmit}
+            customize={this.props.customize}
           />
         </Overlay>
         <Overlay
@@ -217,6 +219,7 @@ class ProfileManagement extends React.Component {
           <ConfirmPasswordBox
             currentPassword={data.password}
             onConfirmSuccess={this.handleConfirmPasswordSuccess}
+            customize={this.props.customize}
           />
         </Overlay>
         <Overlay
@@ -228,15 +231,9 @@ class ProfileManagement extends React.Component {
             title="Delete this account?"
             onCancel={this.toggleConfirmationBox}
             onConfirm={this.handleRemoveAccountConfirm}
+            customize={this.props.customize}
           />
         </Overlay>
-        {/* <Overlay
-            isVisible={this.state.alert}
-            onBackdropPress={this.toggleAlert}
-            overlayStyle={styles.alertBox}
-          >
-          <NoInternetAlert />
-        </Overlay> */}
       </ScrollView>
     );
   }
@@ -248,9 +245,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingBottom: 20,
-  },
-  username: {
-    fontSize: 20,
   },
   userAvatar: {
     backgroundColor: "white",
@@ -268,12 +262,6 @@ const styles = StyleSheet.create({
     borderColor: colors.Border,
     borderRightWidth: 0.5,
   },
-  statisticNumber: {
-    fontSize: 30,
-  },
-  statisticText: {
-    fontSize: 12,
-  },
   infoField: {
     flexDirection: "row",
     alignSelf: "stretch",
@@ -286,13 +274,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   infoTitle: {
-    color: colors.TitleText,
-    fontSize: 16,
     fontWeight: "bold",
-  },
-  info: {
-    color: colors.PrimaryText,
-    fontSize: 16,
   },
   logOut: {
     flexDirection: "row",

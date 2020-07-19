@@ -1,10 +1,13 @@
 import { CHANGE_THEME, CHANGE_SIZE, CHANGE_FONT, GET_CUSTOMIZATION} from '../actions/CustomizeActions'
 import { storeCustomization } from '../../api';
+import { smallFonts, mediumFonts, largeFonts } from '../../styles/fonts'
+import { lightTheme, darkTheme } from '../../styles/colors'
 
 const initialState = {
   darkTheme: false,
+  theme: {...lightTheme},
   font: "sans-serif",
-  fontSize: 25,
+  fontSize: {...mediumFonts},
   switchValue: false,
 };
 
@@ -19,9 +22,17 @@ export default function customizeReducer(state = initialState, action) {
       return {...state}
 
     case CHANGE_THEME:
-      newCustomization = {...state, darkTheme: !state.darkTheme, switchValue: !state.switchValue}
-      storeCustomization(JSON.stringify(newCustomization))
-      return { ...state, darkTheme: !state.darkTheme, switchValue: !state.switchValue} 
+      switch (state.darkTheme) {
+        case false:
+          newCustomization = {...state, darkTheme: true, theme: {...darkTheme}, switchValue: true}
+          storeCustomization(JSON.stringify(newCustomization))
+          return newCustomization;
+        case true:
+          newCustomization = {...state, darkTheme: false ,theme: {...lightTheme}, switchValue: false}
+          storeCustomization(JSON.stringify(newCustomization))
+          return newCustomization;
+        default: return {...state}
+      }
 
     case CHANGE_FONT:
       newCustomization = {...state, font: payload.font }
@@ -31,17 +42,17 @@ export default function customizeReducer(state = initialState, action) {
     case CHANGE_SIZE:
       switch (payload.size) {
         case "small":
-          newCustomization = { ...state, fontSize: 20 }
+          newCustomization = { ...state, fontSize: {...smallFonts} }
           storeCustomization(JSON.stringify(newCustomization))
-          return { ...state, fontSize: 20 };
+          return newCustomization;
         case "medium":
-          newCustomization = { ...state, fontSize: 25 }
+          newCustomization = { ...state, fontSize: {...mediumFonts} }
           storeCustomization(JSON.stringify(newCustomization))
-          return { ...state, fontSize: 25 };
+          return newCustomization;
         case "large":
-          newCustomization = { ...state, fontSize: 30 }
+          newCustomization = { ...state, fontSize: {...largeFonts} }
           storeCustomization(JSON.stringify(newCustomization))
-          return { ...state, fontSize: 30 };
+          return newCustomization;
       }
     default:
       return state;

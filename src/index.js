@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
+import { connect } from 'react-redux';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
@@ -13,16 +14,18 @@ import Settings from './navigations/Settings';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { connect } from 'react-redux';
-import colors from './styles/colors';
+
+import colors, { lightTheme, darkTheme } from './styles/colors';
+import { smallFonts, mediumFonts, largeFonts } from './styles/fonts';
 
 
 const Drawer = createDrawerNavigator();
 
 class TodoApp extends React.Component {
+
   render() {
-    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
-    const fontSize = this.props.customize.fontSize;
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     return (
       <NavigationContainer>
@@ -32,10 +35,10 @@ class TodoApp extends React.Component {
             activeTintColor: colors.PrimaryColor,
             inactiveTintColor: colors.DisabledColor,
             itemStyle: { marginHorizontal: 0 },
-            labelStyle: { fontSize: 16 },
+            labelStyle: { fontSize: fonts.PrimaryColor },
           }}
           drawerStyle={{
-            backgroundColor: theme,
+            backgroundColor: theme.Overlay,
           }}
           screenOptions={({ route }) => ({
             drawerIcon: ({ color, size }) => {
@@ -55,13 +58,13 @@ class TodoApp extends React.Component {
             drawerLabel: ({ color }) => {
               switch(route.name) {
                 case "profile":
-                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>PROFILE</Text>;
+                  return <Text style={{ color: color, fontSize: fonts.PrimaryText, fontFamily: font }}>PROFILE</Text>;
                 case "list":
-                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>MY LIST</Text>;
+                  return <Text style={{ color: color, fontSize: fonts.PrimaryText, fontFamily: font }}>MY LIST</Text>;
                 case "groups":
-                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>GROUPS</Text>;
+                  return <Text style={{ color: color, fontSize: fonts.PrimaryText, fontFamily: font }}>GROUPS</Text>;
                 case "settings":
-                  return <Text style={{ color: color, fontSize: fontSize - 5, fontFamily: font }}>SETTINGS</Text>;
+                  return <Text style={{ color: color, fontSize: fonts.PrimaryText, fontFamily: font }}>SETTINGS</Text>;
                 default:
                   return null;
               }

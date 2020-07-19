@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { View } from 'react-native';
 
 
@@ -8,11 +8,10 @@ import Header from '../Header';
 import CalendarPicker from '../CalendarPicker';
 import TaskList, { FILTER_DATE } from '../TaskList';
 
-import colors from '../../styles/colors'; 
-import screenStyles from './ScreenStyles';
-
+import { lightTheme} from '../../styles/colors';
 
 import { extractDate } from '../../utils/DateTime';
+
 
 class Calendar extends React.Component{
   constructor (props) {
@@ -24,8 +23,8 @@ class Calendar extends React.Component{
 
   renderMarkedDates = () => {
     let marked = {};
-    let theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
-    if (theme === colors.LightBackground) {
+    let themeBackground = this.props.customize.theme;
+    if (themeBackground.Background === lightTheme.Background) {
     this.props.taskList.forEach(task => {
       marked[extractDate(task.dueTime)] = {marked: true, dotColor: "#5172cf", activeOpacity: 0};
     });
@@ -37,11 +36,7 @@ class Calendar extends React.Component{
       });
       marked[this.state.pickedDate] = {...marked[this.state.pickedDate], selected: true, selectedColor: "#3c3a3d"};
     }
-      return JSON.parse(JSON.stringify(marked));
-  }
-
-  toggleDrawer = () => {
-    this.props.navigation.toggleDrawer();
+    return JSON.parse(JSON.stringify(marked));
   }
   
   onDayPress = date => {
@@ -49,9 +44,9 @@ class Calendar extends React.Component{
   }
 
   render() {
-    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const theme = this.props.customize.theme;
     return(
-      <View style={[screenStyles.screenContainer, {backgroundColor: theme}]}>
+      <View style={{ flex: 1, backgroundColor: theme.Background }}>
         <Header
           navigation={this.props.navigation} 
           title={this.props.title}
@@ -61,7 +56,7 @@ class Calendar extends React.Component{
         <CalendarPicker 
           onDayPress={this.onDayPress}
           renderMarkedDates={this.renderMarkedDates}
-          theme={theme}
+          theme={theme.Background}
         />
         <TaskList
           filterOption={FILTER_DATE}

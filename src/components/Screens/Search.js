@@ -1,9 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert} from 'react-native';
-import { SearchBar, ListItem } from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import TaskList, { FILTER_SEARCH } from '../TaskList';
 
@@ -15,12 +14,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
-import Task from '../Task'
-import TaskForm from '../Forms/TaskForm';
-import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
 
-import { createTask, editTask, removeTask } from '../../redux/actions/UserDataActions';
 import { extractDate } from '../../utils/DateTime';
 
 class Search extends React.Component {
@@ -115,6 +110,7 @@ class Search extends React.Component {
   toggleCategoryPicker = () => {
     this.setState({ isCategoryPickerVisible: !this.state.isCategoryPickerVisible,isCategoryPressed: !this.state.isCategoryPressed });
   }
+
   toggleDateTimePicker = () => {
     this.setState({isDateTimePickerVisible: !this.state.isDateTimePickerVisible});
     if (this.state.startInterval !== "" || this.state.endInterval !== "")
@@ -122,9 +118,11 @@ class Search extends React.Component {
       this.setState({isCalendarPressed: true});
     }
   }
+
   toggleStartIntervalPicker = () => {
     this.setState({isStartIntervalPickerVisible: !this.state.isStartIntervalPickerVisible});
   }
+  
   toggleEndIntervalPicker = () => {
     this.setState({isEndIntervalPickerVisible: !this.state.isEndIntervalPickerVisible});
   }
@@ -218,6 +216,10 @@ class Search extends React.Component {
     }
   }
   render() {
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
+
     const filterOption = FILTER_SEARCH;
     var extractedStartInterval= "";
     var extractedEndInterval = "";
@@ -228,13 +230,13 @@ class Search extends React.Component {
       extractedEndInterval = extractDate(this.state.endInterval);
     }
     return (    
-      <View style={screenStyles.screenContainer}>
+      <View style={{ flex: 1, backgroundColor: theme.Background }}>
         <View style={styles.searchBoxContainer}>
           <SearchBar
             round
-            containerStyle={[styles.barContainer, {backgroundColor: theme}]}
-            inputContainerStyle={[styles.inputContainer, {backgroundColor: theme}]}
-            inputStyle={[styles.inputText, {color: inputText, fontFamily: font, fontSize: fontSize}]}
+            containerStyle={[styles.barContainer, {backgroundColor: theme.Background}]}
+            inputContainerStyle={[styles.inputContainer, {backgroundColor: theme.Background}]}
+            inputStyle={[styles.inputText, {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}]}
             placeholder="Search your task here..."
             onChangeText={query => this.updateState(query)}
             value={this.state.query}
@@ -288,7 +290,7 @@ class Search extends React.Component {
             onBackdropPress={this.toggleCategoryPicker}
             overlayStyle={styles.categoryPickerForm}
           >
-            <CategoryPicker onBack={this.toggleCategoryPicker} onSubmit={this.updateCategory} hasDefault = {true} />
+            <CategoryPicker onSubmit={this.updateCategory} hasDefault={true} customize={this.props.customize} />
           </Overlay>
         <TaskList 
           filterOption = {filterOption}
@@ -306,6 +308,7 @@ class Search extends React.Component {
             this.state.endInterval === ""
             )
           }
+          customize={this.props.customize}
         />        
         <DateTimePickerModal
           isVisible={this.state.isStartIntervalPickerVisible}

@@ -1,25 +1,24 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, } from 'react-native';
-import { connect } from 'react-redux';
 import colors from '../../styles/colors';
 
-
-class ConfirmationBox extends React.Component {
+export default class ConfirmationBox extends React.Component {
   render() {
-    const fontSize = this.props.customize.fontSize;
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1, backgroundColor: theme.Overlay }}>
         <View style={styles.content}>
-          <Text style={[styles.largeText, {fontFamily: font, fontSize: fontSize}]}>{this.props.title}</Text>
-          <Text style={[styles.smallText, {fontFamily: font, fontSize: fontSize - 5}]}>You cannot undo this action</Text>
+          <Text style={[styles.largeText, {fontFamily: font, fontSize: fonts.TitleText}]}>{this.props.title}</Text>
+          <Text style={[styles.smallText, {fontFamily: font, fontSize: fonts.CaptionText}]}>You cannot undo this action</Text>
         </View>
         <View style={styles.optionContainer}>
           <TouchableOpacity style={styles.button} onPress={this.props.onCancel}>
-            <Text style={[styles.cancelText, {fontFamily: font, fontSize: fontSize}]}>Cancel</Text>
+            <Text style={[styles.cancelText, {fontFamily: font, fontSize: fonts.ButtonText}]}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={this.props.onConfirm}>
-            <Text style={[styles.confirmText, {fontFamily: font, fontSize: fontSize}]}>Delete</Text>
+            <Text style={[styles.confirmText, {fontFamily: font, fontSize: fonts.ButtonText}]}>Delete</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -28,9 +27,6 @@ class ConfirmationBox extends React.Component {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   content: {
     flex: 1,
     alignItems: "center",
@@ -38,7 +34,6 @@ const styles = StyleSheet.create({
   },
   largeText: {
     color: colors.PrimaryText,
-    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 5,
   },
@@ -54,18 +49,10 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     color: "red",
-    fontSize: 20,
     fontWeight: "bold",
   },
   cancelText: {
     color: "dodgerblue",
-    fontSize: 20,
     fontWeight: "bold",
   },
 });
-
-const mapStateToProps = state => ({
-  customize: state.customize.customize,
-});
-
-export default connect(mapStateToProps)(ConfirmationBox);

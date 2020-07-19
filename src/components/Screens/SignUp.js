@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 
 import { ErrorBox, NoInternetAlert } from './LogIn';
 
-import screenStyles from './ScreenStyles';
-import colors from '../../styles/colors';
+import colors, { lightTheme, darkTheme } from '../../styles/colors';
+import { smallFonts, mediumFonts, largeFonts } from '../../styles/fonts';
 
 import { createUser, isUsernameExisting, isEmailExisting } from '../../api';
 
@@ -102,21 +102,18 @@ class SignUp extends React.Component {
   }
   
   render() {
-    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
-    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
-    const text2ndColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
-    const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
-    const fontSize = this.props.customize.fontSize;
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={[screenStyles.screenContainer, styles.container, {backgroundColor: theme}]}>
-          <Text style={[styles.title, {color: textColor, fontFamily: font, fontSize: fontSize}]}>SIGN UP</Text>
+        <View style={[styles.container, { flex: 1, backgroundColor: theme.Background }]}>
+          <Text style={[styles.title, {fontFamily: font, fontSize: fonts.HeavyText}]}>SIGN UP</Text>
           <View style={styles.inputField}>
-            <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Username</Text>
-            <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.TitleText}]}>Username</Text>
+            <TextInput style={[styles.input, {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}]}
               placeholder="Enter username"
-              placeholderTextColor={text2ndColor}
+              placeholderTextColor={theme.SecondaryText}
               onChangeText={this.onChangeUserName}
               defaultValue={this.state.username}
               onFocus={this.turnOffError}
@@ -124,10 +121,10 @@ class SignUp extends React.Component {
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Email</Text>
-            <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.TitleText}]}>Email</Text>
+            <TextInput style={[styles.input, {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}]}
               placeholder="Enter email"
-              placeholderTextColor={text2ndColor}
+              placeholderTextColor={theme.SecondaryText}
               onChangeText={this.onChangeEmail}
               defaultValue={this.state.email}
               onFocus={this.turnOffError}
@@ -135,10 +132,10 @@ class SignUp extends React.Component {
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Password</Text>
-            <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.TitleText}]}>Password</Text>
+            <TextInput style={[styles.input, {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}]}
               placeholder="Enter password"
-              placeholderTextColor={text2ndColor}
+              placeholderTextColor={theme.SecondaryText}
               onChangeText={this.onChangePassword}
               defaultValue={this.state.password}
               onFocus={this.turnOffError}
@@ -147,10 +144,10 @@ class SignUp extends React.Component {
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Confirm password</Text>
-            <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.TitleText}]}>Confirm password</Text>
+            <TextInput style={[styles.input, {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}]}
               placeholder="Re-enter password"
-              placeholderTextColor={text2ndColor}
+              placeholderTextColor={theme.SecondaryText}
               onChangeText={this.onConfirmPassword}
               defaultValue={this.state.confirmedPassword}
               onFocus={this.turnOffError}
@@ -162,21 +159,26 @@ class SignUp extends React.Component {
             style={styles.submitButton}
             onPress={this.handleSubmit}
           >
-            <Text style={[styles.submitText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>SIGN UP</Text>
+            <Text style={[styles.submitText, {fontFamily: font, fontSize: fonts.ButtonText}]}>SIGN UP</Text>
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.otherOptionsButton}
             onPress={() => this.props.navigation.goBack()}
           >
-            <Text style={[styles.otherOptionsText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Back to Login</Text>
+            <Text style={[styles.otherOptionsText, {fontFamily: font, fontSize: fonts.SecondaryText}]}>Back to Login</Text>
           </TouchableOpacity>
-          {this.state.error ? <ErrorBox error={this.state.errorText} /> : null}
+          {this.state.error ? 
+            <ErrorBox 
+              error={this.state.errorText}
+              customize={this.props.customize} 
+            /> : null
+          }
           <Overlay
             isVisible={this.state.alert}
             onBackdropPress={this.toggleAlert}
             overlayStyle={styles.alertBox}
           >
-            <NoInternetAlert />
+            <NoInternetAlert customize={this.props.customize} />
           </Overlay>
         </View>
       </TouchableWithoutFeedback>
@@ -191,7 +193,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.PrimaryColor,
-    fontSize: 30,
     fontWeight: "bold",
   },
   inputField: {
@@ -200,12 +201,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   inputTitle: {
-    color: colors.TitleText,
-    fontSize: 20,
     marginBottom: 5,
   },
   input: {
-    fontSize: 16,
     borderColor: colors.Border,
     borderWidth: 1,
     borderRadius: 5,
@@ -222,27 +220,12 @@ const styles = StyleSheet.create({
   },
   submitText: {
     color: "white",
-    fontSize: 20,
   },
   otherOptionsButton: {
     paddingHorizontal: 5,
   },
   otherOptionsText: {
     color: colors.PrimaryColor,
-  },
-  errorBox: {
-    backgroundColor: colors.ErrorText,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 5,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    position: "absolute",
-    bottom: 0,
-  },
-  errorText: {
-    color: "white",
-    fontSize: 14,
   },
   alertBox: {
     height: 150,

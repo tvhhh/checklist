@@ -1,14 +1,16 @@
 import React from 'react';
-import { View, Switch, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Header from '../components/Header';
-
-import colors from '../styles/colors';
-import { ScrollView } from 'react-native-gesture-handler';
+import { View, Switch, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../redux/actions/CustomizeActions';
-import { Overlay } from 'react-native-elements';
+
+import Header from '../components/Header';
 import { FontSizeForm, FontForm } from '../components/Forms/CustomizeForm';
+
+import colors, { lightTheme, darkTheme } from '../styles/colors';
+import { smallFonts, mediumFonts, largeFonts } from '../styles/fonts';
+
+import * as actions from '../redux/actions/CustomizeActions';
 
 
 class Settings extends React.Component {
@@ -40,7 +42,7 @@ class Settings extends React.Component {
   onFontSizePress = size => {
     const actions = this.props.actions;
     actions.changeSize(size);
-    this.setState({fontSizeOverlayShown: false});
+    //this.setState({fontSizeOverlayShown: false});
   }
   
   onFontOverlayPress = () => {
@@ -60,20 +62,18 @@ class Settings extends React.Component {
   }
 
   render() {
-    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
-    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
-    const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
-    const fontSize = this.props.customize.fontSize;
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     return (
       <>
-        <View style={{ flex: 1, backgroundColor: theme }}>
+        <View style={{ flex: 1, backgroundColor: theme.Background }}>
           <Header navigation={this.props.navigation} title="SETTINGS"/>
           <ScrollView style={{flex: 1}}>
             <TouchableOpacity style={styles.container} onPress={this.toggleSwitch} >
-              <Text style={[styles.options, {color: textColor, fontSize: fontSize, fontFamily: font}]}>Dark Theme</Text>
+              <Text style={[styles.options, {color: theme.TitleText, fontSize: fonts.TitleText, fontFamily: font}]}>Dark Theme</Text>
               <Switch
-                style={{flex: 1, marginRight: 20}}
+                style={{flex: 1, marginRight: 10}}
                 trackColor={{ false: "#767577", true: "grey" }}
                 thumbColor={"white"}
                 onValueChange = {this.toggleSwitch}
@@ -81,10 +81,16 @@ class Settings extends React.Component {
                 />
             </TouchableOpacity>
             <TouchableOpacity style={styles.container} onPress={this.onFontOverlayPress}>
-              <Text style={[styles.options, {color: textColor, fontSize: fontSize, fontFamily: font}]}>Font</Text>
+              <Text style={[styles.options, {color: theme.TitleText, fontSize: fonts.TitleText, fontFamily: font}]}>Font</Text>
+              {font === "sans-serif" ? <Text style={{marginRight: 10, color: "grey", fontSize: fonts.TitleText, fontFamily: font}}>Sans Serif</Text> : null}
+              {font === "monospace" ? <Text style={{marginRight: 10, color: "grey", fontSize: fonts.TitleText, fontFamily: font}}>Monospace</Text> : null}
+              {font === "sans-serif-light" ? <Text style={{marginRight: 10, color: "grey", fontSize: fonts.TitleText, fontFamily: font}}>Sans Serif Light</Text> : null}
             </TouchableOpacity>
             <TouchableOpacity style={styles.container} onPress={this.onFontSizeOverlayPress}>
-              <Text style={[styles.options, {color: textColor, fontSize: fontSize, fontFamily: font}]}>Font Size</Text>
+              <Text style={[styles.options, {color: theme.TitleText, fontSize: fonts.TitleText, fontFamily: font}]}>Font Size</Text>
+              {fonts.TitleText === 20 ? <Text style={{marginRight: 10, color: "grey", fontSize: fonts.TitleText, fontFamily: font}}>Small</Text> : null}
+              {fonts.TitleText === 25 ? <Text style={{marginRight: 10, color: "grey", fontSize: fonts.TitleText, fontFamily: font}}>Medium</Text> : null}
+              {fonts.TitleText === 30 ? <Text style={{marginRight: 10, color: "grey", fontSize: fonts.TitleText, fontFamily: font}}>Large</Text> : null}
             </TouchableOpacity>
           </ScrollView>
         </View> 
@@ -92,38 +98,38 @@ class Settings extends React.Component {
             isVisible={this.state.fontOverlayShown}
             width={250}
             height={150}
-            overlayStyle={[styles.overlay, {borderColor: overlayBorderColor}]}
+            overlayStyle={[styles.overlay, {borderColor: theme.Overlay}]}
             onBackdropPress={this.onFontBackPress}
         >
-          <FontForm theme={theme} textColor={textColor} onPress={this.onFontPress}/>
+          <FontForm theme={theme.Background} textColor={theme.PrimaryText} fontSize={fonts.TitleText} onPress={this.onFontPress}/>
         </Overlay>
         <Overlay
             isVisible={this.state.fontSizeOverlayShown}
             width={250}
             height={150}
-            overlayStyle={[styles.overlay, {borderColor: overlayBorderColor}]}
+            overlayStyle={[styles.overlay, {borderColor: theme.Overlay}]}
             onBackdropPress={this.onFontSizeBackPress}
         >
-          <FontSizeForm theme={theme} textColor={textColor} onPress={this.onFontSizePress}/>
+          <FontSizeForm theme={theme.Background} textColor={theme.PrimaryText} fontSize={fonts.TitleText} onPress={this.onFontSizePress}/>
         </Overlay>
       </>  
     );
   }
 };
 
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
+    justifyContent: "space-between",
     borderBottomWidth: 2,
     marginTop:10,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    borderBottomColor: "grey",
+    borderBottomColor: colors.Border,
   },
   options: {
     marginLeft: 30, 
-    fontSize: 25,
   },
   overlay: {
     padding: 0,

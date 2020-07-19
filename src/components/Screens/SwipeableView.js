@@ -21,6 +21,8 @@ class SwipeableView extends React.Component {
     };
   }
 
+  const 
+
   renderScene = ({ route }) => {
     switch(route.key) {
       case "day":

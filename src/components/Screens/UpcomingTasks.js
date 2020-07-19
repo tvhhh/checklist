@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 
 import Header from '../Header';
 
-import screenStyles from './ScreenStyles';
-import colors from '../../styles/colors';
+import colors, { lightTheme, darkTheme } from '../../styles/colors';
+import { smallFonts, mediumFonts, largeFonts } from '../../styles/fonts';
 
 import { extractDateTime, getWeekDates } from '../../utils/DateTime';
 
@@ -34,7 +34,7 @@ class UpcomingTasks extends React.Component {
   getCategoriesCount = taskList => {
     var categories = [
       "health", "workout", "ideas",
-      "work", "payment", "entertainment",
+      "work", "payment", "liveliness",
       "meeting", "study", "event",
       "uncategorized",
     ];
@@ -51,6 +51,10 @@ class UpcomingTasks extends React.Component {
   }
 
   render() {
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
+
     const weekTasks = this.getWeekTasksCount(this.props.taskList);
     const weekLabels = Object.keys(weekTasks);
     const weekCounts = weekLabels.map(key => weekTasks[key]);
@@ -68,7 +72,7 @@ class UpcomingTasks extends React.Component {
       population: categoriesTasks[key],
       color: colors[key],
       legendFontColor: "#7F7F7F",
-      legendFontSize: 14,
+      legendFontSize: fonts.CaptionText,
     }));
 
     const chartConfig = {
@@ -79,10 +83,10 @@ class UpcomingTasks extends React.Component {
     };
 
     return (
-      <ScrollView style={screenStyles.screenContainer}>
+      <ScrollView style={{ flex: 1, backgroundColor: theme.Background }}>
         <View style={styles.graphContainer}>
           <Header navigation={this.props.navigation} title="DASHBOARD" />
-          <Text style={styles.graphTitle}>My week</Text>
+          <Text style={[styles.graphTitle, { color: theme.TitleText, fontSize: fonts.TitleText, fontFamily: font }]}>My week</Text>
           <LineChart
             data={weekData}
             width={Dimensions.get("window").width}
@@ -114,8 +118,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   graphTitle: {
-    color: colors.TitleText,
-    fontSize: 20,
     fontWeight: "bold",
     marginLeft: 10,
     marginBottom: 5,
@@ -123,6 +125,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  customize: state.customize,
   taskList: state.userData.data.tasks,
 });
 

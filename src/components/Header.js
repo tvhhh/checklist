@@ -1,12 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { connect } from 'react-redux';
 
 import { Menu, Search, Notice } from './Button';
 
-import colors from '../styles/colors';
-
 import { extractDateTime } from '../utils/DateTime';
-import { connect } from 'react-redux';
 
 class Header extends React.Component {
   constructor(props) {
@@ -21,17 +19,16 @@ class Header extends React.Component {
   }
 
   render() {
-    const titleColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText ;
-    const timeColor = this.props.customize.darkTheme ? colors.DarkSecondaryText: colors.LightSecondaryText;
-    const fontSize = this.props.customize.fontSize;
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     return (
       <View style={styles.container}>
         <Menu style={styles.menuButton} onPress={this.toggleDrawer} />
         {(this.props.title) ?
           <View style={styles.titleContainer}>
-            <Text style={[styles.title, {fontFamily: font, color: titleColor, fontSize: fontSize}]}>{this.props.title}</Text>
-            <Text style={[styles.time, {fontFamily: font, color: timeColor, fontSize: fontSize - 7}]}>{extractDateTime(this.state.today).date}</Text>
+            <Text style={{fontFamily: font, color: theme.TitleText, fontSize: fonts.HeaderText}}>{this.props.title}</Text>
+            <Text style={{fontFamily: font, color: theme.SecondaryText, fontSize: fonts.SecondaryText}}>{extractDateTime(this.state.today).date}</Text>
           </View> : null
         }
         {(this.props.search) ?
@@ -73,16 +70,6 @@ const styles = StyleSheet.create({
   noticeButton: {
     position: "absolute",
     right: 10,
-  },
-  title: {
-    color: colors.TitleText,
-    fontSize: 24,
-    textAlign: "center",
-  },
-  time: {
-    color: colors.SecondaryText,
-    fontSize: 14,
-    textAlign: "center",
   },
 });
 

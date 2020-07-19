@@ -8,7 +8,6 @@ import Header from '../Header';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
 
 import { logIn, getData } from '../../redux/actions/UserDataActions';
@@ -16,9 +15,11 @@ import { logIn, getData } from '../../redux/actions/UserDataActions';
 
 export class ErrorBox extends React.Component {
   render() {
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <View style={styles.errorBox}>
-        <Text style={styles.errorText}>{this.props.error}</Text>
+        <Text style={[styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}]}>{this.props.error}</Text>
       </View>
     );
   }
@@ -26,10 +27,13 @@ export class ErrorBox extends React.Component {
 
 export class NoInternetAlert extends React.Component {
   render() {
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
-      <View style={styles.alertContainer}>
+      <View style={[styles.alertContainer, { backgroundColor: theme.Overlay }]}>
         <MaterialCommunityIcons name="wifi-off" size={60} color={colors.DisabledColor} />
-        <Text style={styles.alertText}>NO INTERNET CONNECTION</Text>
+        <Text style={[styles.alertText, {fontSize: fonts.CaptionText, fontFamily: font}]}>NO INTERNET CONNECTION</Text>
       </View>
     );
   }
@@ -76,23 +80,20 @@ class LogIn extends React.Component {
   }
   
   render() {
-    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
-    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
-    const text2ndColor = this.props.customize.darkTheme ? colors.DarkSecondaryText : colors.LightSecondaryText;
-    const overlayBorderColor = this.props.customize.darkTheme ? colors.DarkOverlay : colors.LightOverlay;
-    const fontSize = this.props.customize.fontSize;
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={[screenStyles.screenContainer, styles.container, {backgroundColor: theme}]}>
+        <View style={{ flex: 1, backgroundColor: theme.Background }}>
           <Header navigation={this.props.navigation} />
           <View style={styles.container}>
-          <Text style={[styles.title, {color: textColor, fontFamily: font, fontSize: fontSize}]}>SIGN IN</Text>
+          <Text style={[styles.title, {fontFamily: font, fontSize: fonts.HeavyText}]}>SIGN IN</Text>
             <View style={styles.inputField}>
-              <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Username</Text>
-              <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
+              <Text style={[styles.inputTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.TitleText}]}>Username</Text>
+              <TextInput style={[styles.input, {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}]}
                 placeholder="Enter username"
-                placeholderTextColor={text2ndColor}
+                placeholderTextColor={theme.SecondaryText}
                 onChangeText={this.onChangeUserName}
                 defaultValue={this.state.username}
                 onFocus={this.turnOffError}
@@ -100,9 +101,10 @@ class LogIn extends React.Component {
               />
             </View>
             <View style={styles.inputField}>
-              <Text style={[styles.inputTitle, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Password</Text>
-              <TextInput style={[styles.input, {color: textColor, fontFamily: font, fontSize: fontSize}]}
+              <Text style={[styles.inputTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.TitleText}]}>Password</Text>
+              <TextInput style={[styles.input, {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}]}
                 placeholder="Enter password"
+                placeholderTextColor={theme.SecondaryText}
                 onChangeText={this.onChangePassword}
                 defaultValue={this.state.password}
                 onFocus={this.turnOffError}
@@ -114,28 +116,33 @@ class LogIn extends React.Component {
               style={styles.submitButton}
               onPress={this.handleSubmit}
             >
-              <Text style={[styles.submitText, {color: textColor, fontFamily: font, fontSize: fontSize}]}>LOGIN</Text>
+              <Text style={[styles.submitText, {fontFamily: font, fontSize: fonts.ButtonText}]}>LOGIN</Text>
             </TouchableOpacity>
             <View style={styles.otherOptions}>
               <TouchableOpacity style={styles.otherOptionsButton}>
-                <Text style={[styles.resetPassword, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Forgot password?</Text>
+                <Text style={[styles.resetPassword, {fontFamily: font, fontSize: fonts.SecondaryText}]}>Forgot password?</Text>
               </TouchableOpacity>
               <Text>|</Text>
               <TouchableOpacity 
                 style={styles.otherOptionsButton}
                 onPress={() => this.props.navigation.navigate("SignUp")}
               >
-                <Text style={[styles.signUp, {color: textColor, fontFamily: font, fontSize: fontSize}]}>Sign up</Text>
+                <Text style={[styles.signUp, {fontFamily: font, fontSize: fonts.SecondaryText}]}>Sign up</Text>
               </TouchableOpacity>
             </View>
-            {this.state.error ? <ErrorBox error="Username or password is incorrect" /> : null}
+            {this.state.error ? 
+              <ErrorBox 
+                error="Username or password is incorrect"
+                customize={this.props.customize}
+              /> : null
+            }
           </View>
           <Overlay
             isVisible={this.state.alert}
             onBackdropPress={this.toggleAlert}
             overlayStyle={styles.alertBox}
           >
-            <NoInternetAlert />
+            <NoInternetAlert customize={this.props.customize} />
           </Overlay>
         </View>
       </TouchableWithoutFeedback>
@@ -151,7 +158,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.PrimaryColor,
-    fontSize: 30,
     fontWeight: "bold",
   },
   inputField: {
@@ -160,12 +166,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   inputTitle: {
-    color: colors.TitleText,
-    fontSize: 20,
     marginBottom: 5,
   },
   input: {
-    fontSize: 16,
     borderColor: colors.Border,
     borderWidth: 1,
     borderRadius: 5,
@@ -182,7 +185,6 @@ const styles = StyleSheet.create({
   },
   submitText: {
     color: "white",
-    fontSize: 20,
   },
   otherOptions: {
     flexDirection: "row",
@@ -199,7 +201,7 @@ const styles = StyleSheet.create({
     color: colors.PrimaryColor,
   },
   errorBox: {
-    backgroundColor: colors.ErrorText,
+    backgroundColor: colors.Error,
     alignItems: "center",
     justifyContent: "center",
     padding: 5,
@@ -210,7 +212,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "white",
-    fontSize: 14,
   },
   alertBox: {
     height: 150,
@@ -224,7 +225,6 @@ const styles = StyleSheet.create({
   },
   alertText: {
     color: colors.DisabledColor,
-    fontSize: 14,
     marginTop: 10,
   },
 });

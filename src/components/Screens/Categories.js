@@ -6,8 +6,8 @@ import Category from '../Category';
 
 import { connect } from 'react-redux';
 
-import screenStyles from './ScreenStyles';
 import colors from '../../styles/colors';
+
 
 
 class Categories extends React.Component {
@@ -16,19 +16,18 @@ class Categories extends React.Component {
     this.state = {
       categories: [
         "health", "workout", "ideas",
-        "work", "payment", "entertainment",
+        "work", "payment", "liveliness",
         "meeting", "study", "event",
       ],
     };
   }
 
   render() {
-    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
-    const textColor = this.props.customize.darkTheme ? colors.DarkPrimaryText : colors.LightPrimaryText;
-    const fontSize = this.props.customize.fontSize;
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     return (
-<View style={[screenStyles.screenContainer, styles.container, {backgroundColor: theme}]}>
+      <View style={styles.container, { flex: 1, backgroundColor: theme.Background }}>
         <Header
           navigation={this.props.navigation} 
           title={this.props.title}
@@ -41,10 +40,7 @@ class Categories extends React.Component {
           renderItem={({ item }) => (
             <View style={styles.categoryContainer}>
               <Category name={item} size={100} />
-              <Text style={[
-                styles.categoryName,
-                { color: colors[item.charAt(0).toUpperCase() + item.slice(1)] , fontFamily: font}
-              ]}>
+              <Text style={{ color: colors[item.charAt(0).toUpperCase() + item.slice(1)] , fontFamily: font, fontSize: fonts.CaptionText}}>
                 {item.toUpperCase()}
               </Text>
             </View>
@@ -65,9 +61,6 @@ const styles = StyleSheet.create({
     alignItems: "center", 
     justifyContent: "center", 
     padding: 10,
-  },
-  categoryName: {
-    fontSize: 12,
   },
 });
 

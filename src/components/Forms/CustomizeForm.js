@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import colors from '../../styles/colors';
 
 export class FontSizeForm extends React.Component {
-
   constructor (props) {
     super(props);
   }
- 
+
+
   render() {
     return(
       <TouchableWithoutFeedback>
@@ -27,31 +28,28 @@ export class FontSizeForm extends React.Component {
 }
 
 export class FontForm extends React.Component {
-
   constructor (props) {
     super(props);
-    this.state={
-    }
   }
 
   render() {
     return(
       <View style={{ flex: 1, backgroundColor: this.props.theme }}>
         <TouchableOpacity style={styles.container} onPress={() => this.props.onPress("sans-serif")}>
-          <Text style={[styles.options, {color: this.props.textColor, fontFamily: "sans-serif"}]}>Sans Serif</Text>
+          <Text style={[styles.options, {color: this.props.textColor, fontFamily: "sans-serif", fontSize: this.props.fontSize}]}>Sans Serif</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.container}  onPress={() => this.props.onPress("monospace")}>
-          <Text style={[styles.options, {color: this.props.textColor, fontFamily: "monospace"}]}>Monospace</Text>
+          <Text style={[styles.options, {color: this.props.textColor, fontFamily: "monospace", fontSize: this.props.fontSize}]}>Monospace</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.container}  onPress={() => this.props.onPress("sans-serif-light")}>
-          <Text style={[styles.options, {color: this.props.textColor, fontFamily: "sans-serif-light"}]}>Sans Serif Light</Text>
+          <Text style={[styles.options, {color: this.props.textColor, fontFamily: "sans-serif-light", fontSize: this.props.fontSize}]}>Sans Serif Light</Text>
         </TouchableOpacity>
       </View>
     );
   }
 }
 
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
@@ -59,7 +57,7 @@ const styles=StyleSheet.create({
     marginTop:10,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    borderBottomColor: "grey",
+    borderBottomColor: colors.Border,
   },
   options: {
     marginLeft: 30, 
