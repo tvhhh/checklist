@@ -1,13 +1,11 @@
 import React from 'react';
-import { View, } from 'react-native';
+import { View } from 'react-native';
+import { connect } from 'react-redux';
 
 import Header from '../Header';
 import TaskList, { FILTER_TODAY, FILTER_WEEK, FILTER_PINNED } from '../TaskList';
-import { connect } from 'react-redux';
-import colors from '../../styles/colors';
 
-
-import screenStyles from './ScreenStyles';
+import colors, { lightTheme, darkTheme } from '../../styles/colors';
 
 
 class List extends React.Component {
@@ -25,10 +23,10 @@ class List extends React.Component {
   }
 
   render() {
-    const theme = this.props.customize.darkTheme ? colors.DarkBackground: colors.LightBackground;
+    const theme = this.props.customize.darkTheme ? darkTheme : lightTheme;
     const filterOption = this.getFilterOption();
     return (
-      <View style={{flex: 1, backgroundColor: theme}}>
+      <View style={{flex: 1, backgroundColor: theme.Background}}>
         <Header
           navigation={this.props.navigation} 
           title={this.props.title}

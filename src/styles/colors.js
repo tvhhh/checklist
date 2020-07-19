@@ -1,8 +1,6 @@
-const colors = {
-  LightBackground: "#f0f0f0",
-  DarkBackground: "#0e0f0f",
-  LightOverlay: "#ffffff",
-  DarkOverlay: "#262729",
+export default colors = {
+  Background: "#f0f0f0",
+  Overlay: "#ffffff",
 
   PrimaryColor: "#00b2ff",
   SecondaryColor: "#006aff",
@@ -10,22 +8,18 @@ const colors = {
 
   Button: "#696969",
   Border: "#808080",
+  Error: "rgba(255, 0, 0, 1.0)",
 
-  LightTitleText: "rgba(0, 0, 0, 1.0)",
-  LightPrimaryText: "rgba(0, 0, 0, 0.87)",
-  LightSecondaryText: "rgba(0, 0, 0, 0.60)",
-
-  DarkTitleText: "#f2f6f7",
-  DarkPrimaryText: "#f2f6f7",
-  DarkSecondaryText: "grey",
-  ErrorText: "rgba(255, 0, 0, 1.0)",
+  TitleText: "rgba(0, 0, 0, 1.0)",
+  PrimaryText: "rgba(0, 0, 0, 0.87)",
+  SecondaryText: "rgba(0, 0, 0, 0.60)",
   
   Health: "rgba(164, 38, 44, 1.0)",
   Workout: "rgba(202, 80, 16, 1.0)",
   Ideas: "rgba(143, 113, 52, 1.0)",
   Work: "rgba(64, 120, 85, 1.0)",
   Payment: "rgba(3, 131, 135, 1.0)",
-  Entertainment: "rgba(0, 120, 212, 1.0)",
+  Liveliness: "rgba(0, 120, 212, 1.0)",
   Meeting: "rgba(64, 88, 124, 1.0)",
   Study: "rgba(64, 82, 171, 1.0)",
   Event: "rgba(133, 64, 133, 1.0)",
@@ -33,4 +27,20 @@ const colors = {
   Default: "rgba(247, 170, 28, 1.0)",
 };
 
-export default colors;
+export const lightTheme = {
+  Background: "#f0f0f0",
+  Overlay: "#ffffff",
+  
+  TitleText: "rgba(0, 0, 0, 1.0)",
+  PrimaryText: "rgba(0, 0, 0, 0.87)",
+  SecondaryText: "rgba(0, 0, 0, 0.60)",
+};
+
+export const darkTheme = {
+  Background: "#0e0f0f",
+  Overlay: "#262729",
+
+  TitleText: "#f2f6f7",
+  PrimaryText: "#f2f6f7",
+  SecondaryText: "grey",
+};

@@ -8,12 +8,11 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { connect } from 'react-redux';
+
 import colors from '../styles/colors';
-import Task from './Task';
 
 
-class Category extends React.Component {
+export default class Category extends React.Component {
   render() {
     let name = this.props.name;
     let size = this.props.size || 60;
@@ -40,8 +39,8 @@ class Category extends React.Component {
       case "payment":
         icon = <FontAwesome5 name="money-bill-wave" color={colors.Payment} size={0.55*size} />;
         break;
-      case "entertainment":
-        icon = <MaterialCommunityIcons name="theater" color={colors.Entertainment} size={0.625*size} />;
+      case "liveliness":
+        icon = <MaterialCommunityIcons name="theater" color={colors.Liveliness} size={0.625*size} />;
         break;
       case "meeting":
         icon = <MaterialCommunityIcons name="account-group" color={colors.Meeting} size={0.625*size} />;
@@ -56,7 +55,6 @@ class Category extends React.Component {
         icon = <FontAwesome5 name="question" color={colors.Uncategorized} size={0.625*size} />
         break;
     }
-    if (name == "uncategorized" && this.props.customize.darkTheme) name = "uncategorizedd";
     return (
       <TouchableOpacity 
         style={[
@@ -82,9 +80,3 @@ const styles = StyleSheet.create({
     justifyContent: "center", 
   },
 });
-
-const mapStateToProps = state => ({
-  customize: state.customize,
-});
-
-export default connect(mapStateToProps)(Category);

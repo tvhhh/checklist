@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 
-export class FontSizeForm extends React.Component {
+import colors from '../../styles/colors';
 
+
+export class FontSizeForm extends React.Component {
   constructor (props) {
     super(props);
   }
@@ -27,11 +29,8 @@ export class FontSizeForm extends React.Component {
 }
 
 export class FontForm extends React.Component {
-
   constructor (props) {
     super(props);
-    this.state={
-    }
   }
 
   render() {
@@ -51,7 +50,7 @@ export class FontForm extends React.Component {
   }
 }
 
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
@@ -59,7 +58,7 @@ const styles=StyleSheet.create({
     marginTop:10,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    borderBottomColor: "grey",
+    borderBottomColor: colors.Border,
   },
   options: {
     marginLeft: 30, 

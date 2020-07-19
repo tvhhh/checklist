@@ -20,7 +20,6 @@ export class Create extends React.Component {
             height: size,
             width: size,
             borderRadius: size/2,
-            backgroundColor: this.props.buttonColor,
           }
         ]}
         onPress={this.props.onPress}

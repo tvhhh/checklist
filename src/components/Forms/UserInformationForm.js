@@ -3,7 +3,8 @@ import { FlatList, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, Touc
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import colors from '../../styles/colors';
+import colors, { lightTheme, darkTheme } from '../../styles/colors';
+import { smallFonts, mediumFonts, largeFonts } from '../../styles/fonts';
 
 
 export class AvatarPicker extends React.Component {
@@ -19,8 +20,9 @@ export class AvatarPicker extends React.Component {
   }
 
   render() {
+    const theme = this.props.customize.darkTheme ? darkTheme : lightTheme;
     return (
-      <View style={styles.colorPickercontainer}>
+      <View style={[styles.colorPickercontainer, { backgroundColor: theme.Overlay }]}>
         <FlatList 
           data={this.state.colors}
           keyExtractor={(item, index) => item + index}
@@ -53,17 +55,21 @@ export class NameBox extends React.Component {
   }
 
   render() {
+    const theme = this.props.customize.darkTheme ? darkTheme : lightTheme;
+    const fonts = mediumFonts;
+    const font = this.props.customize.font;
+
     const isSaveButtonDisabled = this.state.name.trim() === "";
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
+        <View style={{ flex: 1, backgroundColor: theme.Overlay }}>
           <View style={styles.informationField}>
-            <Text style={styles.infoTitleText}>Your name is</Text>
-            <Text style={styles.informationText}>{this.props.name || "You haven't defined your name yet."}</Text>
+            <Text style={[styles.infoTitleText, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Your name is</Text>
+            <Text style={{ color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font }}>{this.props.name || "You haven't defined your name yet."}</Text>
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Your new name is</Text>
-            <TextInput style={styles.input}
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Edit your name</Text>
+            <TextInput style={[styles.input, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Enter your name here"
               onChangeText={this.onChangeName}
               defaultValue={this.state.name}
@@ -75,7 +81,7 @@ export class NameBox extends React.Component {
             disabled={isSaveButtonDisabled}
             onPress={this.handleSubmit}
           >
-            <Text style={styles.saveText}>SAVE</Text>
+            <Text style={[styles.saveText, {fontSize: fonts.ButtonText, fontFamily: font}]}>SAVE</Text>
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
@@ -100,17 +106,21 @@ export class PhoneBox extends React.Component {
   }
 
   render() {
+    const theme = this.props.customize.darkTheme ? darkTheme : lightTheme;
+    const fonts = mediumFonts;
+    const font = this.props.customize.font;
+
     const isSaveButtonDisabled = this.state.phone.trim() === "";
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.informationField}>
-            <Text style={styles.infoTitleText}>Your phone number is</Text>
-            <Text style={styles.informationText}>{this.props.phone || "Add your phone number."}</Text>
+            <Text style={[styles.infoTitleText, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Your phone number is</Text>
+            <Text style={{ color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font }}>{this.props.phone || "Add your phone number."}</Text>
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Your new phone number is</Text>
-            <TextInput style={styles.input}
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Your new phone number is</Text>
+            <TextInput style={[styles.input, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Enter your phone number here"
               keyboardType="phone-pad"
               onChangeText={this.onChangePhone}
@@ -122,7 +132,7 @@ export class PhoneBox extends React.Component {
             disabled={isSaveButtonDisabled}
             onPress={this.handleSubmit}
           >
-            <Text style={styles.saveText}>SAVE</Text>
+            <Text style={[styles.saveText, {fontSize: fonts.ButtonText, fontFamily: font}]}>SAVE</Text>
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
@@ -165,13 +175,17 @@ export class PasswordBox extends React.Component {
   }
 
   render() {
+    const theme = this.props.customize.darkTheme ? darkTheme : lightTheme;
+    const fonts = mediumFonts;
+    const font = this.props.customize.font;
+
     const isSaveButtonDisabled = this.state.password.trim() === "";
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Your current password</Text>
-            <TextInput style={styles.passwordInput}
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Your current password</Text>
+            <TextInput style={[styles.passwordInput, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Enter your current password"
               onChangeText={this.onConfirmCurrentPassword}
               defaultValue={this.state.currentPassword}
@@ -179,14 +193,14 @@ export class PasswordBox extends React.Component {
               autoCapitalize="none"
             />
             {this.state.errorCurrentPassword ?
-              <Text style={styles.errorText}>
+              <Text style={styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}}>
                 Incorrect password.
               </Text> : null
             }
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Your new password</Text>
-            <TextInput style={styles.passwordInput}
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Your new password</Text>
+            <TextInput style={[styles.passwordInput, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Enter your new password"
               onChangeText={this.onChangePassword}
               defaultValue={this.state.password}
@@ -195,8 +209,8 @@ export class PasswordBox extends React.Component {
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Confirm your new password</Text>
-            <TextInput style={styles.passwordInput}
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Confirm your new password</Text>
+            <TextInput style={[styles.passwordInput, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Re-enter your new password"
               onChangeText={this.onConfirmPassword}
               defaultValue={this.state.confirmedPassword}
@@ -204,7 +218,7 @@ export class PasswordBox extends React.Component {
               autoCapitalize="none"
             />
             {this.state.errorConfirmPassword ?
-              <Text style={styles.errorText}>
+              <Text style={styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}}>
                 Unmatched password.
               </Text> : null
             }
@@ -214,7 +228,7 @@ export class PasswordBox extends React.Component {
             disabled={isSaveButtonDisabled}
             onPress={this.handleSubmit}
           >
-            <Text style={styles.saveText}>SAVE</Text>
+            <Text style={[styles.saveText, {fontSize: fonts.ButtonText, fontFamily: font}]}>SAVE</Text>
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
@@ -244,6 +258,10 @@ export class ConfirmPasswordBox extends React.Component {
   }
 
   render() {
+    const theme = this.props.customize.darkTheme ? darkTheme : lightTheme;
+    const fonts = mediumFonts;
+    const font = this.props.customize.font;
+
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
@@ -251,8 +269,8 @@ export class ConfirmPasswordBox extends React.Component {
             <FontAwesome5 name="user-times" size={60} />
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.inputTitle}>Your current password</Text>
-            <TextInput style={styles.passwordInput}
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Your current password</Text>
+            <TextInput style={[styles.passwordInput, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Confirm your password"
               onChangeText={this.onConfirmPassword}
               defaultValue={this.state.password}
@@ -260,7 +278,7 @@ export class ConfirmPasswordBox extends React.Component {
               autoCapitalize="none"
             />
             {this.state.error ?
-              <Text style={styles.errorText}>
+              <Text style={styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}}>
                 Incorrect password.
               </Text> : null
             }
@@ -269,7 +287,7 @@ export class ConfirmPasswordBox extends React.Component {
             style={styles.saveButton} 
             onPress={this.handleSubmit}
           >
-            <Text style={styles.saveText}>OK</Text>
+            <Text style={[styles.saveText, {fontSize: fonts.ButtonText, fontFamily: font}]}>OK</Text>
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
@@ -291,33 +309,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   infoTitleText: {
-    color: colors.TitleText,
-    fontSize: 16,
     fontWeight: "bold",
-  },
-  informationText: {
-    color: colors.PrimaryText,
-    fontSize: 16,
   },
   inputField: {
     flex: 1,
     justifyContent: "center",
   },
   inputTitle: {
-    color: colors.TitleText,
-    fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
   },
   input: {
-    fontSize: 16,
     borderColor: colors.Border,
     borderBottomWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 0,
   },
   passwordInput: {
-    fontSize: 16,
     borderColor: colors.Border,
     borderWidth: 1,
     borderRadius: 5,
@@ -343,10 +351,8 @@ const styles = StyleSheet.create({
   },
   saveText: {
     color: "white",
-    fontSize: 18,
   },
   errorText: {
-    color: colors.ErrorText,
-    fontSize: 12,
+    color: colors.Error,
   },
 });
