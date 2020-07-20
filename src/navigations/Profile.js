@@ -5,9 +5,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 
 import ProfileManagement from '../components/Screens/ProfileManagement';
-import UpcomingTasks from '../components/Screens/UpcomingTasks';
+import List from '../components/Screens/List';
 import LogIn from '../components/Screens/LogIn';
 import SignUp from '../components/Screens/SignUp';
+import ForgotPassword from '../components/Screens/ForgotPassword';
 
 
 const GuestStack = createStackNavigator();
@@ -16,9 +17,10 @@ const RegisteredStack = createStackNavigator();
 class GuestScreen extends React.Component {
   render() {
     return (
-      <GuestStack.Navigator headerMode="none">
+      <GuestStack.Navigator initialRouteName="LogIn" headerMode="none">
         <GuestStack.Screen name="LogIn" component={LogIn} />
         <GuestStack.Screen name="SignUp" component={SignUp} />
+        <GuestStack.Screen name="Forgot" component={ForgotPassword} />
       </GuestStack.Navigator>
     );
   }
@@ -29,7 +31,7 @@ class RegisteredUserScreen extends React.Component {
     return (
       <RegisteredStack.Navigator headerMode="none">
         <RegisteredStack.Screen name="Profile" component={ProfileManagement} />
-        <RegisteredStack.Screen name="UpcomingTasks" component={UpcomingTasks} />
+        <RegisteredStack.Screen name="List" component={List} />
       </RegisteredStack.Navigator>
     );
   }

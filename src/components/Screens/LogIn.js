@@ -43,15 +43,16 @@ class LogIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
+      email: "",
       password: "",
       error: false,
+      errorMessage: "",
       alert: false,
     };
   }
 
-  onChangeUserName = text => {
-    this.setState({ username: text });
+  onChangeEmail = text => {
+    this.setState({ email: text });
   }
 
   onChangePassword = text => {
@@ -70,11 +71,13 @@ class LogIn extends React.Component {
     if (!this.props.appData.connection) {
       this.setState({ alert: true });
     } else {
-      const data = await this.props.logIn(this.state.username, this.state.password);
-      if (data === null) {
-        this.setState({ error: true });
-      } else {
+      const res = await logIn(this.state.email, this.state.password);
+      if (res.status === "done") {
+        const data = res.data;
         this.props.getData(data);
+      } else {
+        const error = res.error;
+        this.setState({ error: true, errorMessage: error });
       }
     }
   }
@@ -90,12 +93,12 @@ class LogIn extends React.Component {
           <View style={styles.container}>
           <Text style={[styles.title, {fontFamily: font, fontSize: fonts.HeavyText}]}>SIGN IN</Text>
             <View style={styles.inputField}>
-              <Text style={[styles.inputTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.TitleText}]}>Username</Text>
+              <Text style={[styles.inputTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.TitleText}]}>Email</Text>
               <TextInput style={[styles.input, {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}]}
-                placeholder="Enter username"
+                placeholder="Enter email"
                 placeholderTextColor={theme.SecondaryText}
-                onChangeText={this.onChangeUserName}
-                defaultValue={this.state.username}
+                onChangeText={this.onChangeEmail}
+                defaultValue={this.state.email}
                 onFocus={this.turnOffError}
                 autoCapitalize="none"
               />
@@ -119,10 +122,13 @@ class LogIn extends React.Component {
               <Text style={[styles.submitText, {fontFamily: font, fontSize: fonts.ButtonText}]}>LOGIN</Text>
             </TouchableOpacity>
             <View style={styles.otherOptions}>
-              <TouchableOpacity style={styles.otherOptionsButton}>
+              <TouchableOpacity 
+                style={styles.otherOptionsButton}
+                onPress={() => this.props.navigation.navigate("Forgot")}
+              >
                 <Text style={[styles.resetPassword, {fontFamily: font, fontSize: fonts.SecondaryText}]}>Forgot password?</Text>
               </TouchableOpacity>
-              <Text>|</Text>
+              <Text style={{ fontFamily: font, fontSize: fonts.SecondaryText, color: theme.SecondaryText }}>|</Text>
               <TouchableOpacity 
                 style={styles.otherOptionsButton}
                 onPress={() => this.props.navigation.navigate("SignUp")}
@@ -132,7 +138,7 @@ class LogIn extends React.Component {
             </View>
             {this.state.error ? 
               <ErrorBox 
-                error="Username or password is incorrect"
+                error={this.state.errorMessage}
                 customize={this.props.customize}
               /> : null
             }
@@ -235,7 +241,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  logIn: (username, password) => dispatch(logIn(username, password)),
   getData: bindActionCreators(getData, dispatch),
 });
 

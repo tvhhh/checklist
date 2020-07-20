@@ -2,8 +2,8 @@ export default colors = {
   Background: "#f0f0f0",
   Overlay: "#ffffff",
 
-  PrimaryColor: "#00b2ff",
-  SecondaryColor: "#006aff",
+  PrimaryColor: "rgba(0, 178, 255, 1.0)",
+  SecondaryColor: "rgba(0, 106, 255, 1.0)",
   DisabledColor: "#808080",
 
   Button: "#696969",

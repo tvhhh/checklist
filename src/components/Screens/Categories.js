@@ -8,10 +8,7 @@ import TaskList, {FILTER_CATEGORY} from '../TaskList';
 import Header from '../Header';
 import Category from '../Category';
 
-import { lightTheme } from '../../styles/colors';
-
 import colors from '../../styles/colors';
-
 
 
 class Categories extends React.Component {

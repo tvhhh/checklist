@@ -5,6 +5,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import colors from '../../styles/colors';
 
+import { reauthenticateUser, setPassword } from '../../redux/actions/UserDataActions';
+
 
 export class AvatarPicker extends React.Component {
   constructor(props) {
@@ -26,7 +28,7 @@ export class AvatarPicker extends React.Component {
           data={this.state.colors}
           keyExtractor={(item, index) => item + index}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => this.props.setAvatar(item)}>
+            <TouchableOpacity onPress={() => this.props.onSubmit(item)}>
               <View style={[styles.colorPicker, {backgroundColor: item}]}></View>
             </TouchableOpacity>
           )}
@@ -50,7 +52,7 @@ export class NameBox extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.setName(this.state.name);
+    this.props.onSubmit(this.state.name);
   }
 
   render() {
@@ -61,7 +63,7 @@ export class NameBox extends React.Component {
     const isSaveButtonDisabled = this.state.name.trim() === "";
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ flex: 1, backgroundColor: theme.Overlay }}>
+        <View style={styles.container}>
           <View style={styles.informationField}>
             <Text style={[styles.infoTitleText, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Your name is</Text>
             <Text style={{ color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font }}>{this.props.name || "You haven't defined your name yet."}</Text>
@@ -70,6 +72,7 @@ export class NameBox extends React.Component {
             <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Edit your name</Text>
             <TextInput style={[styles.input, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Enter your name here"
+              placeholderTextColor={theme.SecondaryText}
               onChangeText={this.onChangeName}
               defaultValue={this.state.name}
               autoCapitalize="words"
@@ -101,7 +104,7 @@ export class PhoneBox extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props.setPhone(this.state.phone);
+    this.props.onSubmit(this.state.phone);
   }
 
   render() {
@@ -118,9 +121,10 @@ export class PhoneBox extends React.Component {
             <Text style={{ color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font }}>{this.props.phone || "Add your phone number."}</Text>
           </View>
           <View style={styles.inputField}>
-            <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Your new phone number is</Text>
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Edit your phone number</Text>
             <TextInput style={[styles.input, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Enter your phone number here"
+              placeholderTextColor={theme.SecondaryText}
               keyboardType="phone-pad"
               onChangeText={this.onChangePhone}
               defaultValue={this.state.phone}
@@ -148,6 +152,8 @@ export class PasswordBox extends React.Component {
       confirmedPassword: "",
       errorCurrentPassword: false,
       errorConfirmPassword: false,
+      errorNewPassword: false,
+      errorNewPasswordMessage: "",
     };
   }
 
@@ -156,20 +162,25 @@ export class PasswordBox extends React.Component {
   }
 
   onChangePassword = password => {
-    this.setState({ password: password });
+    this.setState({ password: password, errorNewPassword: false });
   }
 
   onConfirmPassword = password => {
     this.setState({ confirmedPassword: password, errorConfirmPassword: false });
   }
 
-  handleSubmit = () => {
-    if (this.state.currentPassword !== this.props.currentPassword) {
+  handleSubmit = async () => {
+    if (await reauthenticateUser(this.state.currentPassword) !== "done") {
       this.setState({ errorCurrentPassword: true });
     } else if (this.state.confirmedPassword !== this.state.password) {
       this.setState({ errorConfirmPassword: true });
     } else {
-      this.props.setPassword(this.state.password);
+      const res = await setPassword(this.state.password);
+      if (res !== "done") {
+        this.setState({ errorNewPassword: true, errorNewPasswordMessage: res });
+      } else {
+        this.props.onSubmit();
+      }
     }
   }
 
@@ -186,13 +197,14 @@ export class PasswordBox extends React.Component {
             <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Your current password</Text>
             <TextInput style={[styles.passwordInput, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Enter your current password"
+              placeholderTextColor={theme.SecondaryText}
               onChangeText={this.onConfirmCurrentPassword}
               defaultValue={this.state.currentPassword}
               secureTextEntry={true}
               autoCapitalize="none"
             />
             {this.state.errorCurrentPassword ?
-              <Text style={styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}}>
+              <Text style={[styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}]}>
                 Incorrect password.
               </Text> : null
             }
@@ -206,6 +218,11 @@ export class PasswordBox extends React.Component {
               secureTextEntry={true}
               autoCapitalize="none"
             />
+            {this.state.errorNewPassword ?
+              <Text style={[styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}]}>
+                {this.state.errorNewPasswordMessage}
+              </Text> : null
+            }
           </View>
           <View style={styles.inputField}>
             <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Confirm your new password</Text>
@@ -217,7 +234,7 @@ export class PasswordBox extends React.Component {
               autoCapitalize="none"
             />
             {this.state.errorConfirmPassword ?
-              <Text style={styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}}>
+              <Text style={[styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}]}>
                 Unmatched password.
               </Text> : null
             }
@@ -248,11 +265,11 @@ export class ConfirmPasswordBox extends React.Component {
     this.setState({ password: password, error: false });
   }
 
-  handleSubmit = () => {
-    if (this.state.password !== this.props.currentPassword) {
+  handleSubmit = async () => {
+    if (await reauthenticateUser(this.state.password) !== "done") {
       this.setState({ error: true });
     } else {
-      this.props.onConfirmSuccess();
+      this.props.onSubmit();
     }
   }
 
@@ -265,19 +282,20 @@ export class ConfirmPasswordBox extends React.Component {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.iconField}>
-            <FontAwesome5 name="user-times" size={60} />
+            <FontAwesome5 name="user-times" size={60} color={colors.DisabledColor} />
           </View>
           <View style={styles.inputField}>
             <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Your current password</Text>
             <TextInput style={[styles.passwordInput, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Confirm your password"
+              placeholderTextColor={theme.SecondaryText}
               onChangeText={this.onConfirmPassword}
               defaultValue={this.state.password}
               secureTextEntry={true}
               autoCapitalize="none"
             />
             {this.state.error ?
-              <Text style={styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}}>
+              <Text style={[styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}]}>
                 Incorrect password.
               </Text> : null
             }
@@ -345,11 +363,13 @@ const styles = StyleSheet.create({
   saveButton: {
     backgroundColor: colors.PrimaryColor,
     alignItems: "center",
-    marginTop: 20,
+    justifyContent: "center",
+    marginTop: 15,
     borderRadius: 5,
   },
   saveText: {
     color: "white",
+    fontWeight: "bold",
   },
   errorText: {
     color: colors.Error,

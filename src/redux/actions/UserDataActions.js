@@ -1,4 +1,16 @@
-import { authorize, fetchTaskList, fetchLocalUserData, fetchUserData, storeUserData, clearLocalUserData, removeUser } from '../../api';
+import { 
+  fetchUserData,
+  createUser,
+  signIn,
+  signOut,
+  reauthenticate,
+  updatePassword,
+  sendPasswordResetEmail,
+  fetchLocalUserData,
+  storeLocalUserData,
+  clearLocalUserData,
+  deleteUser,
+} from '../../api';
 
 
 export const GET_DATA = "GET_DATA";
@@ -7,11 +19,11 @@ export const SET_CONNECTION = "SET_CONNECTION";
 export const CREATE_TASK = "CREATE_TASK";
 export const EDIT_TASK = "EDIT_TASK";
 export const REMOVE_TASK = "REMOVE_TASK";
-export const EDIT_PINNED = "EDIT_PINNED";
+export const TOGGLE_PINNED = "TOGGLE_PINNED";
+export const TOGGLE_DONE = "TOGGLE_DONE";
 export const SET_AVATAR = "SET_AVATAR";
 export const SET_NAME = "SET_NAME";
 export const SET_PHONE = "SET_PHONE";
-export const SET_PASSWORD = "SET_PASSWORD";
 
 export const getData = data => ({
   type: GET_DATA,
@@ -53,8 +65,15 @@ export const removeTask = selected => ({
   },
 });
 
-export const editPinned = selected => ({
-  type: EDIT_PINNED,
+export const togglePinned = selected => ({
+  type: TOGGLE_PINNED,
+  payload: {
+    selected,
+  },
+});
+
+export const toggleDone = selected => ({
+  type: TOGGLE_DONE,
   payload: {
     selected,
   },
@@ -81,55 +100,68 @@ export const setPhone = phone => ({
   },
 });
 
-export const setPassword = password => ({
-  type: SET_PASSWORD,
-  payload: {
-    password,
-  },
-});
-
-export const logIn = (username, password) => async (dispatch) => {
-  try {
-    if (await authorize(username, password)) {
-      const data = await fetchUserData(username);
-      storeUserData(JSON.stringify(data));
-      return data;
-    } else {
-      return null;
-    }
-  } catch(error) {
-    console.log(`Login error: ${error}`);
-  }
-};
-
-export const logOut = () => async (dispatch) => {
-  try {
-    dispatch(clearData());
-    clearLocalUserData();
-  } catch(error) {
-    console.log(`Logout error: ${error}`);
-  }
-};
-
 export const fetchData = () => async (dispatch) => {
   try {
     var data = await fetchLocalUserData();
-    if (data === null) {
-      let taskList = await fetchTaskList();
-      data = { username: null, tasks: taskList };
-    }
     dispatch(getData(data));
   } catch(error) {
-    console.log(`Fetch error: ${error}`);
+    console.log(`Fetch error - ${error}`);
   }
 };
 
-export const removeAccount = username => async (dispatch) => {
+export const registerUser = async (data) => {
   try {
-    dispatch(clearData());
-    clearLocalUserData();
-    removeUser(username);
-  } catch (error) {
-    console.log(`Remove account error: ${error}`);
+    await createUser(data);
+    return "done";
+  } catch(error) {
+    return error.message;
+  }
+};
+
+export const logIn = async (email, password) => {
+  try {
+    var res = await signIn(email, password);
+    var data = await fetchUserData(res.user.uid);
+    storeLocalUserData(JSON.stringify(data));
+    return { status: "done", data: data };
+  } catch(error) {
+    return { status: "failed", error: error.message };
+  }
+};
+
+export const logOut = async () => {
+  signOut();
+  clearLocalUserData();
+};
+
+export const deactivateUser = async () => {
+  deleteUser();
+  clearLocalUserData();
+};
+
+export const reauthenticateUser = async (password) => {
+  try {
+    await reauthenticate(password);
+    return "done";
+  } catch(error) {
+    return error.message;
+  }
+};
+
+export const setPassword = async (password) => {
+  try {
+    await updatePassword(password);
+    return "done";
+  } catch(error) {
+    return error.message;
+  }
+};
+
+export const resetPassword = async (email) => {
+  try {
+    await sendPasswordResetEmail(email);
+    return "done";
+  } catch(error) {
+    return error.message;
   }
 };

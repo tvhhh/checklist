@@ -267,15 +267,6 @@ class Search extends React.Component {
           pinned = {this.state.pinned}
           startInterval = {this.state.errorInterval ? "":this.state.startInterval}
           endInterval = {this.state.errorInterval ? "": this.state.endInterval}
-          isNotFilter = {this.state.errorInterval === true ? 
-            true:(
-            this.state.query === "" &
-            this.state.category === "default" &
-            this.state.pinned === false &
-            this.state.startInterval === "" &
-            this.state.endInterval === ""
-            )
-          }
           customize={this.props.customize}
         />        
         <DateTimePickerModal
