@@ -24,6 +24,8 @@ export const FILTER_WEEK = "FILTER_WEEK";
 export const FILTER_PINNED = "FILTER_PINNED";
 export const FILTER_DATE = "FILTER_DATE";
 export const FILTER_SEARCH = "FILTER_SEARCH";
+export const FILTER_NAME = "FILTER_NAME";
+export const FILTER_CATEGORY = "FILTER_CATEGORY";
 
 class TaskList extends React.Component {
   constructor(props) {
@@ -113,6 +115,16 @@ class TaskList extends React.Component {
     }, {});
   }
 
+  filterByCategory = (taskList, category) => {
+    return taskList.filter(task => task.category === category).reduce((obj, task) => {
+      const title = category.toUpperCase();
+      return {
+        ...obj,
+        [title]: [...(obj[title] || []), task],  
+      }
+    }, {});
+  }
+
   filterByDate = (taskList, date) => {
     return taskList.filter(task => extractDate(task.dueTime) === date).reduce((obj, task) => {
       const title = "";
@@ -160,6 +172,8 @@ class TaskList extends React.Component {
         return this.filterByWeek(taskList);
       case FILTER_PINNED:
         return this.filterByPinned(taskList);
+      case FILTER_CATEGORY:
+        return this.filterByCategory(taskList, this.props.category)
       case FILTER_DATE:
         return this.filterByDate(taskList, this.props.date);
       case FILTER_SEARCH:
