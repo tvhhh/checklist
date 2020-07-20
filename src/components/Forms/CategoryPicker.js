@@ -12,7 +12,7 @@ export default class CategoryPicker extends React.Component {
         "health", "workout", "ideas",
         "work", "payment", "liveliness",
         "meeting", "study", "event", 
-        "uncategorized", "default",
+        "unknown", "default",
       ],
     };
   }
@@ -23,7 +23,7 @@ export default class CategoryPicker extends React.Component {
 
   dataPicker = () => {
     if (typeof this.props.hasDefault === "undefined"){
-      return this.state.categories.slice(0,this.state.categories.length - 1);
+      return this.state.categories.slice(0,this.state.categories.length - 2);
     }
     return this.state.categories;
   }

@@ -26,7 +26,7 @@ export default class TaskForm extends React.Component {
         title: this.props.title || "",
         description: this.props.description || "",
         dueTime: this.props.dueTime || today,
-        category: this.props.category || "uncategorized",
+        category: this.props.category || "unknown",
         pinned: this.props.pinned || false,
         done: this.props.done || false,
       },
@@ -88,12 +88,12 @@ export default class TaskForm extends React.Component {
     const extractedDateTime = extractDateTime(this.state.task.dueTime);
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ flex: 1, backgroundColor: theme.Overlay }}>
+        <View style={styles.container}>
           <View style={styles.taskFormHeader}>
             <TouchableOpacity style={styles.buttonContainer} onPress={this.handleSubmit}>
               <Text style={[styles.saveButtonText, {fontSize: fonts.ButtonText, fontFamily: font}]}>SAVE</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonContainer} onPress={this.onBack}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={this.props.onBack}>
               <Text style={[styles.cancelButtonText, {fontSize: fonts.ButtonText, fontFamily: font}]}>CANCEL</Text>
             </TouchableOpacity>
           </View>
@@ -152,7 +152,7 @@ export default class TaskForm extends React.Component {
           <Overlay
             isVisible={this.state.isCategoryPickerVisible}
             onBackdropPress={this.toggleCategoryPicker}
-            overlayStyle={styles.categoryPickerForm}
+            overlayStyle={[styles.categoryPickerForm, { backgroundColor: theme.Overlay }]}
           >
             <CategoryPicker 
               onSubmit={this.updateCategory} 
@@ -162,7 +162,7 @@ export default class TaskForm extends React.Component {
           <Overlay
             isVisible={this.state.isConfirmationBoxVisible}
             onBackdropPress={this.toggleConfirmationBox}
-            overlayStyle={styles.confirmationBox}
+            overlayStyle={[styles.confirmationBox, { backgroundColor: theme.Overlay }]}
           >
             <ConfirmationBox 
               title="Delete this task?" 
@@ -178,6 +178,10 @@ export default class TaskForm extends React.Component {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
   taskFormHeader: {
     flexDirection: "row-reverse",
   },
@@ -219,7 +223,7 @@ const styles = StyleSheet.create({
   },
   categoryPickerForm: { 
     padding: 0,
-    height: 380,
+    height: 350,
     width: 300,
     borderRadius: 5,
   },

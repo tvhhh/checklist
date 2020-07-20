@@ -22,7 +22,7 @@ export default class Category extends React.Component {
         icon = <AntDesign name="switcher" color={colors.Default} size={0.625 * size} />;
         break;
       case "uncategorized":
-        icon = <FontAwesome5 name="question" color={colors.Uncategorized} size={0.625 * size} />;
+        icon = <FontAwesome5 name="question" color={colors.Unknown} size={0.625 * size} />;
         break;
       case "health":
         icon = <FontAwesome name="heartbeat" color={colors.Health} size={0.625 * size} />;
@@ -52,7 +52,7 @@ export default class Category extends React.Component {
         icon = <Foundation name="calendar" color={colors.Event} size={0.625*size} />;
         break;
       default:
-        icon = <FontAwesome5 name="question" color={colors.Uncategorized} size={0.625*size} />
+        icon = <FontAwesome5 name="question" color={colors.Unknown} size={0.625*size} />
         break;
     }
     return (

@@ -163,21 +163,25 @@ class TaskList extends React.Component {
 
   filterSearch = (taskList, query, category, pinned, startInterval, endInterval) => {
     const filtedList = taskList.filter(item => {      
-    const itemTitle = `${item.title.toUpperCase()}`;
-    const itemCategory = `${item.category}`;
-    const itemPinned = item.pinned;
-    const itemDueTime = item.dueTime;
-    const startIntervalChecker = startInterval === "" ? 1:itemDueTime >= startInterval;
-    const endIntervalChecker = endInterval === "" ? 1:itemDueTime <= endInterval;
-    const textData = query.toUpperCase();
-    if (category === "default"){
-      if (itemTitle.includes(textData) && startIntervalChecker && endIntervalChecker && itemPinned === pinned){
-        return true;
-      }   
-    }
-    if (itemTitle.includes(textData) && itemCategory === category && startIntervalChecker && endIntervalChecker && itemPinned === pinned){
-      return true;
-    }    
+      const itemTitle = `${item.title.toUpperCase()}`;
+      const itemCategory = `${item.category}`;
+      const itemPinned = item.pinned;
+      const itemDueTime = item.dueTime;
+      const startIntervalChecker = startInterval === "" ? 1 : itemDueTime >= startInterval;
+      const endIntervalChecker = endInterval === "" ? 1 : itemDueTime <= endInterval;
+      const textData = query.toUpperCase();
+      if (category === "default" &&
+        startInterval === "" &&
+        endInterval === "" &&
+        !pinned) {
+          return false;
+      } else if (itemTitle.includes(textData) &&
+        (itemCategory === category || category === "default") &&
+        startIntervalChecker &&
+        endIntervalChecker &&
+        itemPinned === pinned) {
+          return true;
+      }
       return false;
     });
     
@@ -203,7 +207,13 @@ class TaskList extends React.Component {
       case FILTER_DATE:
         return this.filterByDate(taskList, this.props.date);
       case FILTER_SEARCH:
-        return this.filterSearch(taskList, this.props.query, this.props.category, this.props.pinned, this.props.startInterval, this.props.endInterval);
+        return this.filterSearch(taskList,
+          this.props.query,
+          this.props.category,
+          this.props.pinned,
+          this.props.startInterval,
+          this.props.endInterval
+        );
       case FILTER_OVERDUED:
         return this.filterOverduedTasks(taskList);
       case FILTER_UPCOMING:
@@ -211,7 +221,7 @@ class TaskList extends React.Component {
       case FILTER_COMPLETED:
         return this.filterCompletedTasks(taskList);
       default:  
-        return { "" : taskList };
+        return { "": taskList };
     }
   }
 
@@ -231,7 +241,7 @@ class TaskList extends React.Component {
     }));
     
     return (
-      <View style={styles.container}>
+      <>
         <SectionList
           sections={sections}
           keyExtractor={(item, index) => item + index}
@@ -256,7 +266,7 @@ class TaskList extends React.Component {
           onBackdropPress={this.toggleForm}
           overlayStyle={[
             styles.taskForm, 
-            { height: Object.keys(this.state.selected).length ? 350 : 300 }
+            { height: Object.keys(this.state.selected).length ? 350 : 280, backgroundColor: theme.Overlay }
           ]}
         >
           <TaskForm
@@ -268,16 +278,12 @@ class TaskList extends React.Component {
             customize={this.props.customize}
           />
         </Overlay>
-      </View>
+      </>
     );
   }
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-  },
   listTitle: {
     textAlign: "center",
     marginBottom: 5,
@@ -289,6 +295,7 @@ const styles = StyleSheet.create({
     marginVertical: 180,
   },
   taskForm: {
+    padding: 0,
     borderRadius: 5,
   },
   addButton: {

@@ -53,7 +53,7 @@ export default function userDataReducers(state = initialState, action) {
         ...currentTaskList,
       ];
       newData = { ...state.data, tasks: newTaskList };
-      updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
+      if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case EDIT_TASK:
@@ -62,14 +62,14 @@ export default function userDataReducers(state = initialState, action) {
         { id: payload.selected.id, ...payload.task } : task
       );
       newData = { ...state.data, tasks: newTaskList };
-      updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
+      if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case REMOVE_TASK:
       newTaskList = currentTaskList.filter(task => task.id !== payload.selected.id);
       newData = { ...state.data, tasks: newTaskList };
-      updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
-        storeLocalUserData(JSON.stringify(newData));
+      if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
+      storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case TOGGLE_PINNED:
       newTaskList = currentTaskList.map(task => 
@@ -77,7 +77,7 @@ export default function userDataReducers(state = initialState, action) {
         { ...task, pinned: !task.pinned } : task
       );
       newData = { ...state.data, tasks: newTaskList };
-      updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
+      if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case TOGGLE_DONE:
@@ -86,7 +86,7 @@ export default function userDataReducers(state = initialState, action) {
         { ...task, done: !task.done } : task
       );
       newData = { ...state.data, tasks: newTaskList };
-      updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
+      if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case SET_AVATAR:

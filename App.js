@@ -31,7 +31,7 @@ class App extends React.Component {
       let uid = this.props.appData.data.uid;
       let data = { ...this.props.appData.data };
       delete data.uid;
-      if (state.isConnected && this.props.appData.loggedIn) {
+      if (state.isConnected && uid !== "Guest") {
         updateUserData(uid, data);
       }
     });

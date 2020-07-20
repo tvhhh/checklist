@@ -56,7 +56,7 @@ export class NameBox extends React.Component {
   }
 
   render() {
-    const theme = this.props.theme;
+    const theme = this.props.customize.theme;
     const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
 
@@ -108,7 +108,7 @@ export class PhoneBox extends React.Component {
   }
 
   render() {
-    const theme = this.props.theme;
+    const theme = this.props.customize.theme;
     const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     const isSaveButtonDisabled = this.state.phone.trim() === "";
@@ -185,7 +185,7 @@ export class PasswordBox extends React.Component {
   }
 
   render() {
-    const theme = this.props.theme;
+    const theme = this.props.customize.theme;
     const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     const isSaveButtonDisabled = this.state.password.trim() === "";
@@ -213,6 +213,7 @@ export class PasswordBox extends React.Component {
             <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Your new password</Text>
             <TextInput style={[styles.passwordInput, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Enter your new password"
+              placeholderTextColor={theme.SecondaryText}
               onChangeText={this.onChangePassword}
               defaultValue={this.state.password}
               secureTextEntry={true}
@@ -228,6 +229,7 @@ export class PasswordBox extends React.Component {
             <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Confirm your new password</Text>
             <TextInput style={[styles.passwordInput, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Re-enter your new password"
+              placeholderTextColor={theme.SecondaryText}
               onChangeText={this.onConfirmPassword}
               defaultValue={this.state.confirmedPassword}
               secureTextEntry={true}
@@ -274,7 +276,7 @@ export class ConfirmPasswordBox extends React.Component {
   }
 
   render() {
-    const theme = this.props.theme;
+    const theme = this.props.customize.theme;
     const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
 

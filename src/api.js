@@ -26,7 +26,7 @@ export const createUser = data => {
   .then(res => {
     var uid = res.user.uid;
     var ref = firebase.database().ref(`users/${uid}`);
-    ref.set({ uid: uid, username: username, email: email, tasks: "[]", groups: "[]" });
+    ref.set({ avatar: "#696969", username: username, email: email, tasks: "[]", groups: "[]" });
   });
 };
 
@@ -111,7 +111,7 @@ export const storeLocalUserData = data => {
 };
 
 export const clearLocalUserData = () => {
-  AsyncStorage.clear()
+  AsyncStorage.removeItem(USER_ASYNC_STORAGE_KEY)
   .catch(error => console.log(`AsyncStorage - Clear data - ${error}`));
 };
 

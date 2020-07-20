@@ -108,7 +108,7 @@ class ProfileManagement extends React.Component {
             size={100}
             onPress={this.toggleAvatarPicker}
           />
-          <Text style={{color: data.avatar, fontFamily: font, fontSize: fonts.UsernameText}}>{`@${data.username}`}</Text>
+          <Text style={{color: data.avatar || "dimgrey", fontFamily: font, fontSize: fonts.UsernameText}}>{`@${data.username}`}</Text>
         </View>
         <View style={styles.statisticContainer}>
           <TouchableOpacity

@@ -144,19 +144,13 @@ class Search extends React.Component {
     const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     if (extractedDate !== ""){
-      return(
-        <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>{`${extractedDate}`}</Text>
-      );
+      return <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>{`${extractedDate}`}</Text>;
     }
     if (type === "start"){
-      return (
-        <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>Start Day</Text>
-      );
+      return <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>Start Day</Text>;
     }
     else {
-      return (
-        <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>End Day</Text>
-      );
+      return <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>End Day</Text>;
     }
   }
 
@@ -256,7 +250,7 @@ class Search extends React.Component {
         <Overlay
             isVisible={this.state.isCategoryPickerVisible}
             onBackdropPress={this.toggleCategoryPicker}
-            overlayStyle={styles.categoryPickerForm}
+            overlayStyle={[styles.categoryPickerForm, { backgroundColor: theme.Overlay }]}
           >
             <CategoryPicker onSubmit={this.updateCategory} hasDefault={true} customize={this.props.customize} />
           </Overlay>
