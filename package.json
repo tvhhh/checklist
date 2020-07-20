@@ -25,7 +25,6 @@
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-calendars": "^1.265.0",
-    "react-native-chart-kit": "^6.3.0",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-modal-datetime-picker": "^8.6.0",

@@ -36,7 +36,7 @@ export default class CategoryPicker extends React.Component {
     const fonts = mediumFonts;
     const font = this.props.customize.font;
     return (
-      <View style={[styles.container, { backgroundColor: theme.Overlay }]}>
+      <View style={styles.container}>
         <FlatList 
           data={this.dataPicker()}
           keyExtractor={(item, index) => item + index}

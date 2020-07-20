@@ -12,7 +12,7 @@ export default class ConfirmationBox extends React.Component {
     const fonts = mediumFonts;
     const font = this.props.customize.font;
     return (
-      <View style={{ flex: 1, backgroundColor: theme.Overlay }}>
+      <View style={styles.container}>
         <View style={styles.content}>
           <Text style={[styles.largeText, {fontFamily: font, fontSize: fonts.TitleText}]}>{this.props.title}</Text>
           <Text style={[styles.smallText, {fontFamily: font, fontSize: fonts.CaptionText}]}>You cannot undo this action</Text>
@@ -31,6 +31,9 @@ export default class ConfirmationBox extends React.Component {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   content: {
     flex: 1,
     alignItems: "center",

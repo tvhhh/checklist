@@ -18,7 +18,7 @@ export const mediumFonts = {
   PrimaryText:16,
   SecondaryText: 14,
   TertiaryText: 12,
-  HeavyText: 28,
+  HeavyText: 26,
   CaptionText: 14,
   ButtonText: 20,
   ErrorText: 12,

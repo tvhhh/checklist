@@ -18,7 +18,7 @@ class List extends React.Component {
       case "PINNED":
         return FILTER_PINNED;
       default:
-        return null;
+        return this.props.route.params.filterOption;
     }
   }
 
@@ -27,13 +27,19 @@ class List extends React.Component {
     const filterOption = this.getFilterOption();
     return (
       <View style={{flex: 1, backgroundColor: theme.Background}}>
-        <Header
-          navigation={this.props.navigation} 
-          title={this.props.title}
-          search={true}
-          notice={true}
+        {this.props.headerMode ?
+          <Header
+            navigation={this.props.navigation} 
+            title={this.props.title}
+            search={true}
+            notice={true}
+          /> : null
+        }
+        <TaskList
+          filterOption={filterOption}
+          showEmptyComponent={true}
+          create={true}
         />
-        <TaskList filterOption={filterOption} create={true} />
       </View>
     );
   }

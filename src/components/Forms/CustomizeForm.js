@@ -11,7 +11,6 @@ export class FontSizeForm extends React.Component {
  
   render() {
     return(
-      <TouchableWithoutFeedback>
       <View style={{ flex: 1, backgroundColor: this.props.theme }}>
         <TouchableOpacity style={styles.container} onPress={() => this.props.onPress("small")}>
           <Text style={[styles.options, {color: this.props.textColor, fontSize: 20}]}>Small</Text>
@@ -23,10 +22,9 @@ export class FontSizeForm extends React.Component {
           <Text style={[styles.options, {color: this.props.textColor, fontSize: 30}]}>Large</Text>
         </TouchableOpacity>
       </View>
-      </TouchableWithoutFeedback>
     );
   }
-}
+};
 
 export class FontForm extends React.Component {
   constructor (props) {
@@ -48,7 +46,7 @@ export class FontForm extends React.Component {
       </View>
     );
   }
-}
+};
 
 const styles = StyleSheet.create({
   container: {

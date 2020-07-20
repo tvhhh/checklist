@@ -13,47 +13,53 @@ const firebaseConfig = {
   measurementId: "G-YVR9FCCVND"
 };
 
-
 const USER_ASYNC_STORAGE_KEY = '@TodoApp:UserDB';
-const TASKS_ASYNC_STORAGE_KEY = '@TodoApp:TaskDB';
-const CUSTOM_ASYNC_STORAGE_KEY = '@TodoApp:CustomDB'
+const CUSTOM_ASYNC_STORAGE_KEY = '@TodoApp:CustomDB';
 
 export const initializeApp = () => {
   firebase.initializeApp(firebaseConfig);
 };
 
 export const createUser = data => {
-  var ref = firebase.database().ref(`users/${data.username}`);
-  ref.set({ ...data, tasks: "[]", groups: "[]" });
+  var { username, email, password } = data;
+  return firebase.auth().createUserWithEmailAndPassword(email, password)
+  .then(res => {
+    var uid = res.user.uid;
+    var ref = firebase.database().ref(`users/${uid}`);
+    ref.set({ uid: uid, username: username, email: email, tasks: "[]", groups: "[]" });
+  });
 };
 
-export const removeUser = username => {
-  var ref = firebase.database().ref(`users/${username}`);
-  ref.remove()
-  .catch(error => console.log(`Firebase - Remove user: ${error}`));
+export const signIn = (email, password) => {
+  return firebase.auth().signInWithEmailAndPassword(email, password);
 };
 
-export const isUsernameExisting = username => {
-  var ref = firebase.database().ref(`users/${username}`);
-  return ref.once('value')
-  .then(snapshot => snapshot.exists());
+export const signOut = () => {
+  firebase.auth().signOut();
 };
 
-export const isEmailExisting = email => {
-  var ref = firebase.database().ref('users');
-  return ref.orderByChild('email').equalTo(email).once('value')
-  .then(snapshot => snapshot.exists());
+export const reauthenticate = password => {
+  var user = firebase.auth().currentUser;
+  var credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
+  return user.reauthenticateWithCredential(credential);
 };
 
-export const authorize = (username, password) => {
-  var ref = firebase.database().ref(`users/${username}`);
-  return ref.once('value')
-  .then(snapshot => snapshot.exists() && snapshot.child('password').val() === password)
-  .catch(error => console.log(`Firebase - Authorize: ${error}`));
+export const updatePassword = password => {
+  return firebase.auth().currentUser.updatePassword(password);
 };
 
-export const fetchUserData = username => {
-  var ref = firebase.database().ref(`users/${username}`);
+export const sendPasswordResetEmail = email => {
+  return firebase.auth().sendPasswordResetEmail(email);
+};
+
+export const deleteUser = () => {
+  var user = firebase.auth().currentUser;
+  firebase.database().ref(`users/${user.uid}`).remove();
+  user.delete();
+};
+
+export const fetchUserData = uid => {
+  var ref = firebase.database().ref(`users/${uid}`);
   return ref.once('value')
   .then(snapshot => snapshot.val())
   .then(data => ({
@@ -63,12 +69,13 @@ export const fetchUserData = username => {
       dueTime: new Date(item.dueTime),
     })),
     groups: JSON.parse(data.groups),
+    uid: uid,
   }))
-  .catch(error => console.log(`Firebase - Fetch user data: ${error}`));
+  .catch(error => console.log(`Firebase - Fetch user data - ${error}`));
 };
 
-export const updateUserData = (username, value, key) => {
-  var ref = firebase.database().ref(`users/${username}`);
+export const updateUserData = (uid, value, key) => {
+  var ref = firebase.database().ref(`users/${uid}`);
   if (key) {
     ref.child(key).set(value);
   } else {
@@ -91,42 +98,29 @@ export const fetchLocalUserData = () => {
         ...item,
         dueTime: new Date(item.dueTime),
       })),
-    } : null)
-  .catch(error => console.log(`AsyncStorage - Fetch user data: ${error}`));
+    } : {
+      uid: "Guest",
+      tasks: [],
+    })
+  .catch(error => console.log(`AsyncStorage - Fetch data - ${error}`));
 };
 
-export const storeUserData = data => {
+export const storeLocalUserData = data => {
   AsyncStorage.setItem(USER_ASYNC_STORAGE_KEY, data)
-  .catch(error => console.log(`AsyncStorage - Store user data: ${error}`));
+  .catch(error => console.log(`AsyncStorage - Store data - ${error}`));
 };
 
 export const clearLocalUserData = () => {
   AsyncStorage.clear()
-  .catch(error => console.log(`AsyncStorage - Clear userdata: ${error}`));
-}
-
-export const fetchTaskList = () => {
-  return AsyncStorage.getItem(TASKS_ASYNC_STORAGE_KEY)
-  .then(response => (response !== null) ? JSON.parse(response) : null)
-  .then(data => (data !== null) ? 
-    data.map(item => ({
-      ...item,
-      dueTime: new Date(item.dueTime),
-    })) : [])
-  .catch(error => console.log(`AsyncStorage - Fetch tasklist: ${error}`));
+  .catch(error => console.log(`AsyncStorage - Clear data - ${error}`));
 };
 
-export const storeTaskList = taskList => {
-  AsyncStorage.setItem(TASKS_ASYNC_STORAGE_KEY, taskList)
-  .catch(error => console.log(`AsyncStorage - Save tasklist: ${error}`));
-};
-
-export const fetchCustomization = async () => {
+export const fetchCustomization = () => {
   return AsyncStorage.getItem(CUSTOM_ASYNC_STORAGE_KEY)
-  .catch(error => console.log(`AsyncStorage - Fetch customization: ${error}`));
-}
+  .catch(error => console.log(`AsyncStorage - Fetch customization - ${error}`));
+};
 
-export const storeCustomization = async (customize) => {
-  return await AsyncStorage.setItem(CUSTOM_ASYNC_STORAGE_KEY, customize)
-  .catch(error => console.log(`AsyncStorage - Save customization: ${error}`));
+export const storeCustomization = customize => {
+  return AsyncStorage.setItem(CUSTOM_ASYNC_STORAGE_KEY, customize)
+  .catch(error => console.log(`AsyncStorage - Save customization - ${error}`));
 };

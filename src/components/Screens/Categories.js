@@ -27,7 +27,7 @@ class Categories extends React.Component {
     const fonts = mediumFonts;
     const font = this.props.customize.font;
     return (
-      <View style={styles.container, { flex: 1, backgroundColor: theme.Background }}>
+      <View style={[styles.container, { flex: 1, backgroundColor: theme.Background }]}>
         <Header
           navigation={this.props.navigation} 
           title={this.props.title}

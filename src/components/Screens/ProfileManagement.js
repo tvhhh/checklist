@@ -14,10 +14,12 @@ import FontTisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import { FILTER_OVERDUED, FILTER_UPCOMING, FILTER_COMPLETED } from '../TaskList';
+
 import colors, { lightTheme, darkTheme } from '../../styles/colors';
 import { smallFonts, mediumFonts, largeFonts } from '../../styles/fonts';
 
-import { setAvatar, setName, setPhone, setPassword, logOut, removeAccount } from '../../redux/actions/UserDataActions';
+import { setAvatar, setName, setPhone, logOut, deactivateUser, clearData } from '../../redux/actions/UserDataActions';
 
 
 class ProfileManagement extends React.Component {
@@ -64,8 +66,7 @@ class ProfileManagement extends React.Component {
     this.setState({ isPasswordBoxVisible: !this.state.isPasswordBoxVisible });
   }
 
-  handlePasswordSubmit = password => {
-    this.props.setPassword(password);
+  handlePasswordSubmit = () => {
     this.setState({ isPasswordBoxVisible: false });
   }
 
@@ -82,7 +83,13 @@ class ProfileManagement extends React.Component {
   }
 
   handleRemoveAccountConfirm = () => {
-    this.props.removeAccount(this.props.appData.data.username);
+    this.props.clearData();
+    deactivateUser();
+  }
+
+  handleLogOut = () => {
+    this.props.clearData();
+    logOut();
   }
 
   render() {
@@ -105,21 +112,30 @@ class ProfileManagement extends React.Component {
           <Text style={{color: data.avatar, fontFamily: font, fontSize: fonts.UsernameText}}>{`@${data.username}`}</Text>
         </View>
         <View style={styles.statisticContainer}>
-          <TouchableOpacity style={styles.statisticBox}>
+          <TouchableOpacity
+            style={styles.statisticBox}
+            onPress={() => this.props.navigation.navigate("List", { filterOption: FILTER_OVERDUED })}
+          >
             <Text style={{color: colors.DisabledColor, fontFamily: font, fontSize: fonts.TertiaryText}}>You have</Text>
             <Text style={{color: colors.DisabledColor, fontFamily: font, fontSize: fonts.HeavyText}}>
               {data.tasks.filter(task => task.dueTime < new Date() && !task.done).length}
             </Text>
             <Text style={{color: colors.DisabledColor, fontFamily: font, fontSize: fonts.TertiaryText}}>OVERDUED</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.statisticBox} onPress={() => this.props.navigation.navigate("UpcomingTasks")}>
+          <TouchableOpacity
+            style={styles.statisticBox}
+            onPress={() => this.props.navigation.navigate("List", { filterOption: FILTER_UPCOMING })}
+          >
             <Text style={{color: colors.PrimaryColor, fontFamily: font, fontSize: fonts.TertiaryText}}>You have</Text>
             <Text style={{color: colors.PrimaryColor, fontFamily: font, fontSize: fonts.HeavyText}}>
               {data.tasks.filter(task => task.dueTime > new Date() && !task.done).length}
             </Text>
             <Text style={{color: colors.PrimaryColor, fontFamily: font, fontSize: fonts.TertiaryText}}>UPCOMING</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.statisticBox}>
+          <TouchableOpacity
+            style={styles.statisticBox}
+            onPress={() => this.props.navigation.navigate("List", { filterOption: FILTER_COMPLETED })}
+          >
             <Text style={{color: colors.SecondaryColor, fontFamily: font, fontSize: fonts.TertiaryText}}>You have</Text>
             <Text style={{color: colors.SecondaryColor, fontFamily: font, fontSize: fonts.HeavyText}}>
               {data.tasks.filter(task => task.done).length}
@@ -167,68 +183,68 @@ class ProfileManagement extends React.Component {
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.logOut} onPress={this.props.logOut}>
+        <TouchableOpacity style={styles.logOut} onPress={this.handleLogOut}>
           <Text style={[styles.logOutText, {fontFamily: font, fontSize: fonts.ButtonText}]}>LOG OUT</Text>
           <MaterialCommunityIcons name="logout" size={25} color="white" />
         </TouchableOpacity>
         <Overlay
           isVisible={this.state.isAvatarPickerVisible}
           onBackdropPress={this.toggleAvatarPicker}
-          overlayStyle={styles.avatarPicker}
+          overlayStyle={[styles.avatarPicker, { backgroundColor: theme.Overlay }]}
         >
           <AvatarPicker 
-            setAvatar={this.handleAvatarSubmit} 
+            onSubmit={this.handleAvatarSubmit} 
             customize={this.props.customize}
           />
         </Overlay>
         <Overlay
           isVisible={this.state.isNameBoxVisible}
           onBackdropPress={this.toggleNameBox}
-          overlayStyle={styles.nameBox}
+          overlayStyle={[styles.nameBox, { backgroundColor: theme.Overlay }]}
         >
           <NameBox
             name={data.name}
-            setName={this.handleNameSubmit}
+            onSubmit={this.handleNameSubmit}
             customize={this.props.customize}
           />
         </Overlay>
         <Overlay
           isVisible={this.state.isPhoneBoxVisible}
           onBackdropPress={this.togglePhoneBox}
-          overlayStyle={styles.phoneBox}
+          overlayStyle={[styles.phoneBox, { backgroundColor: theme.Overlay }]}
         >
           <PhoneBox
             phone={data.phone}
-            setPhone={this.handlePhoneSubmit}
+            onSubmit={this.handlePhoneSubmit}
             customize={this.props.customize}
           />
         </Overlay>
         <Overlay
           isVisible={this.state.isPasswordBoxVisible}
           onBackdropPress={this.togglePasswordBox}
-          overlayStyle={styles.passwordBox}
+          overlayStyle={[styles.passwordBox, { backgroundColor: theme.Overlay }]}
         >
           <PasswordBox
             currentPassword={data.password}
-            setPassword={this.handlePasswordSubmit}
+            onSubmit={this.handlePasswordSubmit}
             customize={this.props.customize}
           />
         </Overlay>
         <Overlay
           isVisible={this.state.isConfirmPasswordBoxVisible}
           onBackdropPress={this.toggleConfirmPasswordBox}
-          overlayStyle={styles.confirmPasswordBox}
+          overlayStyle={[styles.confirmPasswordBox, { backgroundColor: theme.Overlay }]}
         >
           <ConfirmPasswordBox
             currentPassword={data.password}
-            onConfirmSuccess={this.handleConfirmPasswordSuccess}
+            onSubmit={this.handleConfirmPasswordSuccess}
             customize={this.props.customize}
           />
         </Overlay>
         <Overlay
           isVisible={this.state.isConfirmationBoxVisible}
           onBackdropPress={this.toggleConfirmationBox}
-          overlayStyle={styles.confirmationBox}
+          overlayStyle={[styles.confirmationBox, { backgroundColor: theme.Overlay }]}
         >
           <ConfirmationBox 
             title="Delete this account?"
@@ -340,9 +356,7 @@ const mapDispatchToProps = dispatch => ({
   setAvatar: bindActionCreators(setAvatar, dispatch),
   setName: bindActionCreators(setName, dispatch),
   setPhone: bindActionCreators(setPhone, dispatch),
-  setPassword: bindActionCreators(setPassword, dispatch),
-  logOut: () => dispatch(logOut()),
-  removeAccount: username => dispatch(removeAccount(username)),
+  clearData: bindActionCreators(clearData, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileManagement);

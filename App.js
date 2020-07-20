@@ -28,9 +28,11 @@ class App extends React.Component {
     await this.props.fetchData();
     NetInfo.addEventListener(state => {
       this.props.setConnectionStatus(state.isConnected);
-      let data = this.props.appData.data
+      let uid = this.props.appData.data.uid;
+      let data = { ...this.props.appData.data };
+      delete data.uid;
       if (state.isConnected && this.props.appData.loggedIn) {
-        updateUserData(data.username, data);
+        updateUserData(uid, data);
       }
     });
   }
