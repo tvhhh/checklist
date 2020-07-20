@@ -29,6 +29,22 @@ class Notification extends React.Component {
     }
   };
   render() {
+    const diffTime = (curT, dueT) => {
+      var r;
+      if (dueT.getMinutes() == curT.getMinutes()) {
+        r = dueT.getSecond() - curT.getSecond();
+        return 'Your task will be end at the next' + r + 'seconds';
+      }
+      if (dueT.getHours() == curT.getHours()) {
+        r = dueT.getMinutes() - curT.getMinutes();
+        return 'Your task will be end at the next' + r + 'minutes';
+      }
+      r = dueT.getHours() - curT.getHours();
+      if (r < 0) {
+        return 'Expired';
+      }
+      return 'Your task will be end at the next ' + r + ' hours';
+    };
     return (
       <View style={{flex: 1}}>
         <Header title={'NOTIFICATION'} />
@@ -62,8 +78,7 @@ class Notification extends React.Component {
                   <View style={styles.textContainer}>
                     <Text style={styles.title}>{item.title} </Text>
                     <Text style={styles.description}>
-                      | {extractDate(item.dueTime)}{' '}
-                      {extractDateTime(item.dueTime).time}{' '}
+                      | {diffTime(new Date(), item.dueTime)}{' '}
                     </Text>
                   </View>
                 </View>
@@ -92,19 +107,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: 5,
     paddingLeft: 0,
-    paddingBottom: 5,
+    paddingBottom: 8,
     margin: 20,
     marginBottom: 10,
     borderRadius: 30,
     backgroundColor: '#c9f1fd',
-    fontSize: 13,
+    fontSize: 11,
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
   },
   description: {
-    fontSize: 15,
+    fontSize: 13,
   },
   textContainer: {
     flex: 1,
