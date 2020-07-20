@@ -96,7 +96,7 @@ class UpcomingTasks extends React.Component {
             withInnerLines={false}
             segments={Math.max(...weekCounts)}
           />
-          <Text style={styles.graphTitle}>My tasks</Text>
+          <Text style={[styles.graphTitle, {  color: theme.TitleText, fontSize: fonts.TitleText, fontFamily: font }]}>My tasks</Text>
           <PieChart
             data={categoriesData}
             width={Dimensions.get("window").width}
@@ -116,6 +116,7 @@ class UpcomingTasks extends React.Component {
 const styles = StyleSheet.create({
   graphContainer: {
     paddingVertical: 10,
+    justifyContent: "space-evenly"
   },
   graphTitle: {
     fontWeight: "bold",
