@@ -1,10 +1,9 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, View, } from 'react-native';
-import { Overlay } from 'react-native-elements';
 
 import { connect } from 'react-redux';
 
-import TaskList, {FILTER_CATEGORY} from '../TaskList';
+import { FILTER_CATEGORY } from '../TaskList';
 import Header from '../Header';
 import Category from '../Category';
 
@@ -20,17 +19,11 @@ class Categories extends React.Component {
         "work", "payment", "liveliness",
         "meeting", "study", "event",
       ],
-      showForm: false,
-      pickedCategory: "none",
     };
   }
 
-  onFormBackdropPress = () => {
-    this.setState({ showForm: false, selected: {} });
-  }
-
   onCategoryPress = category => {
-    this.setState({ showForm: true, pickedCategory: category });
+    this.props.navigation.navigate("List", { filterOption: FILTER_CATEGORY, category: category });
   }
 
   render() {
@@ -58,20 +51,6 @@ class Categories extends React.Component {
           )}
           numColumns={3}
         />
-        <Overlay
-          isVisible={this.state.showForm}
-          onBackdropPress={this.onFormBackdropPress}
-          fullScreen={true}
-          overlayStyle={[
-            styles.taskForm, 
-            { flex: 1, backgroundColor: theme.Background }
-          ]}
-        >
-          <TaskList
-            filterOption={FILTER_CATEGORY}
-            category={this.state.pickedCategory}
-        />
-        </Overlay>
       </View>
     );
   }

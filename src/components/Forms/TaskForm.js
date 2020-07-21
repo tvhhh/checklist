@@ -153,6 +153,7 @@ export default class TaskForm extends React.Component {
             isVisible={this.state.isCategoryPickerVisible}
             onBackdropPress={this.toggleCategoryPicker}
             overlayStyle={[styles.categoryPickerForm, { backgroundColor: theme.Overlay }]}
+            animationType="fade"
           >
             <CategoryPicker 
               onSubmit={this.updateCategory} 
@@ -163,6 +164,7 @@ export default class TaskForm extends React.Component {
             isVisible={this.state.isConfirmationBoxVisible}
             onBackdropPress={this.toggleConfirmationBox}
             overlayStyle={[styles.confirmationBox, { backgroundColor: theme.Overlay }]}
+            animationType="fade"
           >
             <ConfirmationBox 
               title="Delete this task?" 

@@ -248,12 +248,13 @@ class Search extends React.Component {
           </View> : null
         }        
         <Overlay
-            isVisible={this.state.isCategoryPickerVisible}
-            onBackdropPress={this.toggleCategoryPicker}
-            overlayStyle={[styles.categoryPickerForm, { backgroundColor: theme.Overlay }]}
-          >
-            <CategoryPicker onSubmit={this.updateCategory} hasDefault={true} customize={this.props.customize} />
-          </Overlay>
+          isVisible={this.state.isCategoryPickerVisible}
+          onBackdropPress={this.toggleCategoryPicker}
+          overlayStyle={[styles.categoryPickerForm, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
+        >
+          <CategoryPicker onSubmit={this.updateCategory} hasDefault={true} customize={this.props.customize} />
+        </Overlay>
         <TaskList 
           filterOption = {filterOption}
           query = {this.state.query}

@@ -190,6 +190,7 @@ class ProfileManagement extends React.Component {
           isVisible={this.state.isAvatarPickerVisible}
           onBackdropPress={this.toggleAvatarPicker}
           overlayStyle={[styles.avatarPicker, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
         >
           <AvatarPicker 
             onSubmit={this.handleAvatarSubmit} 
@@ -200,6 +201,7 @@ class ProfileManagement extends React.Component {
           isVisible={this.state.isNameBoxVisible}
           onBackdropPress={this.toggleNameBox}
           overlayStyle={[styles.nameBox, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
         >
           <NameBox
             name={data.name}
@@ -211,6 +213,7 @@ class ProfileManagement extends React.Component {
           isVisible={this.state.isPhoneBoxVisible}
           onBackdropPress={this.togglePhoneBox}
           overlayStyle={[styles.phoneBox, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
         >
           <PhoneBox
             phone={data.phone}
@@ -222,9 +225,9 @@ class ProfileManagement extends React.Component {
           isVisible={this.state.isPasswordBoxVisible}
           onBackdropPress={this.togglePasswordBox}
           overlayStyle={[styles.passwordBox, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
         >
           <PasswordBox
-            currentPassword={data.password}
             onSubmit={this.handlePasswordSubmit}
             customize={this.props.customize}
           />
@@ -233,9 +236,9 @@ class ProfileManagement extends React.Component {
           isVisible={this.state.isConfirmPasswordBoxVisible}
           onBackdropPress={this.toggleConfirmPasswordBox}
           overlayStyle={[styles.confirmPasswordBox, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
         >
           <ConfirmPasswordBox
-            currentPassword={data.password}
             onSubmit={this.handleConfirmPasswordSuccess}
             customize={this.props.customize}
           />
@@ -244,6 +247,7 @@ class ProfileManagement extends React.Component {
           isVisible={this.state.isConfirmationBoxVisible}
           onBackdropPress={this.toggleConfirmationBox}
           overlayStyle={[styles.confirmationBox, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
         >
           <ConfirmationBox 
             title="Delete this account?"

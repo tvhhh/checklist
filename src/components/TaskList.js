@@ -268,6 +268,7 @@ class TaskList extends React.Component {
             styles.taskForm, 
             { height: Object.keys(this.state.selected).length ? 350 : 280, backgroundColor: theme.Overlay }
           ]}
+          animationType="fade"
         >
           <TaskForm
             {...this.state.selected}
