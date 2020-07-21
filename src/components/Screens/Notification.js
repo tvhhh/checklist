@@ -4,7 +4,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import CheckButton from '../CheckBox';
 import Header from '../Header';
 import {connect} from 'react-redux';
-import {extractDate, isToday, extractDateTime} from '../../utils/DateTime';
+import {isToday, extractDateTime} from '../../utils/DateTime';
 
 class Notification extends React.Component {
   constructor(props) {
@@ -31,13 +31,19 @@ class Notification extends React.Component {
   render() {
     const diffTime = (curT, dueT) => {
       var r;
-      if (dueT.getMinutes() == curT.getMinutes()) {
-        r = dueT.getSecond() - curT.getSecond();
-        return 'Your task will be end at the next' + r + 'seconds';
+      if (dueT.getMinutes() - 1 == curT.getMinutes()) {
+        r = dueT.getSeconds() - curT.getSeconds();
+        if (r < 0) {
+          return 'Expired';
+        }
+        return 'Your task will be end at the next ' + r + ' seconds';
       }
       if (dueT.getHours() == curT.getHours()) {
         r = dueT.getMinutes() - curT.getMinutes();
-        return 'Your task will be end at the next' + r + 'minutes';
+        if (r < 0) {
+          return 'Expired';
+        }
+        return 'Your task will be end at the next ' + r + ' minutes';
       }
       r = dueT.getHours() - curT.getHours();
       if (r < 0) {
@@ -58,33 +64,35 @@ class Notification extends React.Component {
             </Text>
           </TouchableOpacity>
           {this.state.showMNote ? (
-            <FlatList
-              data={this.props.taskList
-                .filter(item => {
-                  return isToday(item.dueTime);
-                })
-                .sort((a, b) =>
-                  extractDateTime(a.dueTime).time.localeCompare(
-                    extractDateTime(b.dueTime).time,
-                  ),
-                )}
-              renderItem={({item}) => (
-                <View style={styles.item}>
-                  <CheckButton
-                    name="done"
-                    checked={this.props.done}
-                    onPress={this.props.toggleDone}
-                  />
-                  <View style={styles.textContainer}>
-                    <Text style={styles.title}>{item.title} </Text>
-                    <Text style={styles.description}>
-                      | {diffTime(new Date(), item.dueTime)}{' '}
-                    </Text>
+            <View style={{height: 400}}>
+              <FlatList
+                data={this.props.taskList
+                  .filter(item => {
+                    return isToday(item.dueTime);
+                  })
+                  .sort((a, b) =>
+                    extractDateTime(a.dueTime).time.localeCompare(
+                      extractDateTime(b.dueTime).time,
+                    ),
+                  )}
+                renderItem={({item}) => (
+                  <View style={styles.item}>
+                    <CheckButton
+                      name="done"
+                      checked={this.props.done}
+                      onPress={this.props.toggleDone}
+                    />
+                    <View style={styles.textContainer}>
+                      <Text style={styles.title}>{item.title} </Text>
+                      <Text style={styles.description}>
+                        | {diffTime(new Date(), item.dueTime)}{' '}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-            />
+                )}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
           ) : null}
           <TouchableOpacity onPress={this.onPressT}>
             <Text style={styles.myTNoteContainer}>
@@ -141,9 +149,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 15,
     width: 150,
-    marginTop: 20,
-    marginBottom: 50,
     padding: 10,
+    marginTop: 5,
     backgroundColor: '#d3e2fb',
   },
   container: {
