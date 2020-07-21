@@ -8,6 +8,7 @@ import {
   TOGGLE_DONE,
   REMOVE_TASK,
   SET_AVATAR,
+  SET_USERNAME,
   SET_NAME,
   SET_PHONE,
 } from '../actions/UserDataActions';
@@ -91,17 +92,22 @@ export default function userDataReducers(state = initialState, action) {
       return { ...state, data: newData };
     case SET_AVATAR:
       newData = { ...state.data, avatar: payload.color };
-      updateUserData(state.data.uid, payload.color, 'avatarColor');
+      updateUserData(state.data.uid, payload.color, 'avatar');
+      storeLocalUserData(JSON.stringify(newData));
+      return { ...state, data: newData };
+    case SET_USERNAME:
+      newData = { ...state.data, username: payload.username };
+      updateUserData(state.data.uid, payload.color, 'username');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case SET_NAME:
       newData = { ...state.data, name: payload.name };
-      updateUserData(state.data.uid, payload.name, 'fullName');
+      updateUserData(state.data.uid, payload.name, 'name');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case SET_PHONE:
       newData = { ...state.data, phone: payload.phone };
-      updateUserData(state.data.uid, payload.phone, 'phoneNumber');
+      updateUserData(state.data.uid, payload.phone, 'phone');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     default:
