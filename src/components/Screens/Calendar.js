@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 
-
 import { connect } from 'react-redux';
 
 import Header from '../Header';
@@ -26,7 +25,7 @@ class Calendar extends React.Component{
     let themeBackground = this.props.customize.theme;
     if (themeBackground.Background === lightTheme.Background) {
     this.props.taskList.forEach(task => {
-      marked[extractDate(task.dueTime)] = {marked: true, dotColor: "#5172cf", activeOpacity: 0};
+      marked[extractDate(task.dueTime)] = {marked: true, dotColor: "#5172cf"};
     });
     marked[this.state.pickedDate] = {...marked[this.state.pickedDate], selected: true, selectedColor: "#5172cf"};
     }
@@ -57,11 +56,11 @@ class Calendar extends React.Component{
           onDayPress={this.onDayPress}
           renderMarkedDates={this.renderMarkedDates}
           theme={theme.Background}
+          font={this.props.customize.font}
         />
         <TaskList
           filterOption={FILTER_DATE}
           date={this.state.pickedDate}
-          calendarView={true}
           create={true}
         />
       </View>

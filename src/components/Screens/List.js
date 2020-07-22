@@ -7,31 +7,37 @@ import TaskList, { FILTER_TODAY, FILTER_WEEK, FILTER_PINNED } from '../TaskList'
 
 
 class List extends React.Component {
-  getFilterOption = () => {
+  getFilter = () => {
     switch(this.props.title) {
       case "MY DAY":
-        return FILTER_TODAY;
+        return { filterOption: FILTER_TODAY };
       case "MY WEEK":
-        return FILTER_WEEK;
+        return { filterOption: FILTER_WEEK };
       case "PINNED":
-        return FILTER_PINNED;
+        return { filterOption: FILTER_PINNED };
       default:
-        return null;
+        return this.props.route.params;
     }
   }
 
   render() {
     const theme = this.props.customize.theme;
-    const filterOption = this.getFilterOption();
+    const filter = this.getFilter();
     return (
       <View style={{flex: 1, backgroundColor: theme.Background}}>
-        <Header
-          navigation={this.props.navigation} 
-          title={this.props.title}
-          search={true}
-          notice={true}
+        {this.props.headerMode ?
+          <Header
+            navigation={this.props.navigation} 
+            title={this.props.title}
+            search={true}
+            notice={true}
+          /> : null
+        }
+        <TaskList
+          {...filter}
+          showEmptyComponent={true}
+          create={true}
         />
-        <TaskList filterOption={filterOption} create={true} />
       </View>
     );
   }

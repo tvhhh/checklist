@@ -15,8 +15,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import colors, { lightTheme, darkTheme } from './styles/colors';
-import { smallFonts, mediumFonts, largeFonts } from './styles/fonts';
+import colors from './styles/colors';
 
 
 const Drawer = createDrawerNavigator();

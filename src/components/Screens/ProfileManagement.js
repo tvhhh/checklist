@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import Header from '../Header';
-import { AvatarPicker, NameBox, PhoneBox, PasswordBox, ConfirmPasswordBox } from '../Forms/UserInformationForm';
+import { AvatarPicker, InformationBox, PasswordBox, ConfirmPasswordBox } from '../Forms/UserInformationForm';
 import ConfirmationBox from '../Forms/ConfirmationBox';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -14,7 +14,11 @@ import FontTisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { setAvatar, setName, setPhone, setPassword, logOut, removeAccount } from '../../redux/actions/UserDataActions';
+import { FILTER_OVERDUED, FILTER_UPCOMING, FILTER_COMPLETED } from '../TaskList';
+
+import colors from '../../styles/colors';
+
+import { setAvatar, setUsername, setName, setPhone, logOut, deactivateUser, clearData } from '../../redux/actions/UserDataActions';
 
 
 class ProfileManagement extends React.Component {
@@ -22,11 +26,11 @@ class ProfileManagement extends React.Component {
     super(props);
     this.state = {
       isAvatarPickerVisible: false,
-      isNameBoxVisible: false,
-      isPhoneBoxVisible: false,
+      isInformationBoxVisible: false,
       isPasswordBoxVisible: false,
       isConfirmPasswordBoxVisible: false,
       isConfirmationBoxVisible: false,
+      informationType: "",
     };
   }
 
@@ -39,30 +43,32 @@ class ProfileManagement extends React.Component {
     this.setState({ isAvatarPickerVisible: false });
   }
 
-  toggleNameBox = () => {
-    this.setState({ isNameBoxVisible: !this.state.isNameBoxVisible });
+  toggleInformationBox = type => {
+    this.setState({ informationType: type, isInformationBoxVisible: !this.state.isInformationBoxVisible });
   }
 
-  handleNameSubmit = name => {
-    this.props.setName(name);
-    this.setState({ isNameBoxVisible: false });
-  }
-
-  togglePhoneBox = () => {
-    this.setState({ isPhoneBoxVisible: !this.state.isPhoneBoxVisible });
-  }
-
-  handlePhoneSubmit = phone => {
-    this.props.setPhone(phone);
-    this.setState({ isPhoneBoxVisible: false });
+  handleInformationSubmit = (info, type) => {
+    switch(type) {
+      case "username":
+        this.props.setUsername(info);
+        break;
+      case "name":
+        this.props.setName(info);
+        break;
+      case "phone":
+        this.props.setPhone(info);
+        break;
+      default:
+        break;
+    }
+    this.setState({ isInformationBoxVisible: false });
   }
 
   togglePasswordBox = () => {
     this.setState({ isPasswordBoxVisible: !this.state.isPasswordBoxVisible });
   }
 
-  handlePasswordSubmit = password => {
-    this.props.setPassword(password);
+  handlePasswordSubmit = () => {
     this.setState({ isPasswordBoxVisible: false });
   }
 
@@ -75,11 +81,17 @@ class ProfileManagement extends React.Component {
   }
 
   toggleConfirmationBox = () => {
-    this.setState({ isConfirmationBoxVisible: !this.state.isConfirmationBoxVisible })
+    this.setState({ isConfirmationBoxVisible: !this.state.isConfirmationBoxVisible });
   }
 
   handleRemoveAccountConfirm = () => {
-    this.props.removeAccount(this.props.appData.data.username);
+    this.props.clearData();
+    deactivateUser();
+  }
+
+  handleLogOut = () => {
+    this.props.clearData();
+    logOut();
   }
 
   render() {
@@ -92,31 +104,43 @@ class ProfileManagement extends React.Component {
       <ScrollView style={{ flex: 1, backgroundColor: theme.Background }}>
         <Header navigation={this.props.navigation} />
         <View style={styles.header}>
-          <FontAwesome
-            style={styles.userAvatar}
-            name="user-circle"
-            color={data.avatar || "dimgrey"}
-            size={100}
-            onPress={this.toggleAvatarPicker}
-          />
-          <Text style={{color: data.avatar, fontFamily: font, fontSize: fonts.UsernameText}}>{`@${data.username}`}</Text>
+          <TouchableOpacity onPress={this.toggleAvatarPicker}>
+            <FontAwesome
+              style={styles.userAvatar}
+              name="user-circle"
+              color={data.avatar}
+              size={100}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.toggleInformationBox("username")}>
+            <Text style={{color: data.avatar, fontFamily: font, fontSize: fonts.UsernameText}}>{`@${data.username}`}</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.statisticContainer}>
-          <TouchableOpacity style={styles.statisticBox}>
+          <TouchableOpacity
+            style={[styles.statisticBox, { borderRightWidth: 0.5 }]}
+            onPress={() => this.props.navigation.navigate("List", { filterOption: FILTER_OVERDUED })}
+          >
             <Text style={{color: colors.DisabledColor, fontFamily: font, fontSize: fonts.TertiaryText}}>You have</Text>
             <Text style={{color: colors.DisabledColor, fontFamily: font, fontSize: fonts.HeavyText}}>
               {data.tasks.filter(task => task.dueTime < new Date() && !task.done).length}
             </Text>
             <Text style={{color: colors.DisabledColor, fontFamily: font, fontSize: fonts.TertiaryText}}>OVERDUED</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.statisticBox} onPress={() => this.props.navigation.navigate("UpcomingTasks")}>
+          <TouchableOpacity
+            style={[styles.statisticBox, { borderRightWidth: 0.5 }]}
+            onPress={() => this.props.navigation.navigate("List", { filterOption: FILTER_UPCOMING })}
+          >
             <Text style={{color: colors.PrimaryColor, fontFamily: font, fontSize: fonts.TertiaryText}}>You have</Text>
             <Text style={{color: colors.PrimaryColor, fontFamily: font, fontSize: fonts.HeavyText}}>
               {data.tasks.filter(task => task.dueTime > new Date() && !task.done).length}
             </Text>
             <Text style={{color: colors.PrimaryColor, fontFamily: font, fontSize: fonts.TertiaryText}}>UPCOMING</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.statisticBox}>
+          <TouchableOpacity
+            style={styles.statisticBox}
+            onPress={() => this.props.navigation.navigate("List", { filterOption: FILTER_COMPLETED })}
+          >
             <Text style={{color: colors.SecondaryColor, fontFamily: font, fontSize: fonts.TertiaryText}}>You have</Text>
             <Text style={{color: colors.SecondaryColor, fontFamily: font, fontSize: fonts.HeavyText}}>
               {data.tasks.filter(task => task.done).length}
@@ -124,7 +148,7 @@ class ProfileManagement extends React.Component {
             <Text style={{color: colors.SecondaryColor, fontFamily: font, fontSize: fonts.TertiaryText}}>COMPLETED</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.infoField} onPress={this.toggleNameBox}>
+        <TouchableOpacity style={styles.infoField} onPress={() => this.toggleInformationBox("name")}>
           <AntDesign name="contacts" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
             <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Full Name</Text>
@@ -140,7 +164,7 @@ class ProfileManagement extends React.Component {
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.infoField} onPress={this.togglePhoneBox}>
+        <TouchableOpacity style={styles.infoField} onPress={() => this.toggleInformationBox("phone")}>
           <FontTisto name="phone" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
             <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Phone number</Text>
@@ -164,68 +188,63 @@ class ProfileManagement extends React.Component {
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.logOut} onPress={this.props.logOut}>
+        <TouchableOpacity style={styles.logOut} onPress={this.handleLogOut}>
           <Text style={[styles.logOutText, {fontFamily: font, fontSize: fonts.ButtonText}]}>LOG OUT</Text>
           <MaterialCommunityIcons name="logout" size={25} color="white" />
         </TouchableOpacity>
         <Overlay
           isVisible={this.state.isAvatarPickerVisible}
           onBackdropPress={this.toggleAvatarPicker}
-          overlayStyle={styles.avatarPicker}
+          overlayStyle={[styles.avatarPicker, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
         >
           <AvatarPicker 
-            setAvatar={this.handleAvatarSubmit} 
+            onSubmit={this.handleAvatarSubmit} 
             customize={this.props.customize}
           />
         </Overlay>
         <Overlay
-          isVisible={this.state.isNameBoxVisible}
-          onBackdropPress={this.toggleNameBox}
-          overlayStyle={styles.nameBox}
+          isVisible={this.state.isInformationBoxVisible}
+          onBackdropPress={this.toggleInformationBox}
+          overlayStyle={[styles.informationBox, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
         >
-          <NameBox
-            name={data.name}
-            setName={this.handleNameSubmit}
-            customize={this.props.customize}
-          />
-        </Overlay>
-        <Overlay
-          isVisible={this.state.isPhoneBoxVisible}
-          onBackdropPress={this.togglePhoneBox}
-          overlayStyle={styles.phoneBox}
-        >
-          <PhoneBox
-            phone={data.phone}
-            setPhone={this.handlePhoneSubmit}
+          <InformationBox
+            info={data[this.state.informationType]}
+            type={this.state.informationType}
+            inputTitle={`Edit your ${this.state.informationType}`}
+            placeholder={`Enter your ${this.state.informationType} here`}
+            onSubmit={this.handleInformationSubmit}
             customize={this.props.customize}
           />
         </Overlay>
         <Overlay
           isVisible={this.state.isPasswordBoxVisible}
           onBackdropPress={this.togglePasswordBox}
-          overlayStyle={styles.passwordBox}
+          overlayStyle={[styles.passwordBox, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
         >
           <PasswordBox
-            currentPassword={data.password}
-            setPassword={this.handlePasswordSubmit}
+            onSubmit={this.handlePasswordSubmit}
             customize={this.props.customize}
           />
         </Overlay>
         <Overlay
           isVisible={this.state.isConfirmPasswordBoxVisible}
           onBackdropPress={this.toggleConfirmPasswordBox}
-          overlayStyle={styles.confirmPasswordBox}
+          overlayStyle={[styles.confirmPasswordBox, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
         >
           <ConfirmPasswordBox
-            currentPassword={data.password}
-            onConfirmSuccess={this.handleConfirmPasswordSuccess}
+            onSubmit={this.handleConfirmPasswordSuccess}
             customize={this.props.customize}
           />
         </Overlay>
         <Overlay
           isVisible={this.state.isConfirmationBoxVisible}
           onBackdropPress={this.toggleConfirmationBox}
-          overlayStyle={styles.confirmationBox}
+          overlayStyle={[styles.confirmationBox, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
         >
           <ConfirmationBox 
             title="Delete this account?"
@@ -260,7 +279,6 @@ const styles = StyleSheet.create({
     padding: 5,
     marginBottom: 10,
     borderColor: colors.Border,
-    borderRightWidth: 0.5,
   },
   infoField: {
     flexDirection: "row",
@@ -296,13 +314,8 @@ const styles = StyleSheet.create({
     width: 300,
     borderRadius: 5,
   },
-  nameBox: {
-    height: 200,
-    width: 300,
-    borderRadius: 5,
-  },
-  phoneBox: {
-    height: 200,
+  informationBox: {
+    height: 140,
     width: 300,
     borderRadius: 5,
   },
@@ -335,11 +348,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setAvatar: bindActionCreators(setAvatar, dispatch),
+  setUsername: bindActionCreators(setUsername, dispatch),
   setName: bindActionCreators(setName, dispatch),
   setPhone: bindActionCreators(setPhone, dispatch),
-  setPassword: bindActionCreators(setPassword, dispatch),
-  logOut: () => dispatch(logOut()),
-  removeAccount: username => dispatch(removeAccount(username)),
+  clearData: bindActionCreators(clearData, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileManagement);

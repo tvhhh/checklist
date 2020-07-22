@@ -2,8 +2,8 @@ export default colors = {
   Background: "#f0f0f0",
   Overlay: "#ffffff",
 
-  PrimaryColor: "#00b2ff",
-  SecondaryColor: "#006aff",
+  PrimaryColor: "rgba(0, 178, 255, 1.0)",
+  SecondaryColor: "rgba(0, 106, 255, 1.0)",
   DisabledColor: "#808080",
 
   Button: "#696969",
@@ -23,7 +23,7 @@ export default colors = {
   Meeting: "rgba(64, 88, 124, 1.0)",
   Study: "rgba(64, 82, 171, 1.0)",
   Event: "rgba(133, 64, 133, 1.0)",
-  Uncategorized: "rgba(115, 115, 115, 1.0)",
+  Unknown: "rgba(115, 115, 115, 1.0)",
   Default: "rgba(247, 170, 28, 1.0)",
 };
 

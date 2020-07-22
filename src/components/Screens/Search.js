@@ -144,19 +144,13 @@ class Search extends React.Component {
     const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     if (extractedDate !== ""){
-      return(
-        <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>{`${extractedDate}`}</Text>
-      );
+      return <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>{`${extractedDate}`}</Text>;
     }
     if (type === "start"){
-      return (
-        <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>Start Day</Text>
-      );
+      return <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>Start Day</Text>;
     }
     else {
-      return (
-        <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>End Day</Text>
-      );
+      return <Text style={{color: "grey", fontFamily: font, fontSize: fonts.FilterBox}}>End Day</Text>;
     }
   }
 
@@ -254,12 +248,13 @@ class Search extends React.Component {
           </View> : null
         }        
         <Overlay
-            isVisible={this.state.isCategoryPickerVisible}
-            onBackdropPress={this.toggleCategoryPicker}
-            overlayStyle={styles.categoryPickerForm}
-          >
-            <CategoryPicker onSubmit={this.updateCategory} hasDefault={true} customize={this.props.customize} />
-          </Overlay>
+          isVisible={this.state.isCategoryPickerVisible}
+          onBackdropPress={this.toggleCategoryPicker}
+          overlayStyle={[styles.categoryPickerForm, { backgroundColor: theme.Overlay }]}
+          animationType="fade"
+        >
+          <CategoryPicker onSubmit={this.updateCategory} hasDefault={true} customize={this.props.customize} />
+        </Overlay>
         <TaskList 
           filterOption = {filterOption}
           query = {this.state.query}
@@ -267,15 +262,6 @@ class Search extends React.Component {
           pinned = {this.state.pinned}
           startInterval = {this.state.errorInterval ? "":this.state.startInterval}
           endInterval = {this.state.errorInterval ? "": this.state.endInterval}
-          isNotFilter = {this.state.errorInterval === true ? 
-            true:(
-            this.state.query === "" &
-            this.state.category === "default" &
-            this.state.pinned === false &
-            this.state.startInterval === "" &
-            this.state.endInterval === ""
-            )
-          }
           customize={this.props.customize}
         />        
         <DateTimePickerModal

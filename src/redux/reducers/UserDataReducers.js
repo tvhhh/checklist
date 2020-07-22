@@ -1,12 +1,26 @@
-import { GET_DATA, CLEAR_DATA, SET_CONNECTION, CREATE_TASK, EDIT_TASK, EDIT_PINNED, REMOVE_TASK, SET_NAME, SET_PHONE, SET_PASSWORD, SET_AVATAR } from '../actions/UserDataActions';
-import { storeTaskList, storeUserData, updateUserData } from '../../api';
+import { 
+  GET_DATA,
+  CLEAR_DATA,
+  SET_CONNECTION,
+  CREATE_TASK,
+  EDIT_TASK,
+  TOGGLE_PINNED,
+  TOGGLE_DONE,
+  REMOVE_TASK,
+  SET_AVATAR,
+  SET_USERNAME,
+  SET_NAME,
+  SET_PHONE,
+} from '../actions/UserDataActions';
+
+import { storeLocalUserData, updateUserData } from '../../api';
 
 
 const initialState = {
   connection: false,
   loggedIn: false,
   data: {
-    username: null,
+    uid: "Guest",
     tasks: [],
   },
 };
@@ -21,7 +35,7 @@ export default function userDataReducers(state = initialState, action) {
     case GET_DATA:
       return {
         ...state,
-        loggedIn: payload.data.username !== null,
+        loggedIn: payload.data.uid !== "Guest",
         data: { ...payload.data },
       };
     case CLEAR_DATA:
@@ -40,12 +54,8 @@ export default function userDataReducers(state = initialState, action) {
         ...currentTaskList,
       ];
       newData = { ...state.data, tasks: newTaskList };
-      if (state.data.username !== null) {
-        updateUserData(state.data.username, JSON.stringify(newTaskList), 'tasks');
-        storeUserData(JSON.stringify(newData));
-      } else {
-        storeTaskList(JSON.stringify(newTaskList));
-      }
+      if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
+      storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case EDIT_TASK:
       newTaskList = currentTaskList.map(task => 
@@ -53,55 +63,52 @@ export default function userDataReducers(state = initialState, action) {
         { id: payload.selected.id, ...payload.task } : task
       );
       newData = { ...state.data, tasks: newTaskList };
-      if (state.data.username !== null) {
-        updateUserData(state.data.username, JSON.stringify(newTaskList), 'tasks');
-        storeUserData(JSON.stringify(newData));
-      } else {
-        storeTaskList(JSON.stringify(newTaskList));
-      }
+      if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
+      storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case REMOVE_TASK:
       newTaskList = currentTaskList.filter(task => task.id !== payload.selected.id);
       newData = { ...state.data, tasks: newTaskList };
-      if (state.data.username !== null) {
-        updateUserData(state.data.username, JSON.stringify(newTaskList), 'tasks');
-        storeUserData(JSON.stringify(newData));
-      } else {
-        storeTaskList(JSON.stringify(newTaskList));
-      }
+      if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
+      storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
-    case EDIT_PINNED:
+    case TOGGLE_PINNED:
       newTaskList = currentTaskList.map(task => 
         (task.id === payload.selected.id) ? 
         { ...task, pinned: !task.pinned } : task
       );
       newData = { ...state.data, tasks: newTaskList };
-      if (state.data.username !== null) {
-        updateUserData(state.data.username, JSON.stringify(newTaskList), 'tasks');
-        storeUserData(JSON.stringify(newData));
-      } else {
-        storeTaskList(JSON.stringify(newTaskList));
-      }
+      if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
+      storeLocalUserData(JSON.stringify(newData));
+      return { ...state, data: newData };
+    case TOGGLE_DONE:
+      newTaskList = currentTaskList.map(task => 
+        (task.id === payload.selected.id) ? 
+        { ...task, done: !task.done } : task
+      );
+      newData = { ...state.data, tasks: newTaskList };
+      if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
+      storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case SET_AVATAR:
       newData = { ...state.data, avatar: payload.color };
-      updateUserData(state.data.username, payload.color, 'avatar');
-      storeUserData(JSON.stringify(newData));
+      updateUserData(state.data.uid, payload.color, 'avatar');
+      storeLocalUserData(JSON.stringify(newData));
+      return { ...state, data: newData };
+    case SET_USERNAME:
+      newData = { ...state.data, username: payload.username };
+      updateUserData(state.data.uid, payload.color, 'username');
+      storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case SET_NAME:
       newData = { ...state.data, name: payload.name };
-      updateUserData(state.data.username, payload.name, 'name');
-      storeUserData(JSON.stringify(newData));
+      updateUserData(state.data.uid, payload.name, 'name');
+      storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case SET_PHONE:
       newData = { ...state.data, phone: payload.phone };
-      updateUserData(state.data.username, payload.phone, 'phone');
-      storeUserData(JSON.stringify(newData));
-      return { ...state, data: newData };
-    case SET_PASSWORD:
-      newData = { ...state.data, password: payload.password };
-      updateUserData(state.data.username, payload.password, 'password');
-      storeUserData(JSON.stringify(newData));
+      updateUserData(state.data.uid, payload.phone, 'phone');
+      storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     default:
       return state;

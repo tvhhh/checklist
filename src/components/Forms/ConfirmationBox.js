@@ -8,10 +8,10 @@ export default class ConfirmationBox extends React.Component {
     const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
     return (
-      <View style={{ flex: 1, backgroundColor: theme.Overlay }}>
+      <View style={styles.container}>
         <View style={styles.content}>
-          <Text style={[styles.largeText, {fontFamily: font, fontSize: fonts.TitleText}]}>{this.props.title}</Text>
-          <Text style={[styles.smallText, {fontFamily: font, fontSize: fonts.CaptionText}]}>You cannot undo this action</Text>
+          <Text style={[styles.title, {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.TitleText}]}>{this.props.title}</Text>
+          <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.CaptionText}}>You cannot undo this action</Text>
         </View>
         <View style={styles.optionContainer}>
           <TouchableOpacity style={styles.button} onPress={this.props.onCancel}>
@@ -27,18 +27,18 @@ export default class ConfirmationBox extends React.Component {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   content: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
-  largeText: {
+  title: {
     color: colors.PrimaryText,
     fontWeight: "bold",
     marginBottom: 5,
-  },
-  smallText: {
-    color: colors.PrimaryText,
   },
   optionContainer: {
     flexDirection: "row",

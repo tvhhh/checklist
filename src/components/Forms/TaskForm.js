@@ -1,7 +1,7 @@
 import React from 'react';
 import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Overlay } from 'react-native-elements';
-import { connect } from 'react-redux';
+
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import CategoryPicker from './CategoryPicker';
 import Category from '../Category';
@@ -26,7 +26,7 @@ export default class TaskForm extends React.Component {
         title: this.props.title || "",
         description: this.props.description || "",
         dueTime: this.props.dueTime || today,
-        category: this.props.category || "uncategorized",
+        category: this.props.category || "unknown",
         pinned: this.props.pinned || false,
         done: this.props.done || false,
       },
@@ -88,10 +88,13 @@ export default class TaskForm extends React.Component {
     const extractedDateTime = extractDateTime(this.state.task.dueTime);
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ flex: 1, backgroundColor: theme.Overlay }}>
+        <View style={styles.container}>
           <View style={styles.taskFormHeader}>
-            <TouchableOpacity style={styles.saveButtonContainer} onPress={this.handleSubmit}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={this.handleSubmit}>
               <Text style={[styles.saveButtonText, {fontSize: fonts.ButtonText, fontFamily: font}]}>SAVE</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonContainer} onPress={this.props.onBack}>
+              <Text style={[styles.cancelButtonText, {fontSize: fonts.ButtonText, fontFamily: font}]}>CANCEL</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.taskFormInputField}>
@@ -149,7 +152,8 @@ export default class TaskForm extends React.Component {
           <Overlay
             isVisible={this.state.isCategoryPickerVisible}
             onBackdropPress={this.toggleCategoryPicker}
-            overlayStyle={styles.categoryPickerForm}
+            overlayStyle={[styles.categoryPickerForm, { backgroundColor: theme.Overlay }]}
+            animationType="fade"
           >
             <CategoryPicker 
               onSubmit={this.updateCategory} 
@@ -159,7 +163,8 @@ export default class TaskForm extends React.Component {
           <Overlay
             isVisible={this.state.isConfirmationBoxVisible}
             onBackdropPress={this.toggleConfirmationBox}
-            overlayStyle={styles.confirmationBox}
+            overlayStyle={[styles.confirmationBox, { backgroundColor: theme.Overlay }]}
+            animationType="fade"
           >
             <ConfirmationBox 
               title="Delete this task?" 
@@ -175,19 +180,25 @@ export default class TaskForm extends React.Component {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
   taskFormHeader: {
     flexDirection: "row-reverse",
-    paddingHorizontal: 15,
   },
-  saveButtonContainer: {
-    padding: 5,
+  buttonContainer: {
+    paddingHorizontal: 10,
+    marginBottom: 5,
   },
   saveButtonText: {
     color: colors.PrimaryColor,
   },
+  cancelButtonText: {
+    color: colors.SecondaryColor,
+  },
   taskFormInputField: {
     flex: 1,
-    paddingHorizontal: 10,
   },
   titleInput: {
     borderColor: colors.Border,
@@ -214,7 +225,7 @@ const styles = StyleSheet.create({
   },
   categoryPickerForm: { 
     padding: 0,
-    height: 380,
+    height: 350,
     width: 300,
     borderRadius: 5,
   },

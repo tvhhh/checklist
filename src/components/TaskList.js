@@ -1,22 +1,21 @@
 import React from 'react';
-import { SectionList, StyleSheet, Text, View, } from 'react-native';
+import { Dimensions, SectionList, StyleSheet, Text, View, } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Task from './Task';
 import TaskForm from './Forms/TaskForm';
 import { Create } from './Button';
 
-import colors, { lightTheme, darkTheme } from '../styles/colors';
-import { smallFonts, mediumFonts, largeFonts } from '../styles/fonts';
+import colors from '../styles/colors';
 
-import { isToday, getWeekDates, getNameOfDay, extractDate } from '../utils/DateTime';
+import { isToday, getToday, getWeekDates, getNameOfDay, extractDate, extractDateTime } from '../utils/DateTime';
 
-import { createTask, editTask, removeTask, editPinned } from '../redux/actions/UserDataActions';
+import { createTask, editTask, removeTask, togglePinned, toggleDone } from '../redux/actions/UserDataActions';
 
 
 export const FILTER_TODAY = "FILTER_TODAY";
@@ -24,6 +23,11 @@ export const FILTER_WEEK = "FILTER_WEEK";
 export const FILTER_PINNED = "FILTER_PINNED";
 export const FILTER_DATE = "FILTER_DATE";
 export const FILTER_SEARCH = "FILTER_SEARCH";
+export const FILTER_NAME = "FILTER_NAME";
+export const FILTER_CATEGORY = "FILTER_CATEGORY";
+export const FILTER_OVERDUED = "FILTER_OVERDUED";
+export const FILTER_UPCOMING = "FILTER_UPCOMING";
+export const FILTER_COMPLETED = "FILTER_COMPLETED";
 
 class TaskList extends React.Component {
   constructor(props) {
@@ -38,7 +42,8 @@ class TaskList extends React.Component {
     <Task 
       {...item} 
       onSelect={() => this.onSelectedTaskPress(item)} 
-      togglePinned={() => this.togglePinned(item)} 
+      togglePinned={() => this.props.togglePinned(item)} 
+      toggleDone={() => this.props.toggleDone(item)}
       customize={this.props.customize}
     />
   )
@@ -50,20 +55,12 @@ class TaskList extends React.Component {
       fontSize: this.props.customize.fontSize.TitleText,
     }]}>{section.title}</Text>
 
-  onAddButtonPress = () => {
-    this.setState({ showForm: true });
+  toggleForm = () => {
+    this.setState({ showForm: !this.state.showForm })
   }
 
   onSelectedTaskPress = task => {
     this.setState({ showForm: true, selected: task });
-  }
-
-  onFormBackdropPress = () => {
-    this.setState({ showForm: false, selected: {} });
-  }
-
-  togglePinned = selected => {
-    this.props.editPinned(selected);
   }
 
   handleFormSubmit = task => {
@@ -93,7 +90,6 @@ class TaskList extends React.Component {
 
   filterByWeek = taskList => {
     let [start, end] = getWeekDates();
-
     return taskList.filter(task => task.dueTime <= end && task.dueTime >= start).reduce((obj, task) => {
       const title = getNameOfDay(task.dueTime);
       return {
@@ -113,6 +109,16 @@ class TaskList extends React.Component {
     }, {});
   }
 
+  filterByCategory = (taskList, category) => {
+    return taskList.filter(task => task.category === category).reduce((obj, task) => {
+      const title = category.toUpperCase();
+      return {
+        ...obj,
+        [title]: [...(obj[title] || []), task],  
+      }
+    }, {});
+  }
+
   filterByDate = (taskList, date) => {
     return taskList.filter(task => extractDate(task.dueTime) === date).reduce((obj, task) => {
       const title = "";
@@ -123,23 +129,59 @@ class TaskList extends React.Component {
     }, {});
   }
 
+  filterOverduedTasks = taskList => {
+    let now = getToday();
+    return taskList.filter(task => task.dueTime < now && !task.done).reduce((obj, task) => {
+      const title = extractDateTime(task.dueTime).date;
+      return {
+        ...obj,
+        [title]: [...(obj[title] || []), task],
+      }
+    }, {});
+  }
+
+  filterUpcomingTasks = taskList => {
+    let now = getToday();
+    return taskList.filter(task => task.dueTime > now && !task.done).reduce((obj, task) => {
+      const title = extractDateTime(task.dueTime).date;
+      return {
+        ...obj,
+        [title]: [...(obj[title] || []), task],
+      }
+    }, {});
+  }
+
+  filterCompletedTasks = taskList => {
+    return taskList.filter(task => task.done).reduce((obj, task) => {
+      const title = extractDateTime(task.dueTime).date;
+      return {
+        ...obj,
+        [title]: [...(obj[title] || []), task],
+      }
+    }, {});
+  }
+
   filterSearch = (taskList, query, category, pinned, startInterval, endInterval) => {
     const filtedList = taskList.filter(item => {      
-    const itemTitle = `${item.title.toUpperCase()}`;
-    const itemCategory = `${item.category}`;
-    const itemPinned = item.pinned;
-    const itemDueTime = item.dueTime;
-    const startIntervalChecker = startInterval === "" ? 1:itemDueTime >= startInterval;
-    const endIntervalChecker = endInterval === "" ? 1:itemDueTime <= endInterval;
-    const textData = query.toUpperCase();
-    if (category === "default"){
-      if (itemTitle.includes(textData) && startIntervalChecker && endIntervalChecker && itemPinned === pinned){
-        return true;
-      }   
-    }
-    if (itemTitle.includes(textData) && itemCategory === category && startIntervalChecker && endIntervalChecker && itemPinned === pinned){
-      return true;
-    }    
+      const itemTitle = `${item.title.toUpperCase()}`;
+      const itemCategory = `${item.category}`;
+      const itemPinned = item.pinned;
+      const itemDueTime = item.dueTime;
+      const startIntervalChecker = startInterval === "" ? 1 : itemDueTime >= startInterval;
+      const endIntervalChecker = endInterval === "" ? 1 : itemDueTime <= endInterval;
+      const textData = query.toUpperCase();
+      if (category === "default" &&
+        startInterval === "" &&
+        endInterval === "" &&
+        !pinned) {
+          return false;
+      } else if (itemTitle.includes(textData) &&
+        (itemCategory === category || category === "default") &&
+        startIntervalChecker &&
+        endIntervalChecker &&
+        itemPinned === pinned) {
+          return true;
+      }
       return false;
     });
     
@@ -160,12 +202,26 @@ class TaskList extends React.Component {
         return this.filterByWeek(taskList);
       case FILTER_PINNED:
         return this.filterByPinned(taskList);
+      case FILTER_CATEGORY:
+        return this.filterByCategory(taskList, this.props.category)
       case FILTER_DATE:
         return this.filterByDate(taskList, this.props.date);
       case FILTER_SEARCH:
-        return this.filterSearch(taskList, this.props.query, this.props.category, this.props.pinned, this.props.startInterval, this.props.endInterval);
+        return this.filterSearch(taskList,
+          this.props.query,
+          this.props.category,
+          this.props.pinned,
+          this.props.startInterval,
+          this.props.endInterval
+        );
+      case FILTER_OVERDUED:
+        return this.filterOverduedTasks(taskList);
+      case FILTER_UPCOMING:
+        return this.filterUpcomingTasks(taskList);
+      case FILTER_COMPLETED:
+        return this.filterCompletedTasks(taskList);
       default:  
-        return taskList;
+        return { "": taskList };
     }
   }
 
@@ -186,39 +242,40 @@ class TaskList extends React.Component {
     
     return (
       <>
-        {this.props.isNotFilter ? null:
         <SectionList
           sections={sections}
           keyExtractor={(item, index) => item + index}
           renderItem={this.renderItem}
           renderSectionHeader={this.renderSectionHeader}
-          ListEmptyComponent={this.props.calendarView ? null : (
+          ListEmptyComponent={this.props.showEmptyComponent ? (
             <View style={styles.emptyComponentContainer}>
-              <Text style={{ color: theme.PrimaryText, fontSize: fonts.HeavyText, fontFamily: font }}>Welcome to TODOS!</Text>
+              <Ionicons name="md-cloud-done" color={colors.PrimaryColor} size={120} />
+              <Text style={{ color: theme.PrimaryText, fontSize: fonts.HeavyText, fontFamily: font }}>You're all done here!</Text>
               <Text style={{ color: theme.SecondaryText, fontSize: fonts.PrimaryText, fontFamily: font }}>Tap + to create a new task</Text>
-              <FontAwesome5 name="tasks" color="grey" size={40} />
             </View>
-          )}
-        />}
+          ) : null}
+        />
         {this.props.create ?
           <Create
             style={styles.addButton}
-            onPress={this.onAddButtonPress} 
+            onPress={this.toggleForm}
           /> : null
         }
         <Overlay
           isVisible={this.state.showForm} 
-          onBackdropPress={this.onFormBackdropPress}
+          onBackdropPress={this.toggleForm}
           overlayStyle={[
             styles.taskForm, 
-            { height: Object.keys(this.state.selected).length ? 350 : 300 , backgroundColor: theme.Overlay, borderColor: theme.Overlay}
+            { height: Object.keys(this.state.selected).length ? 350 : 280, backgroundColor: theme.Overlay }
           ]}
+          animationType="fade"
         >
           <TaskForm
             {...this.state.selected}
             isOnSelected={Object.keys(this.state.selected).length > 0} 
             onSubmit={this.handleFormSubmit}
             onRemove={this.handleRemoval}
+            onBack={this.toggleForm}
             customize={this.props.customize}
           />
         </Overlay>
@@ -233,14 +290,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   emptyComponentContainer: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 220,
+    marginVertical: 180,
   },
   taskForm: {
     padding: 0,
-    borderWidth: 3,
-    borderRadius: 10,
+    borderRadius: 5,
   },
   addButton: {
     position: "absolute",
@@ -258,7 +315,8 @@ const mapDispatchToProps = dispatch => ({
   createTask: bindActionCreators(createTask, dispatch),
   editTask: bindActionCreators(editTask, dispatch),
   removeTask: bindActionCreators(removeTask, dispatch),
-  editPinned: bindActionCreators(editPinned, dispatch),
+  togglePinned: bindActionCreators(togglePinned, dispatch),
+  toggleDone: bindActionCreators(toggleDone, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskList);

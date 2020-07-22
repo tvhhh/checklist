@@ -100,9 +100,9 @@ class Groups extends React.Component {
   }
 
   render() {
-    const theme = this.props.customize.darkTheme ? colors.DarkBackground : colors.LightBackground;
+    const theme = this.props.customize.theme;
     return (
-      <View style={{ flex: 1, backgroundColor: theme}}>
+      <View style={{ flex: 1, backgroundColor: theme.Background}}>
         <Header
           navigation={this.props.navigation}
           title="GROUPS"

@@ -5,10 +5,9 @@ import { connect } from 'react-redux';
 
 import { ErrorBox, NoInternetAlert } from './LogIn';
 
-import colors, { lightTheme, darkTheme } from '../../styles/colors';
-import { smallFonts, mediumFonts, largeFonts } from '../../styles/fonts';
+import colors from '../../styles/colors';
 
-import { createUser, isUsernameExisting, isEmailExisting } from '../../api';
+import { registerUser } from '../../redux/actions/UserDataActions';
 
 
 class SignUp extends React.Component {
@@ -21,7 +20,7 @@ class SignUp extends React.Component {
         password: "",
         confirmedPassword: "",
       },
-      errorText: "",
+      errorMessage: "",
       error: false,
       alert: false,
     };
@@ -45,15 +44,6 @@ class SignUp extends React.Component {
 
   onConfirmPassword = text => {
     this.setState({ user: { ...this.state.user, confirmedPassword: text } });
-  }
-
-  checkEmptyEntry = () => {
-    return (this.state.user.username.trim() === "" || this.state.user.password.trim() === "");
-  }
-
-  checkInvalidEmail = (email) => {
-    var format = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return email.match(format) === null;
   }
 
   checkUnmatchedPassword = (password, confirmedPassword) => {
@@ -82,22 +72,16 @@ class SignUp extends React.Component {
   handleSubmit = async () => {
     if (!this.props.appData.connection) {
       this.setState({ alert: true });
-    } else if (await isUsernameExisting(this.state.user.username)) {
-      this.setState({ error: true, errorText: "Sorry, this username has existed." });
-    } else if (await isEmailExisting(this.state.user.email)) {
-      this.setState({ error: true, errorText: "Sorry, this email has existed." })
-    } else if (this.checkEmptyEntry()) {
-      this.setState({ error: true, errorText: "Please don't leave any field empty." });
-    } else if (this.checkInvalidEmail(this.state.user.email)) {
-      this.setState({ error: true, errorText: "Invalid email." });
     } else if (this.checkUnmatchedPassword(this.state.user.password, this.state.user.confirmedPassword)) {
-      this.setState({ error: true, errorText: "Unmatched password, please make sure you input correctly." });
+      this.setState({ error: true, errorMessage: "Unmatched password." });
     } else {
-      var data = this.state.user;
-      delete data.confirmedPassword;
-      createUser(data);
-      this.clearAllInput();
-      this.props.navigation.goBack();
+      const res = await registerUser(this.state.user);
+      if (res === "done") {
+        this.clearAllInput();
+        this.props.navigation.goBack();
+      } else {
+        this.setState({ error: true, errorMessage: res });
+      }
     }
   }
   
@@ -169,8 +153,8 @@ class SignUp extends React.Component {
           </TouchableOpacity>
           {this.state.error ? 
             <ErrorBox 
-              error={this.state.errorText}
-              customize={this.props.customize} 
+              error={this.state.errorMessage}
+              customize={this.props.customize}
             /> : null
           }
           <Overlay
