@@ -6,7 +6,7 @@ import { createGroup } from '../../../redux/actions/GroupDataActions'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-export class AddGroupView extends React.Component {
+export class AddGroupViewNew extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -36,7 +36,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddGroupView);
 
-export function AddGroupViewOld({route, navigation}) {
+export function AddGroupView({route, navigation}) {
 
   const { database } = route.params;
   return (

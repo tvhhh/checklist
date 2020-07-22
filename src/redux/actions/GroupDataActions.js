@@ -1,5 +1,4 @@
 export const CREATE_GROUP = "CREATE_GROUP"
-export const LEAVE_GROUP = "LEAVE_GROUP"
 export const ADD_USER_TO_GROUP = "ADD_USER_TO_GROUP"
 export const REMOVE_USER_FROM_GROUP = "REMOVE_USER_FROM_GROUP"
 export const CHANGE_USER_POLICY = "CHANGE_USER_POLICY"
@@ -11,13 +10,6 @@ export const createGroup = data => ({
   type: CREATE_GROUP,
   payload: {
     data,
-  }
-})
-
-export const leaveGroup = (uid, gid) => ({
-  type: LEAVE_GROUP,
-  payload: {
-    uid, gid,
   }
 })
 
