@@ -1,9 +1,8 @@
 import React from 'react';
 import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 
-import { ErrorBox, NoInternetAlert } from './LogIn';
+import { ErrorBox } from './LogIn';
 
 import colors from '../../styles/colors';
 
@@ -50,17 +49,6 @@ class SignUp extends React.Component {
     return password !== confirmedPassword;
   }
 
-  clearAllInput = () => {
-    this.setState({
-      user: {
-        username: "",
-        email: "",
-        password: "",
-        confirmedPassword: "",
-      },
-    });
-  }
-
   turnOffError = () => {
     this.setState({ error: false });
   }
@@ -77,7 +65,6 @@ class SignUp extends React.Component {
     } else {
       const res = await registerUser(this.state.user);
       if (res === "done") {
-        this.clearAllInput();
         this.props.navigation.goBack();
       } else {
         this.setState({ error: true, errorMessage: res });
@@ -157,13 +144,6 @@ class SignUp extends React.Component {
               customize={this.props.customize}
             /> : null
           }
-          <Overlay
-            isVisible={this.state.alert}
-            onBackdropPress={this.toggleAlert}
-            overlayStyle={styles.alertBox}
-          >
-            <NoInternetAlert customize={this.props.customize} />
-          </Overlay>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -210,11 +190,6 @@ const styles = StyleSheet.create({
   },
   otherOptionsText: {
     color: colors.PrimaryColor,
-  },
-  alertBox: {
-    height: 150,
-    width: 300,
-    borderRadius: 5,
   },
 });
 

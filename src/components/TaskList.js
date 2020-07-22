@@ -25,6 +25,7 @@ export const FILTER_DATE = "FILTER_DATE";
 export const FILTER_SEARCH = "FILTER_SEARCH";
 export const FILTER_NAME = "FILTER_NAME";
 export const FILTER_CATEGORY = "FILTER_CATEGORY";
+export const FILTER_NOTIFICATION = "FILTER_NOTICE";
 export const FILTER_OVERDUED = "FILTER_OVERDUED";
 export const FILTER_UPCOMING = "FILTER_UPCOMING";
 export const FILTER_COMPLETED = "FILTER_COMPLETED";
@@ -129,6 +130,20 @@ class TaskList extends React.Component {
     }, {});
   }
 
+  filterNotifications = taskList => {
+    let now = getToday();
+    return taskList.filter(task => 
+      (task.dueTime < now && !task.done) || 
+      (task.dueTime >= now && isToday(task.dueTime)))
+    .reduce((obj, task) => {
+      const title = task.dueTime < now ? "EXPIRED" : "UPCOMING";
+      return {
+        ...obj,
+        [title]: [...(obj[title] || []), task],
+      }
+    }, {});
+  }
+
   filterOverduedTasks = taskList => {
     let now = getToday();
     return taskList.filter(task => task.dueTime < now && !task.done).reduce((obj, task) => {
@@ -214,6 +229,8 @@ class TaskList extends React.Component {
           this.props.startInterval,
           this.props.endInterval
         );
+      case FILTER_NOTIFICATION:
+        return this.filterNotifications(taskList);
       case FILTER_OVERDUED:
         return this.filterOverduedTasks(taskList);
       case FILTER_UPCOMING:
@@ -247,13 +264,7 @@ class TaskList extends React.Component {
           keyExtractor={(item, index) => item + index}
           renderItem={this.renderItem}
           renderSectionHeader={this.renderSectionHeader}
-          ListEmptyComponent={this.props.showEmptyComponent ? (
-            <View style={styles.emptyComponentContainer}>
-              <Ionicons name="md-cloud-done" color={colors.PrimaryColor} size={120} />
-              <Text style={{ color: theme.PrimaryText, fontSize: fonts.HeavyText, fontFamily: font }}>You're all done here!</Text>
-              <Text style={{ color: theme.SecondaryText, fontSize: fonts.PrimaryText, fontFamily: font }}>Tap + to create a new task</Text>
-            </View>
-          ) : null}
+          ListEmptyComponent={this.props.listEmptyComponent}
         />
         {this.props.create ?
           <Create
@@ -264,21 +275,23 @@ class TaskList extends React.Component {
         <Overlay
           isVisible={this.state.showForm} 
           onBackdropPress={this.toggleForm}
+          overlayBackgroundColor={theme.Overlay}
           overlayStyle={[
-            styles.taskForm, 
-            { height: Object.keys(this.state.selected).length ? 350 : 280, backgroundColor: theme.Overlay }
+            styles.taskForm,
+            { height: Object.keys(this.state.selected).length ? 350 : 300 }
           ]}
+          children={
+            <TaskForm
+              {...this.state.selected}
+              isOnSelected={Object.keys(this.state.selected).length > 0} 
+              onSubmit={this.handleFormSubmit}
+              onRemove={this.handleRemoval}
+              onBack={this.toggleForm}
+              customize={this.props.customize}
+            />
+          }
           animationType="fade"
-        >
-          <TaskForm
-            {...this.state.selected}
-            isOnSelected={Object.keys(this.state.selected).length > 0} 
-            onSubmit={this.handleFormSubmit}
-            onRemove={this.handleRemoval}
-            onBack={this.toggleForm}
-            customize={this.props.customize}
-          />
-        </Overlay>
+        />
       </>
     );
   }
@@ -288,6 +301,7 @@ const styles = StyleSheet.create({
   listTitle: {
     textAlign: "center",
     marginBottom: 5,
+    marginTop: 10,
   },
   emptyComponentContainer: {
     flex: 1,

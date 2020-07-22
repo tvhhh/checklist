@@ -16,7 +16,11 @@ export default class Task extends React.Component {
         <View style={[styles.taskContainer, { opacity: (this.props.done) ? 0.5 : 1, backgroundColor: theme.Overlay}]}>
           <CheckButton name="done" checked={this.props.done} onPress={this.props.toggleDone} />
           <View style={styles.textContainer}>
-            <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>{this.props.title}</Text>
+            <Text 
+              style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >{this.props.title}</Text>
             <Text style={{color: theme.SecondaryText, fontFamily: font, fontSize: fonts.SecondaryText}}>{`${extractedTime.date}  ${extractedTime.time}`}</Text>
           </View>
           <Category name={this.props.category} size={40} />
@@ -35,7 +39,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginBottom: 5,
     borderRadius: 15,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
   },
   textContainer: {
     flex: 1,

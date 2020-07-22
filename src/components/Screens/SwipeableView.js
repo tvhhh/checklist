@@ -6,7 +6,7 @@ import Calendar from './Calendar';
 import Categories from './Categories';
 
 
-class SwipeableView extends React.Component {
+export default class SwipeableView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,8 +20,6 @@ class SwipeableView extends React.Component {
       ],
     };
   }
-
-  const 
 
   renderScene = ({ route }) => {
     switch(route.key) {
@@ -51,5 +49,3 @@ class SwipeableView extends React.Component {
     );
   }
 };
-
-export default SwipeableView;

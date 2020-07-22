@@ -195,64 +195,74 @@ class ProfileManagement extends React.Component {
         <Overlay
           isVisible={this.state.isAvatarPickerVisible}
           onBackdropPress={this.toggleAvatarPicker}
-          overlayStyle={[styles.avatarPicker, { backgroundColor: theme.Overlay }]}
+          overlayBackgroundColor={theme.Overlay}
+          overlayStyle={styles.avatarPicker}
+          children={
+            <AvatarPicker 
+              onSubmit={this.handleAvatarSubmit} 
+              customize={this.props.customize}
+            />
+          }
           animationType="fade"
-        >
-          <AvatarPicker 
-            onSubmit={this.handleAvatarSubmit} 
-            customize={this.props.customize}
-          />
-        </Overlay>
+        />
         <Overlay
           isVisible={this.state.isInformationBoxVisible}
           onBackdropPress={this.toggleInformationBox}
-          overlayStyle={[styles.informationBox, { backgroundColor: theme.Overlay }]}
+          overlayBackgroundColor={theme.Overlay}
+          overlayStyle={styles.informationBox}
+          children={
+            <InformationBox
+              info={data[this.state.informationType]}
+              type={this.state.informationType}
+              inputTitle={`Edit your ${this.state.informationType}`}
+              placeholder={`Enter your ${this.state.informationType} here`}
+              onSubmit={this.handleInformationSubmit}
+              customize={this.props.customize}
+            />
+          }
           animationType="fade"
-        >
-          <InformationBox
-            info={data[this.state.informationType]}
-            type={this.state.informationType}
-            inputTitle={`Edit your ${this.state.informationType}`}
-            placeholder={`Enter your ${this.state.informationType} here`}
-            onSubmit={this.handleInformationSubmit}
-            customize={this.props.customize}
-          />
-        </Overlay>
+        />
         <Overlay
           isVisible={this.state.isPasswordBoxVisible}
           onBackdropPress={this.togglePasswordBox}
-          overlayStyle={[styles.passwordBox, { backgroundColor: theme.Overlay }]}
+          overlayBackgroundColor={theme.Overlay}
+          overlayStyle={styles.passwordBox}
+          children={
+            <PasswordBox
+              onSubmit={this.handlePasswordSubmit}
+              customize={this.props.customize}
+            />
+          }
           animationType="fade"
-        >
-          <PasswordBox
-            onSubmit={this.handlePasswordSubmit}
-            customize={this.props.customize}
-          />
-        </Overlay>
+        />
         <Overlay
           isVisible={this.state.isConfirmPasswordBoxVisible}
           onBackdropPress={this.toggleConfirmPasswordBox}
-          overlayStyle={[styles.confirmPasswordBox, { backgroundColor: theme.Overlay }]}
+          overlayBackgroundColor={theme.Overlay}
+          overlayStyle={styles.confirmPasswordBox}
+          children={
+            <ConfirmPasswordBox
+              onSubmit={this.handleConfirmPasswordSuccess}
+              customize={this.props.customize}
+            />
+          }
           animationType="fade"
-        >
-          <ConfirmPasswordBox
-            onSubmit={this.handleConfirmPasswordSuccess}
-            customize={this.props.customize}
-          />
-        </Overlay>
+        />
         <Overlay
           isVisible={this.state.isConfirmationBoxVisible}
           onBackdropPress={this.toggleConfirmationBox}
-          overlayStyle={[styles.confirmationBox, { backgroundColor: theme.Overlay }]}
+          overlayBackgroundColor={theme.Overlay}
+          overlayStyle={styles.confirmationBox}
+          children={
+            <ConfirmationBox 
+              title="Delete this account?"
+              onCancel={this.toggleConfirmationBox}
+              onConfirm={this.handleRemoveAccountConfirm}
+              customize={this.props.customize}
+            />
+          }
           animationType="fade"
-        >
-          <ConfirmationBox 
-            title="Delete this account?"
-            onCancel={this.toggleConfirmationBox}
-            onConfirm={this.handleRemoveAccountConfirm}
-            customize={this.props.customize}
-          />
-        </Overlay>
+        />
       </ScrollView>
     );
   }

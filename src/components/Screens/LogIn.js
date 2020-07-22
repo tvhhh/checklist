@@ -1,12 +1,9 @@
 import React from 'react';
 import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import Header from '../Header';
-
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import colors from '../../styles/colors';
 
@@ -20,20 +17,6 @@ export class ErrorBox extends React.Component {
     return (
       <View style={styles.errorBox}>
         <Text style={[styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}]}>{this.props.error}</Text>
-      </View>
-    );
-  }
-};
-
-export class NoInternetAlert extends React.Component {
-  render() {
-    const theme = this.props.customize.theme;
-    const fonts = this.props.customize.fontSize;
-    const font = this.props.customize.font;
-    return (
-      <View style={[styles.alertContainer, { backgroundColor: theme.Overlay }]}>
-        <MaterialCommunityIcons name="wifi-off" size={60} color={colors.DisabledColor} />
-        <Text style={[styles.alertText, {fontSize: fonts.CaptionText, fontFamily: font}]}>NO INTERNET CONNECTION</Text>
       </View>
     );
   }
@@ -143,13 +126,6 @@ class LogIn extends React.Component {
               /> : null
             }
           </View>
-          <Overlay
-            isVisible={this.state.alert}
-            onBackdropPress={this.toggleAlert}
-            overlayStyle={styles.alertBox}
-          >
-            <NoInternetAlert customize={this.props.customize} />
-          </Overlay>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -228,10 +204,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  alertText: {
-    color: colors.DisabledColor,
-    marginTop: 10,
   },
 });
 

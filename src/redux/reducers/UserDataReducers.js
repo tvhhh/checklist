@@ -97,7 +97,7 @@ export default function userDataReducers(state = initialState, action) {
       return { ...state, data: newData };
     case SET_USERNAME:
       newData = { ...state.data, username: payload.username };
-      updateUserData(state.data.uid, payload.color, 'username');
+      updateUserData(state.data.uid, payload.username, 'username');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case SET_NAME:

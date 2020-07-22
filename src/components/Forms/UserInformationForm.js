@@ -175,7 +175,7 @@ export class PasswordBox extends React.Component {
             }
           </View>
           <View style={styles.inputField}>
-            <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Confirm your new password</Text>
+            <Text style={[styles.inputTitle, {color: theme.TitleText, fontSize: fonts.PrimaryText, fontFamily: font}]}>Confirm your password</Text>
             <TextInput style={[styles.passwordInput, {color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}]}
               placeholder="Re-enter your new password"
               placeholderTextColor={theme.SecondaryText}

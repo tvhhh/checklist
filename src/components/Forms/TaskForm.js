@@ -152,27 +152,31 @@ export default class TaskForm extends React.Component {
           <Overlay
             isVisible={this.state.isCategoryPickerVisible}
             onBackdropPress={this.toggleCategoryPicker}
-            overlayStyle={[styles.categoryPickerForm, { backgroundColor: theme.Overlay }]}
+            overlayBackgroundColor={theme.Overlay}
+            overlayStyle={styles.categoryPickerForm}
+            children={
+              <CategoryPicker 
+                onSubmit={this.updateCategory} 
+                customize={this.props.customize}
+              />
+            }
             animationType="fade"
-          >
-            <CategoryPicker 
-              onSubmit={this.updateCategory} 
-              customize={this.props.customize}
-            />
-          </Overlay>
+          />
           <Overlay
             isVisible={this.state.isConfirmationBoxVisible}
             onBackdropPress={this.toggleConfirmationBox}
-            overlayStyle={[styles.confirmationBox, { backgroundColor: theme.Overlay }]}
+            overlayBackgroundColor={theme.Overlay}
+            overlayStyle={styles.confirmationBox}
+            children={
+              <ConfirmationBox 
+                title="Delete this task?" 
+                onCancel={this.toggleConfirmationBox} 
+                onConfirm={this.handleRemoveConfirm}
+                customize={this.props.customize} 
+              />
+            }
             animationType="fade"
-          >
-            <ConfirmationBox 
-              title="Delete this task?" 
-              onCancel={this.toggleConfirmationBox} 
-              onConfirm={this.handleRemoveConfirm}
-              customize={this.props.customize} 
-            />
-          </Overlay>
+          />
         </View>
       </TouchableWithoutFeedback>
     );

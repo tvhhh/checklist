@@ -1,9 +1,13 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import Header from '../Header';
 import TaskList, { FILTER_TODAY, FILTER_WEEK, FILTER_PINNED } from '../TaskList';
+
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import colors from '../../styles/colors';
 
 
 class List extends React.Component {
@@ -22,6 +26,9 @@ class List extends React.Component {
 
   render() {
     const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
+
     const filter = this.getFilter();
     return (
       <View style={{flex: 1, backgroundColor: theme.Background}}>
@@ -35,13 +42,27 @@ class List extends React.Component {
         }
         <TaskList
           {...filter}
-          showEmptyComponent={true}
           create={true}
+          listEmptyComponent={
+            <View style={styles.emptyComponent}>
+              <MaterialIcons name="done-all" color={colors.PrimaryColor} size={120} />
+              <Text style={{ color: theme.PrimaryText, fontSize: fonts.HeavyText, fontFamily: font }}>You're all done here!</Text>
+              <Text style={{ color: theme.SecondaryText, fontSize: fonts.PrimaryText, fontFamily: font }}>Tap + to create a new task</Text>
+            </View>
+          }
         />
       </View>
     );
   }
 };
+
+const styles = StyleSheet.create({
+  emptyComponent: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 180,
+  },
+});
 
 const mapStateToProps = state => ({
   customize: state.customize,

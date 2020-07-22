@@ -220,10 +220,10 @@ class Search extends React.Component {
             placeholder="Search your task here..."
             onChangeText={query => this.updateState(query)}
             value={this.state.query}
-            searchIcon={<EvilIcons name="search" size={fonts.PrimaryText} color={"grey"}/>}
+            searchIcon={<EvilIcons name="search" size={25} color={colors.Button}/>}
             />
           <TouchableOpacity onPress={this.toggleFilter}>
-            <MaterialCommunityIcons name="filter-variant" size={fonts.PrimaryText + 5} color={colors.Button}/>     
+            <MaterialCommunityIcons name="filter-variant" size={35} color={colors.Button}/>     
           </TouchableOpacity>           
         </View>
         {this.renderFilter()}
