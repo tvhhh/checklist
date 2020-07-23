@@ -5,13 +5,9 @@ import { Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import Task from './Task';
 import TaskForm from './Forms/TaskForm';
 import { Create } from './Button';
-
-import colors from '../styles/colors';
 
 import { isToday, getToday, getWeekDates, getNameOfDay, extractDate, extractDateTime } from '../utils/DateTime';
 
@@ -244,8 +240,6 @@ class TaskList extends React.Component {
 
   render() {
     const theme = this.props.customize.theme;
-    const fonts = this.props.customize.fontSize;
-    const font = this.props.customize.font;
 
     const tasks = this.filter(
       this.props.filterOption,

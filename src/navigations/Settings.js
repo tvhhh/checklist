@@ -97,8 +97,8 @@ class Settings extends React.Component {
             <TouchableOpacity style={[styles.container, {backgroundColor: theme.Overlay, height: fonts.TitleText + 20}]} onPress={() => this.onFontSizeDropDownPress()}>
               <Text style={[styles.options, {color: theme.TitleText, fontSize: fonts.TitleText, fontFamily: font}]}>Font Size</Text>
               {fonts.TitleText === 20 ? <Text style={{marginRight: 20, color: "grey", fontSize: fonts.TitleText, fontFamily: font}}>Small</Text> : null}
-              {fonts.TitleText === 25 ? <Text style={{marginRight: 20, color: "grey", fontSize: fonts.TitleText, fontFamily: font}}>Medium</Text> : null}
-              {fonts.TitleText === 30 ? <Text style={{marginRight: 20, color: "grey", fontSize: fonts.TitleText, fontFamily: font}}>Large</Text> : null}
+              {fonts.TitleText === 23 ? <Text style={{marginRight: 20, color: "grey", fontSize: fonts.TitleText, fontFamily: font}}>Medium</Text> : null}
+              {fonts.TitleText === 26 ? <Text style={{marginRight: 20, color: "grey", fontSize: fonts.TitleText, fontFamily: font}}>Large</Text> : null}
             </TouchableOpacity>
             {this.state.isFontSizeDropDownVisible ? 
               <View style={{ flex: 1}}>
