@@ -266,7 +266,7 @@ class TaskList extends React.Component {
           onBackdropPress={this.toggleForm}
           overlayStyle={[
             styles.taskForm, 
-            { height: Object.keys(this.state.selected).length ? 350 : 280, backgroundColor: theme.Overlay }
+            { height: Object.keys(this.state.selected).length ? 350 : 300, backgroundColor: theme.Overlay }
           ]}
           animationType="fade"
         >

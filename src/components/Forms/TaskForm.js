@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingTop: 5,
+    paddingBottom: 10,
   },
   removeButton: {
     alignItems: "center",
