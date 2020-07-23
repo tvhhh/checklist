@@ -4,5 +4,6 @@
     <color name="color_primary">#1e90ff</color>
     <color name="splashscreen_bg">#dfeef5</color>
     <color name="app_bg">#000000</color>
+    <color name="white">#FFF</color>
 
 </resources>
