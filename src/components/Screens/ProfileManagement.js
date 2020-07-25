@@ -35,7 +35,7 @@ class ProfileManagement extends React.Component {
   }
 
   toggleAvatarPicker = () => {
-    this.setState({ isAvatarPickerVisible: !this.state.isAvatarPickerVisible });
+    if (this.props.connected) this.setState({ isAvatarPickerVisible: !this.state.isAvatarPickerVisible });
   }
 
   handleAvatarSubmit = color => {
@@ -44,7 +44,7 @@ class ProfileManagement extends React.Component {
   }
 
   toggleInformationBox = type => {
-    this.setState({ informationType: type, isInformationBoxVisible: !this.state.isInformationBoxVisible });
+    if (this.props.connected) this.setState({ informationType: type, isInformationBoxVisible: !this.state.isInformationBoxVisible });
   }
 
   handleInformationSubmit = (info, type) => {
@@ -65,7 +65,7 @@ class ProfileManagement extends React.Component {
   }
 
   togglePasswordBox = () => {
-    this.setState({ isPasswordBoxVisible: !this.state.isPasswordBoxVisible });
+    if (this.props.connected) this.setState({ isPasswordBoxVisible: !this.state.isPasswordBoxVisible });
   }
 
   handlePasswordSubmit = () => {
@@ -73,7 +73,7 @@ class ProfileManagement extends React.Component {
   }
 
   toggleConfirmPasswordBox = () => {
-    this.setState({ isConfirmPasswordBoxVisible: !this.state.isConfirmPasswordBoxVisible });
+    if (this.props.connected) this.setState({ isConfirmPasswordBoxVisible: !this.state.isConfirmPasswordBoxVisible });
   }
 
   handleConfirmPasswordSuccess = () => {
@@ -151,40 +151,40 @@ class ProfileManagement extends React.Component {
         <TouchableOpacity style={styles.infoField} onPress={() => this.toggleInformationBox("name")}>
           <AntDesign name="contacts" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Full Name</Text>
-            <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>{data.name || "What's your name?"}</Text>
+            <Text style={{color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}}>Full Name</Text>
+            <Text style={{color: theme.SecondaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>{data.name || "What's your name?"}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField}>
           <FontTisto name="email" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Email</Text>
-            <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>{data.email}</Text>
+            <Text style={{color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}}>Email</Text>
+            <Text style={{color: theme.SecondaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>{data.email}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField} onPress={() => this.toggleInformationBox("phone")}>
           <FontTisto name="phone" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Phone number</Text>
-            <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>{data.phone || "Update your phone number"}</Text>
+            <Text style={{color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}}>Phone number</Text>
+            <Text style={{color: theme.SecondaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>{data.phone || "Update your phone number"}</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField} onPress={this.togglePasswordBox}>
           <FontAwesome name="key" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Change password</Text>
-            <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>Reset your password</Text>
+            <Text style={{color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}}>Change password</Text>
+            <Text style={{color: theme.SecondaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>Reset your password</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoField} onPress={this.toggleConfirmPasswordBox}>
           <MaterialCommunityIcons name="account-remove" size={30} color={colors.PrimaryColor} />
           <View style={styles.infoText}>
-            <Text style={[styles.infoTitle, {color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}]}>Deactivate account</Text>
-            <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>Remove your account</Text>
+            <Text style={{color: theme.TitleText, fontFamily: font, fontSize: fonts.PrimaryText}}>Deactivate account</Text>
+            <Text style={{color: theme.SecondaryText, fontFamily: font, fontSize: fonts.PrimaryText}}>Remove your account</Text>
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
@@ -301,9 +301,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
   },
-  infoTitle: {
-    fontWeight: "bold",
-  },
   logOut: {
     flexDirection: "row",
     backgroundColor: colors.SecondaryColor,
@@ -354,6 +351,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   customize: state.customize,
   appData: state.userData,
+  connected: state.userData.connected,
 });
 
 const mapDispatchToProps = dispatch => ({

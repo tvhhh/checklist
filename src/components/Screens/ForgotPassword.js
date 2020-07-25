@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   inputTitle: {
-    fontWeight: "bold",
     marginBottom: 5,
   },
   input: {

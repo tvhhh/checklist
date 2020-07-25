@@ -7,11 +7,12 @@
  */
 
 import React from 'react';
-import { YellowBox } from 'react-native';
+import { StatusBar, View, YellowBox } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import NetInfo from '@react-native-community/netinfo';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
 
 import TodoApp from './src/index';
 
@@ -26,13 +27,15 @@ class App extends React.Component {
   componentDidMount = async () => {
     await this.props.fetchCustomData();
     await this.props.fetchData();
+    StatusBar.setBackgroundColor(this.props.customize.theme.Background);
+    StatusBar.setBarStyle(this.props.customize.darkTheme ? "light-content" : "dark-content");
+    changeNavigationBarColor(this.props.customize.theme.Background);
     NetInfo.addEventListener(state => {
       this.props.setConnectionStatus(state.isConnected);
       let uid = this.props.appData.data.uid;
-      let data = { ...this.props.appData.data };
-      delete data.uid;
+      let tasks = JSON.stringify(this.props.appData.data.tasks);
       if (state.isConnected && uid !== "Guest") {
-        updateUserData(uid, data);
+        updateUserData(uid, tasks, 'tasks');
       }
     });
   }

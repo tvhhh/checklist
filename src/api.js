@@ -45,6 +45,12 @@ export const reauthenticate = password => {
   return user.reauthenticateWithCredential(credential);
 };
 
+export const isUsernameExisting = username => {
+  var ref = firebase.database().ref('users');
+  return ref.orderByChild('username').equalTo(username).once('value')
+  .then(snapshot => snapshot.exists());
+};
+
 export const updatePassword = password => {
   return firebase.auth().currentUser.updatePassword(password);
 };
@@ -77,16 +83,7 @@ export const fetchUserData = uid => {
 
 export const updateUserData = (uid, value, key) => {
   var ref = firebase.database().ref(`users/${uid}`);
-  if (key) {
-    ref.child(key).set(value);
-  } else {
-    var data = {
-      ...value,
-      tasks: JSON.stringify(value.tasks),
-      groups: JSON.stringify(value.groups),
-    };
-    ref.set(data);
-  }
+  ref.child(key).set(value);
 };
 
 export const fetchLocalUserData = () => {
@@ -120,15 +117,29 @@ export const clearLocalUserData = () => {
 };
 
 /* api for groups */
-export const fetchGroupData = (uid) => {
-  var ref = firebase.database().ref(`users/${uid}`);
-  return ref.once('value')
+export const createGroup = (username, name) => {
+  var ref = firebase.database().ref('groups');
+  var data = {
+    name: name,
+    owner: username,
+    admins: JSON.stringify([username]),
+    members: "[]",
+    tasks: "[]",
+  };
+  return ref.push(data)
+  .then(dataRef => dataRef.once('value'))
+  .then(snapshot => ({ gid: snapshot.key, data: data }));
+};
+
+export const fetchGroupData = uid => {
+  var usersRef = firebase.database().ref(`users/${uid}`);
+  return usersRef.once('value')
   .then(snapshot => snapshot.val())
   .then(data => JSON.parse(data.groups))
-  .then(groupList => {
-    var ref2 = firebase.database().ref(`groups`);
-    return groupList.map(group => {
-      ref2.child(group).once('value')
+  .then(groups => {
+    var groupsRef = firebase.database().ref(`groups`);
+    return groups.map(group => {
+      groupsRef.child(group).once('value')
       .then(snapshot => snapshot.val())
       .then(data => (
         {
@@ -144,8 +155,8 @@ export const fetchGroupData = (uid) => {
       .catch(error => console.log(`Firebase - fetch group data - ${error}`));
     })
   })
-  .catch(error => console.log(`Firebase - Fetch user data - ${error}`));
-}
+  .catch(error => console.log(`Firebase - Fetch group data - ${error}`));
+};
 
 export const fetchLocalGroupData = () => {
   return AsyncStorage.getItem(GROUP_ASYNC_STORAGE_KEY)
@@ -164,25 +175,14 @@ export const fetchLocalGroupData = () => {
   .catch(error => console.log(`AsyncStorage - Fetch group data local - ${error}`));
 };
 
-
 export const storeLocalGroupData = (data) => {
   AsyncStorage.setItem(GROUP_ASYNC_STORAGE_KEY, data)
   .catch(error => console.log(`AsyncStorage - Store group data - ${error}`));
-}
+};
 
 export const updateGroupData = (gid, value, key) => {
   var ref = firebase.database().ref(`groups/${gid}`);
-  if (key) {
-    ref.child(key).set(value);
-  } else {
-    var data = {
-      ...value,
-      admins: JSON.stringify(value.admins),
-      members: JSON.stringify(value.members),
-      tasks: JSON.stringify(value.tasks),
-    };
-    ref.set(data);
-  }
+  ref.child(key).set(value);
 };
 
 /* END api for groups */

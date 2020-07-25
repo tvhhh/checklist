@@ -197,6 +197,8 @@ dependencies {
 
     implementation project(':react-native-push-notification')
 
+    implementation project(':react-native-navigation-bar-color')
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }

@@ -11,13 +11,14 @@ import {
   SET_USERNAME,
   SET_NAME,
   SET_PHONE,
+  ADD_GROUP_ID
 } from '../actions/UserDataActions';
 
 import { storeLocalUserData, updateUserData } from '../../api';
 
 
 const initialState = {
-  connection: false,
+  connected: false,
   loggedIn: false,
   data: {
     uid: "Guest",
@@ -29,6 +30,8 @@ export default function userDataReducers(state = initialState, action) {
   const payload = action.payload;
   var currentTaskList = state.data.tasks;
   var newTaskList = [];
+  var currentGroupList = state.data.groups;
+  var newGroupList = [];
   var newData = {};
   
   switch(action.type) {
@@ -41,12 +44,12 @@ export default function userDataReducers(state = initialState, action) {
     case CLEAR_DATA:
       return {
         ...initialState,
-        connection: state.connection,
+        connected: state.connected,
       };
     case SET_CONNECTION:
       return {
         ...state,
-        connection: payload.status,
+        connected: payload.status,
       };
     case CREATE_TASK:
       newTaskList = [
@@ -108,6 +111,12 @@ export default function userDataReducers(state = initialState, action) {
     case SET_PHONE:
       newData = { ...state.data, phone: payload.phone };
       updateUserData(state.data.uid, payload.phone, 'phone');
+      storeLocalUserData(JSON.stringify(newData));
+      return { ...state, data: newData };
+    case ADD_GROUP_ID:
+      newGroupList = [ ...currentGroupList, payload.gid ];
+      newData = { ...state.data, groups: newGroupList };
+      updateUserData(state.data.uid, JSON.stringify(newGroupList), 'groups');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     default:

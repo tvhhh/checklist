@@ -53,14 +53,8 @@ class SignUp extends React.Component {
     this.setState({ error: false });
   }
 
-  toggleAlert = () => {
-    this.setState({ alert: !this.state.alert });
-  }
-
   handleSubmit = async () => {
-    if (!this.props.appData.connection) {
-      this.setState({ alert: true });
-    } else if (this.checkUnmatchedPassword(this.state.user.password, this.state.user.confirmedPassword)) {
+    if (this.checkUnmatchedPassword(this.state.user.password, this.state.user.confirmedPassword)) {
       this.setState({ error: true, errorMessage: "Unmatched password." });
     } else {
       const res = await registerUser(this.state.user);

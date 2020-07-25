@@ -5,8 +5,8 @@ import groupDataReducers from './GroupDataReducers';
 
 const reducer = combineReducers({
   userData: userDataReducers,
-  customize: customizeReducer,
   groupData: groupDataReducers,
+  customize: customizeReducer,
 });
 
 export default reducer;

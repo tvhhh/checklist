@@ -36,8 +36,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    color: colors.PrimaryText,
-    fontWeight: "bold",
     marginBottom: 5,
   },
   optionContainer: {
@@ -49,10 +47,8 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     color: "red",
-    fontWeight: "bold",
   },
   cancelText: {
     color: "dodgerblue",
-    fontWeight: "bold",
   },
 });

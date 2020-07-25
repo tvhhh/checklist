@@ -7,6 +7,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import colors from '../../styles/colors';
 
 import { reauthenticateUser, setPassword } from '../../redux/actions/UserDataActions';
+import { isUsernameExisting } from '../../api';
 
 
 export class AvatarPicker extends React.Component {
@@ -45,15 +46,21 @@ export class InformationBox extends React.Component {
     super(props);
     this.state = {
       info: this.props.info || "",
+      error: false,
+      errorMessage: "",
     };
   }
 
   onChangeInfo = text => {
-    this.setState({ info: text });
+    this.setState({ info: text, error: false });
   }
 
-  handleSubmit = () => {
-    this.props.onSubmit(this.state.info, this.props.type);
+  handleSubmit = async () => {
+    if (this.props.type === "username" && this.state.info !== this.props.info && await isUsernameExisting(this.state.info)) {
+      this.setState({ error: true, errorMessage: "This username has existed." });
+    } else {
+      this.props.onSubmit(this.state.info, this.props.type);
+    }
   }
 
   render() {
@@ -76,6 +83,11 @@ export class InformationBox extends React.Component {
               keyboardType={this.props.type === "phone" ? "phone-pad" : "default"}
               autoCapitalize={this.props.type === "name" ? "words" : "none"}
             />
+            {this.state.error ?
+              <Text style={[styles.errorText, {fontSize: fonts.ErrorText, fontFamily: font}]}>
+                {this.state.errorMessage}
+              </Text> : null
+            }
           </View>
           <View style={styles.saveButtonContainer}>
             <TouchableOpacity disabled={isSaveButtonDisabled} onPress={this.handleSubmit}>
@@ -282,7 +294,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   inputTitle: {
-    fontWeight: "bold",
     marginBottom: 5,
   },
   input: {

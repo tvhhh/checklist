@@ -40,7 +40,7 @@ export const darkTheme = {
   Background: "#0e0f0f",
   Overlay: "#262729",
 
-  TitleText: "#f2f6f7",
-  PrimaryText: "#f2f6f7",
-  SecondaryText: "grey",
+  TitleText: "rgba(255, 255, 255, 1.0)",
+  PrimaryText: "rgba(255, 255, 255, 0.87)",
+  SecondaryText: "rgba(255, 255, 255, 0.60)",
 };

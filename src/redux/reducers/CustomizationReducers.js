@@ -1,7 +1,9 @@
-import { CHANGE_THEME, CHANGE_SIZE, CHANGE_FONT, GET_CUSTOMIZATION} from '../actions/CustomizeActions'
+import { CHANGE_THEME, CHANGE_SIZE, CHANGE_FONT, GET_CUSTOMIZATION} from '../actions/CustomizeActions';
+import { StatusBar } from 'react-native';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import { storeCustomization } from '../../api';
-import { smallFonts, mediumFonts, largeFonts } from '../../styles/fonts'
-import { lightTheme, darkTheme } from '../../styles/colors'
+import { smallFonts, mediumFonts, largeFonts } from '../../styles/fonts';
+import { lightTheme, darkTheme } from '../../styles/colors';
 
 const initialState = {
   darkTheme: false,
@@ -22,16 +24,20 @@ export default function customizeReducer(state = initialState, action) {
       return {...state}
 
     case CHANGE_THEME:
-      switch (state.darkTheme) {
-        case false:
-          newCustomization = {...state, darkTheme: true, theme: {...darkTheme}, switchValue: true}
-          storeCustomization(JSON.stringify(newCustomization))
-          return newCustomization;
-        case true:
-          newCustomization = {...state, darkTheme: false ,theme: {...lightTheme}, switchValue: false}
-          storeCustomization(JSON.stringify(newCustomization))
-          return newCustomization;
-        default: return {...state}
+      if (state.darkTheme) {
+        newCustomization = {...state, darkTheme: false ,theme: {...lightTheme}, switchValue: false};
+        storeCustomization(JSON.stringify(newCustomization));
+        StatusBar.setBackgroundColor(lightTheme.Background);
+        StatusBar.setBarStyle("dark-content");
+        changeNavigationBarColor(lightTheme.Background);
+        return newCustomization;
+      } else {
+        newCustomization = {...state, darkTheme: true, theme: {...darkTheme}, switchValue: true};
+        storeCustomization(JSON.stringify(newCustomization));
+        StatusBar.setBackgroundColor(darkTheme.Background);
+        StatusBar.setBarStyle("light-content");
+        changeNavigationBarColor(darkTheme.Background);
+        return newCustomization;
       }
 
     case CHANGE_FONT:

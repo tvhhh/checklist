@@ -1,6 +1,7 @@
 import { 
   fetchUserData,
   createUser,
+  isUsernameExisting,
   signIn,
   signOut,
   reauthenticate,
@@ -25,6 +26,7 @@ export const SET_AVATAR = "SET_AVATAR";
 export const SET_USERNAME = "SET_USERNAME";
 export const SET_NAME = "SET_NAME";
 export const SET_PHONE = "SET_PHONE";
+export const ADD_GROUP_ID = "ADD_GROUP_ID";
 
 export const getData = data => ({
   type: GET_DATA,
@@ -108,6 +110,13 @@ export const setPhone = phone => ({
   },
 });
 
+export const addGroupId = gid => ({
+  type: ADD_GROUP_ID,
+  payload: {
+    gid,
+  },
+});
+
 export const fetchData = () => async (dispatch) => {
   try {
     var data = await fetchLocalUserData();
@@ -119,6 +128,8 @@ export const fetchData = () => async (dispatch) => {
 
 export const registerUser = async (data) => {
   try {
+    if (await isUsernameExisting(data.username))
+      throw { message: "This username has already been used." }
     await createUser(data);
     return "done";
   } catch(error) {

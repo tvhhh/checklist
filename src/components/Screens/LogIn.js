@@ -46,22 +46,14 @@ class LogIn extends React.Component {
     this.setState({ error: false });
   }
 
-  toggleAlert = () => {
-    this.setState({ alert: !this.state.alert });
-  }
-
   handleSubmit = async () => {
-    if (!this.props.appData.connection) {
-      this.setState({ alert: true });
+    const res = await logIn(this.state.email, this.state.password);
+    if (res.status === "done") {
+      const data = res.data;
+      this.props.getData(data);
     } else {
-      const res = await logIn(this.state.email, this.state.password);
-      if (res.status === "done") {
-        const data = res.data;
-        this.props.getData(data);
-      } else {
-        const error = res.error;
-        this.setState({ error: true, errorMessage: error });
-      }
+      const error = res.error;
+      this.setState({ error: true, errorMessage: error });
     }
   }
   
