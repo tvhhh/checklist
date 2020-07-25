@@ -115,7 +115,9 @@ export default function userDataReducers(state = initialState, action) {
       return { ...state, data: newData };
     case ADD_GROUP_ID:
       newGroupList = [ ...currentGroupList, payload.gid ];
+      console.log(newGroupList);
       newData = { ...state.data, groups: newGroupList };
+      console.log(newData);
       updateUserData(state.data.uid, JSON.stringify(newGroupList), 'groups');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };

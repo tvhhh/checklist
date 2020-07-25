@@ -8,6 +8,7 @@ import Header from '../Header';
 import colors from '../../styles/colors';
 
 import { logIn, getData } from '../../redux/actions/UserDataActions';
+import { getGroupData } from '../../redux/actions/GroupDataActions';
 
 
 export class ErrorBox extends React.Component {
@@ -51,6 +52,9 @@ class LogIn extends React.Component {
     if (res.status === "done") {
       const data = res.data;
       this.props.getData(data);
+      const groupData = res.groupData;
+      console.log(groupData);
+      this.props.getGroupData(groupData);
     } else {
       const error = res.error;
       this.setState({ error: true, errorMessage: error });
@@ -206,6 +210,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getData: bindActionCreators(getData, dispatch),
+  getGroupData: bindActionCreators(getGroupData, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogIn);

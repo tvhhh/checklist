@@ -128,32 +128,31 @@ export const createGroup = (username, name) => {
   };
   return ref.push(data)
   .then(dataRef => dataRef.once('value'))
-  .then(snapshot => ({ gid: snapshot.key, data: data }));
+  .then(snapshot => snapshot.key);
 };
 
 export const fetchGroupData = uid => {
   var usersRef = firebase.database().ref(`users/${uid}`);
+  var groupsRef = firebase.database().ref('groups');
   return usersRef.once('value')
   .then(snapshot => snapshot.val())
   .then(data => JSON.parse(data.groups))
   .then(groups => {
-    var groupsRef = firebase.database().ref(`groups`);
-    return groups.map(group => {
-      groupsRef.child(group).once('value')
+    return Promise.all(groups.map(group => {
+      return groupsRef.child(group).once('value')
       .then(snapshot => snapshot.val())
-      .then(data => (
-        {
+      .then(data => ({
           ...data, 
           admins: JSON.parse(data.admins), 
-          members: JSON.parse(data.memebers),
+          members: JSON.parse(data.members),
           tasks: JSON.parse(data.tasks).map(item => ({
             ...item,
             dueTime: new Date(item.dueTime),
           })),
           gid: group,
         }))
-      .catch(error => console.log(`Firebase - fetch group data - ${error}`));
-    })
+      .catch(error => console.log(`Firebase - fetch group data - ${error}`))
+    }));
   })
   .catch(error => console.log(`Firebase - Fetch group data - ${error}`));
 };

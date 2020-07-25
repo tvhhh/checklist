@@ -1,5 +1,6 @@
 import { 
   fetchUserData,
+  fetchGroupData,
   createUser,
   isUsernameExisting,
   signIn,
@@ -10,6 +11,7 @@ import {
   fetchLocalUserData,
   storeLocalUserData,
   clearLocalUserData,
+  storeLocalGroupData,
   deleteUser,
 } from '../../api';
 
@@ -141,8 +143,10 @@ export const logIn = async (email, password) => {
   try {
     var res = await signIn(email, password);
     var data = await fetchUserData(res.user.uid);
+    var groupData = await fetchGroupData(res.user.uid);
     storeLocalUserData(JSON.stringify(data));
-    return { status: "done", data: data };
+    storeLocalGroupData(JSON.stringify(groupData));
+    return { status: "done", data: data, groupData: groupData };
   } catch(error) {
     return { status: "failed", error: error.message };
   }
