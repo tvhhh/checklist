@@ -12,6 +12,7 @@ import { Create } from './Button';
 import { isToday, getToday, getWeekDates, getNameOfDay, extractDate, extractDateTime } from '../utils/DateTime';
 
 import { createTask, editTask, removeTask, togglePinned, toggleDone } from '../redux/actions/UserDataActions';
+import { addGroupTask, editGroupTask, removeGroupTask, toggleGroupPinned, toggleGroupDone } from '../redux/actions/GroupDataActions'
 
 
 export const FILTER_TODAY = "FILTER_TODAY";
@@ -25,6 +26,7 @@ export const FILTER_NOTIFICATION = "FILTER_NOTICE";
 export const FILTER_OVERDUED = "FILTER_OVERDUED";
 export const FILTER_UPCOMING = "FILTER_UPCOMING";
 export const FILTER_COMPLETED = "FILTER_COMPLETED";
+export const FILTER_GROUP_TASKS = "FILTER_GROUP_TASKS";
 
 class TaskList extends React.Component {
   constructor(props) {
@@ -39,8 +41,8 @@ class TaskList extends React.Component {
     <Task 
       {...item} 
       onSelect={() => this.onSelectedTaskPress(item)} 
-      togglePinned={() => this.props.togglePinned(item)} 
-      toggleDone={() => this.props.toggleDone(item)}
+      togglePinned={() => this.togglePinned(item)} 
+      toggleDone={() => this.toggleDone(item)}
       customize={this.props.customize}
     />
   )
@@ -63,16 +65,34 @@ class TaskList extends React.Component {
   handleFormSubmit = task => {
     this.setState({ showForm: false });
     if (Object.keys(this.state.selected).length > 0) {
-      this.props.editTask(task, this.state.selected);
+      this.props.group ?
+        this.props.editGroupTask(this.props.group.gid, task, this.state.selected):
+        this.props.editTask(task, this.state.selected);
     } else {
-      this.props.createTask(task);
+      this.props.group ?
+        this.props.addGroupTask(this.props.group.gid, task):
+        this.props.createTask(task);
     }
     this.setState({ selected: {} });
   }
 
   handleRemoval = () => {
-    this.props.removeTask(this.state.selected);
+    this.props.group ?
+      this.props.removeGroupTask(this.props.group.gid, this.state.selected):
+      this.props.removeTask(this.state.selected);
     this.setState({ showForm: false, selected: {} });
+  }
+
+  togglePinned = item => {
+    this.props.group ?
+      this.props.toggleGroupPinned(this.props.group.gid, item):
+      this.props.togglePinned(item)
+  }
+
+  toggleDone = item => {
+    this.props.group ?
+      this.props.toggleGroupDone(this.props.group.gid, item):
+      this.props.toggleDone(item)
   }
 
   filterByToday = taskList => {
@@ -205,6 +225,16 @@ class TaskList extends React.Component {
     }, {});
   }
 
+  filterGroupTask = (group) => {
+    return group.tasks.reduce((obj, task) => {
+      const title = extractDateTime(task.dueTime).date;
+      return {
+        ...obj,
+        [title]: [...(obj[title] || []), task],
+      }
+    }, {});
+  }
+
   filter = (option, taskList) => {
     switch(option) {
       case FILTER_TODAY:
@@ -233,6 +263,8 @@ class TaskList extends React.Component {
         return this.filterUpcomingTasks(taskList);
       case FILTER_COMPLETED:
         return this.filterCompletedTasks(taskList);
+      case FILTER_GROUP_TASKS:
+        return this.filterGroupTask(this.props.group);
       default:  
         return { "": taskList };
     }
@@ -317,6 +349,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   customize: state.customize,
   taskList: state.userData.data.tasks,
+  groupData: state.groupData,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -325,6 +358,11 @@ const mapDispatchToProps = dispatch => ({
   removeTask: bindActionCreators(removeTask, dispatch),
   togglePinned: bindActionCreators(togglePinned, dispatch),
   toggleDone: bindActionCreators(toggleDone, dispatch),
+  addGroupTask: bindActionCreators(addGroupTask, dispatch),
+  editGroupTask: bindActionCreators(editGroupTask, dispatch),
+  removeGroupTask: bindActionCreators(removeGroupTask, dispatch),
+  toggleGroupPinned: bindActionCreators(toggleGroupPinned, dispatch),
+  toggleGroupDone: bindActionCreators(toggleGroupDone, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskList);

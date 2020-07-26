@@ -65,6 +65,25 @@ export const deleteUser = () => {
   user.delete();
 };
 
+export const getDataByUsername = username => {
+  console.debug('in get data by username, api');
+  console.debug(username);
+  var ref = firebase.database().ref('users');
+  return ref.orderByChild('username').equalTo(username).once('value')
+  .then(snapshot => (snapshot.val()))
+  .then(data => {
+    console.debug(Object.keys(data));
+    let uid = Object.keys(data)[0];
+    return {
+      groups: JSON.parse(data[uid].groups),
+      uid: uid,
+    }
+  })
+  .catch(error => console.log(`Firebase - get data by username - ${error}`));
+  // console.debug('ret val = ');
+  // console.debug(retVal);
+}
+
 export const fetchUserData = uid => {
   var ref = firebase.database().ref(`users/${uid}`);
   return ref.once('value')
@@ -183,6 +202,12 @@ export const updateGroupData = (gid, value, key) => {
   var ref = firebase.database().ref(`groups/${gid}`);
   ref.child(key).set(value);
 };
+
+export const deleteGroup = gid => {
+  // console.log("delete group in api....");
+  var ref = firebase.database().ref(`groups/${gid}`);
+  ref.remove();
+}
 
 /* END api for groups */
 

@@ -15,7 +15,7 @@ class HomeView extends React.Component {
   }
 
   renderItem = ({ item }) =>
-    <TouchableOpacity style={styles.group} onPress={() => {}}>
+    <TouchableOpacity style={styles.group} onPress={() => {this.props.navigation.navigate('group',{gid: item.gid})}}>
       <Text 
         style={[
           styles.itemText,

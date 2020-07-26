@@ -7,7 +7,7 @@ import { white } from 'color-name';
 import { connect } from 'react-redux';
 import { Menu, Notice } from '../components/Button';
 import colors from '../styles/colors';
-import { HomeView, GroupView, InfoView, MemberView, AddGroupView } from '../components/Screens/GroupScreens/index.js'
+import { HomeView, GroupView, InfoView, MemberView, AddGroupView, AddMemberView } from '../components/Screens/GroupScreens/index.js'
 import {POLICIES, TASK_STATES, TEST_DATA, currentUserId} from '../utils/GroupEnum'
 
 export const Stack = createStackNavigator();
@@ -27,14 +27,22 @@ class Groups extends React.Component {
           search={true}
           notice={true}
         />
-
+        {this.props.userData.loggedIn?
         <Stack.Navigator headerMode="none" >
           <Stack.Screen name="home" component={HomeView} />
           <Stack.Screen name="group" component={GroupView} />
           <Stack.Screen name="info" component={InfoView} />
           <Stack.Screen name="members" component={MemberView} />
           <Stack.Screen name='create-group' component={AddGroupView} />
-        </Stack.Navigator>
+          <Stack.Screen name='add-members' component={AddMemberView} />
+        </Stack.Navigator>:
+        <TouchableOpacity
+          onPress={() => {this.props.navigation.jumpTo('profile')}}
+        >
+          <Text>To login page</Text>
+        </TouchableOpacity>
+
+        }
       </View>
     );
   }
@@ -89,6 +97,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
   customize: state.customize,
+  userData: state.userData,
 });
 
 

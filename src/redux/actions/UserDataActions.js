@@ -29,6 +29,7 @@ export const SET_USERNAME = "SET_USERNAME";
 export const SET_NAME = "SET_NAME";
 export const SET_PHONE = "SET_PHONE";
 export const ADD_GROUP_ID = "ADD_GROUP_ID";
+export const REMOVE_GROUP_ID = "REMOVE_GROUP_ID";
 
 export const getData = data => ({
   type: GET_DATA,
@@ -114,6 +115,13 @@ export const setPhone = phone => ({
 
 export const addGroupId = gid => ({
   type: ADD_GROUP_ID,
+  payload: {
+    gid,
+  },
+});
+
+export const removeGroupId = gid => ({
+  type: REMOVE_GROUP_ID,
   payload: {
     gid,
   },

@@ -11,7 +11,8 @@ import {
   SET_USERNAME,
   SET_NAME,
   SET_PHONE,
-  ADD_GROUP_ID
+  ADD_GROUP_ID,
+  REMOVE_GROUP_ID,
 } from '../actions/UserDataActions';
 
 import { storeLocalUserData, updateUserData } from '../../api';
@@ -121,6 +122,14 @@ export default function userDataReducers(state = initialState, action) {
       updateUserData(state.data.uid, JSON.stringify(newGroupList), 'groups');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
+    case REMOVE_GROUP_ID:
+      newGroupList = currentGroupList.filter(gid => {
+        return gid !== payload.gid
+      });
+      newData = { ...state.data, groups: newGroupList };
+      updateUserData(state.data.uid, JSON.stringify(newGroupList), 'groups');
+      storeLocalUserData(JSON.stringify(newData));
+      return {... state, data:newData};
     default:
       return state;
   }
