@@ -226,6 +226,7 @@ class TaskList extends React.Component {
   }
 
   filterGroupTask = (group) => {
+    if (group === undefined) group = {tasks: []}
     return group.tasks.reduce((obj, task) => {
       const title = extractDateTime(task.dueTime).date;
       return {

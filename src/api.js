@@ -67,12 +67,12 @@ export const deleteUser = () => {
 
 export const getDataByUsername = username => {
   console.debug('in get data by username, api');
-  console.debug(username);
+  console.debug(`username = ${username}`);
   var ref = firebase.database().ref('users');
   return ref.orderByChild('username').equalTo(username).once('value')
   .then(snapshot => (snapshot.val()))
   .then(data => {
-    console.debug(Object.keys(data));
+    // console.debug(Object.keys(data));
     let uid = Object.keys(data)[0];
     return {
       groups: JSON.parse(data[uid].groups),

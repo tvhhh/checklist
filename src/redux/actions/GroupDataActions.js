@@ -140,3 +140,16 @@ export const addUserToGroupAsync = (username, gid) => async(dispatch) => {
     console.log(`add user to group - ${error}`);
   }
 }
+
+export const removeUserFromGroupAsync = (username, gid) => async(dispatch) => {
+  try {
+    console.debug('in remove user async');
+    let userData = await getDataByUsername(username);
+    console.debug(userData);
+    let newUserGroups = userData.groups.filter(groupId => groupId !== gid);
+    updateUserData(userData.uid, JSON.stringify(newUserGroups), 'groups');
+    dispatch(removeUserFromGroup(username, gid));
+  } catch(error) {
+    console.log(`remove user from group - ${error}`);
+  }
+}

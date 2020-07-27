@@ -9,12 +9,15 @@ import { Menu, Notice } from '../components/Button';
 import colors from '../styles/colors';
 import { HomeView, GroupView, InfoView, MemberView, AddGroupView, AddMemberView } from '../components/Screens/GroupScreens/index.js'
 import {POLICIES, TASK_STATES, TEST_DATA, currentUserId} from '../utils/GroupEnum'
+import {clearData} from '../redux/actions/UserDataActions'
+import { bindActionCreators } from 'redux';
 
 export const Stack = createStackNavigator();
 
 class Groups extends React.Component {
   constructor (props) {
     super(props);
+    // this.props.clearData();
   }
 
   render() {
@@ -100,5 +103,8 @@ const mapStateToProps = state => ({
   userData: state.userData,
 });
 
+const mapDispatchToProps = dispatch => ({
+  clearData: bindActionCreators(clearData, dispatch),
+})
 
-export default connect(mapStateToProps)(Groups);
+export default connect(mapStateToProps, mapDispatchToProps)(Groups);

@@ -14,9 +14,11 @@ export const TASK_STATES = {
 export const getPolicyFromGroup = (group, username) => {
   // console.debug('in get policy');
   // console.debug(group, username);
-  if (group.owner === username) return POLICIES.OWNER;
-  if (group.admins.includes(username)) return POLICIES.ADMIN;
-  if (group.members.includes(username)) return POLICIES.MEMBER;
+  if (group) {
+    if (group.owner === username) return POLICIES.OWNER;
+    if (group.admins.includes(username)) return POLICIES.ADMIN;
+    if (group.members.includes(username)) return POLICIES.MEMBER;
+  }
   return POLICIES.UNKNOWN;
 }
 

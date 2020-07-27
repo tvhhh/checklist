@@ -5,6 +5,7 @@ import { POLICIES, TASK_STATES, TEST_DATA, currentUserId } from '../../../utils/
 import { registerGroup } from '../../../redux/actions/GroupDataActions'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export class AddGroupView extends React.Component {
   constructor(props) {
@@ -12,6 +13,49 @@ export class AddGroupView extends React.Component {
     this.state = {
       name: "",
     };
+  }
+
+  renderHeader(title) {
+    const displayTitle = title;
+
+    return (
+      <View 
+      style={[
+          styles.header,
+          {
+            backgroundColor: this.props.customize.theme.Background,
+          }
+        ]}
+      >
+      {/* back button */}
+      <TouchableOpacity
+          style={
+            {
+              marginRight:20,
+              flex:1
+            }
+          }
+          onPress={() => {this.props.navigation.goBack()}}
+        >
+          <MaterialIcons
+            name={"arrow-back"}
+            size={25}
+            color={this.props.customize.theme.TitleText}
+          />
+        </TouchableOpacity>
+
+        <Text
+          style={
+            {
+              color: this.props.customize.theme.TitleText, 
+              fontSize: this.props.customize.fontSize.TitleText, 
+              fontFamily: this.props.customize.font,
+              flex: 8,
+            }
+          }
+        >{`${displayTitle}`}</Text>
+      </View>
+    ); 
   }
 
   onChangeName = text => {
@@ -25,12 +69,44 @@ export class AddGroupView extends React.Component {
 
   render() {
     return (
-      <View>
+      <View
+        style={{
+          flex:1,
+          backgroundColor: this.props.customize.theme.Background,
+        }}
+      >
+        {this.renderHeader("Create new group")}
         <TextInput 
+          style={{
+            ...styles.textInput,
+            color: this.props.customize.theme.PrimaryText, 
+            fontSize: this.props.customize.fontSize.PrimaryText, 
+            fontFamily: this.props.customize.font,
+            borderColor: this.props.customize.theme.TitleText,
+          }}
           onChangeText={this.onChangeName}
           defaultValue={this.state.name}
+          placeholder={"Group name"}
+          placeholderTextColor={this.props.customize.theme.SecondaryText}
         />
-        <TouchableOpacity style={{ backgroundColor: "black", height: 50, width: 50 }} onPress={this.handleSubmit} />
+        <TouchableOpacity 
+          style={{
+            ...styles.submitButton,
+            backgroundColor: this.props.customize.theme.Overlay,
+          }} 
+          onPress={this.handleSubmit} 
+        > 
+          <Text
+            style={{
+              ...styles.menuText,
+              color: this.props.customize.theme.TitleText, 
+              fontSize: this.props.customize.fontSize.TitleText, 
+              fontFamily: this.props.customize.font,
+            }}
+          >
+            Submit
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -39,6 +115,7 @@ export class AddGroupView extends React.Component {
 const mapStateToProps = state => ({
   userData: state.userData,
   groupData: state.groupData,
+  customize: state.customize,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -47,153 +124,44 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddGroupView);
 
-// class AddGroupForm extends React.Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = {
-//       groupName: "",
-//       textInput: [],
-//       inputData: []
-//     }
-//   }
-
-//   addTextInput = (index) => {
-//     let textInput = this.state.textInput;
-//     textInput.push(
-//       <TextInput style={styles.textInput}
-//         onChangeText={(text) => this.addValues(text, index)}
-//         placeholder="Username"
-//       />);
-//     this.setState({textInput});
-//   }
-
-//   removeTextInput = () => {
-//     let textInput = this.state.textInput;
-//     let inputData = this.state.inputData;
-//     textInput.pop()
-//     inputData.pop()
-//     this.setState({textInput, inputData})
-//   }
-
-//   addValues = (text, index) => {
-//     let dataArray = this.state.inputData;
-//     let checkBool = false;
-//     if (dataArray.length !== 0) {
-//       dataArray.forEach(element => {
-//         if (element.index === index) {
-//           element.text = text;
-//           checkBool = true;
-//         }
-//       });
-//     }
-//     if (checkBool) {
-//       this.setState({
-//         inputData: dataArray
-//       })
-//     }
-//     else {
-//       dataArray.push({'text': text, 'index': index});
-//       this.setState({
-//         inputData: dataArray
-//       })
-//     }
-//   }
-
-//   handleSubmit = () => {
-//     // // console.debug('Data', this.state.inputData)
-//     // createGroup({
-//     //   gid: "2",
-//     //   name: this.state.name,
-//     //   members: this.state.inputData,
-//     // })
-
-//     // let database = this.props.database;
-//     // let newkey = "2"
-//     // database.groups[newkey] = {
-//     //   gid: newkey,
-//     //   name: this.state.groupName,
-//     //   owner: currentUserId,
-//     //   admins: [currentUserId],
-//     //   members: this.state.inputData.map(item => {
-//     //     let uid = findUidFromUsername(item.text, database);
-//     //     if (uid !== -1)
-//     //     {
-//     //       return uid;
-//     //     }
-//     //     else
-//     //       console.debug(item.text + " does not exist !");
-//     //   }),
-//     //   tasks: [],
-//     // }
-//     // let groups = database.users[currentUserId].groups
-//     // groups.push(newkey);
-//     // database.groups[newkey].members.forEach(uid => {
-//     //   if (uid in database.users) {
-//     //     database.users[uid].groups.push(newkey);
-//     //   }
-//     //   else {
-//     //     console.debug(uid + "does not exist !");
-//     //   }
-//     // })
-//     // console.debug('after add');
-//     // console.debug(database.users);
-//     // console.debug(database.groups);
-//     this.props.navigation.navigate('home', {database: database});
-
-//   }
-
-//   render() {
-//     return (
-//       <ScrollView> 
-//         <View>
-//           <TextInput style={styles.textInput}
-//             onChangeText={(text) => this.setState({groupName: text})}
-//             placeholder="Group name"
-//           />
-//         </View>
-
-//         <View style={styles.row}> 
-//           <View style={{margin: 10}}>
-//             <Button title='add more member' onPress={() => this.addTextInput(this.state.textInput.length)}/>
-//           </View>
-//           <View style={{margin: 10}}>
-//             <Button title='Remove' onPress={() => this.removeTextInput()} />
-//           </View>
-//         </View>
-
-        
-//         <View style={{margin: 10}}>
-//           {this.state.textInput.map((value) => {
-//             return value
-//           })}
-//           <Button title='Submit' onPress={() => this.handleSubmit()} />
-//         </View>
-//       </ScrollView>
-//     );
-//   }
-// }
-
 const styles = StyleSheet.create({
+  header: {
+    flexDirection:'row',
+    padding: 20,
+    textAlign: 'center',
+    backgroundColor: '#ffffff',
+    color: '#ffffff',
+    fontSize: 30,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
   },
-  buttonView: {
-  flexDirection: 'row'
-  },
   textInput: {
-  height: 40,
-  borderColor: 'black', 
-  borderWidth: 1,
-  margin: 10,
-  padding: 10,
-},
-row:{
-  flexDirection: 'row',
-  justifyContent: 'center'
+    height: 40,
+    borderColor: 'black', 
+    borderWidth: 1,
+    margin: 10,
+    padding: 10,
   },
+  row:{
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  menuText: {
+    paddingVertical: 8,
+    marginLeft: 8,
+  },
+  submitButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 5,
+    marginTop: 10,
+    marginHorizontal: 8,
+    borderRadius: 20,
+  }, 
 }
 
 );

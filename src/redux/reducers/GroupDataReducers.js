@@ -32,6 +32,10 @@ export default function groupDataReducers(state = initialState, action) {
       return newGroupList;
 
     case LEAVE_GROUP:
+      console.debug("in leave group, reducers")
+      console.debug(`payload = `);
+      console.debug(payload.gid);
+
       newGroupList = state.filter(group => {
         if (group.gid === payload.gid) {
           group.admins = group.admins.filter(username => username !== payload.username);
@@ -42,23 +46,41 @@ export default function groupDataReducers(state = initialState, action) {
         }
         return true;    
       });
+      console.debug(newGroupList);
       storeLocalGroupData(JSON.stringify(newGroupList));
       return newGroupList;
 
     case DELETE_GROUP:
-      // console.debug('delete group, group data reducer');
+      console.debug('delete group, group data reducer');
       newGroupList = state.filter(group => {
         if (group.gid === payload.gid) {
-          deleteGroup(payload.gid)
+          
+          deleteGroup(payload.gid);
           return false;
         }
         return true;    
       });
       storeLocalGroupData(JSON.stringify(newGroupList));
+      console.debug(newGroupList);
       return newGroupList;
 
     case REMOVE_USER_FROM_GROUP:
-      return state;
+      console.debug('in remove user from group, reducers');
+      console.debug(`payload = ${payload}`);
+
+      newGroupList = state.map(group => {
+        if (group.gid === payload.gid) {
+          let newMembers = group.members.filter(username => username !== payload.username);
+          let newAdmins = group.admins.filter(username => username !== payload.username);
+          updateGroupData(payload.gid, JSON.stringify(newMembers), 'members');
+          updateGroupData(payload.gid, JSON.stringify(newAdmins), 'admins');
+          return {...group, members: newMembers, admins: newAdmins};
+        }
+        return group;
+      });
+      storeLocalGroupData(JSON.stringify(newGroupList));  
+      return newGroupList;
+      
 
     case ADD_USER_TO_GROUP:
       console.debug('in add user to group, reducers');
@@ -76,22 +98,28 @@ export default function groupDataReducers(state = initialState, action) {
     case CHANGE_USER_POLICY:
       newGroupList = state.map(group => {
         if (group.gid === payload.gid) {
-          
+          let newAdmins = [];
+          let newMembers = [];
           switch(payload.policy) {
             case POLICIES.ADMIN:
-              group.admins = group.admins.filter(username => username !== payload.username);
-              group.members = group.members.filter(username => username !== payload.username);
-              group.admins = [...group.admins, payload.username];
+              newAdmins = group.admins.filter(username => username !== payload.username);
+              newMembers = group.members.filter(username => username !== payload.username);
+              newAdmins = [...newAdmins, payload.username];
+              updateGroupData(group.gid, JSON.stringify(newAdmins), 'admins');
+              updateGroupData(group.gid, JSON.stringify(newMembers), 'members');
               break;
             case POLICIES.MEMBER:
-              group.admins = group.admins.filter(username => username !== payload.username);
-              group.members = group.members.filter(username => username !== payload.username);
-              group.members = [...group.members, payload.username];
+              newAdmins = group.admins.filter(username => username !== payload.username);
+              newMembers = group.members.filter(username => username !== payload.username);
+              newMembers = [...group.members, payload.username];
+              updateGroupData(group.gid, JSON.stringify(newAdmins), 'admins');
+              updateGroupData(group.gid, JSON.stringify(newMembers), 'members');
               break;
             default:
               console.debug(`unknown policy: ${payload.policy}`);
               break;
           } 
+          return {...group, admins: newAdmins, members: newMembers};
         }
         return group;
       });

@@ -91,7 +91,7 @@ class GroupView extends React.Component {
               flex:1,
             }
           }
-          onPress={() => {this.props.navigation.navigate('info',{group: this.state.group})}}
+          onPress={() => {this.props.navigation.navigate('info',{gid: this.props.route.params.gid})}}
         >
           <Octicons 
             name="info"
@@ -112,7 +112,7 @@ class GroupView extends React.Component {
             backgroundColor: this.props.customize.theme.Background,
         }}
       >
-        {this.renderHeader(group.name)}
+        {this.renderHeader(group? group.name: "nothing goes here")}
         <TaskList 
           filterOption={FILTER_GROUP_TASKS}
           group={group}

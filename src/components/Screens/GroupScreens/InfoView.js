@@ -6,18 +6,18 @@ import {POLICIES, TASK_STATES, TEST_DATA, currentUserId, getPolicyFromGroup} fro
 import { bindActionCreators } from 'redux';
 import {connect } from 'react-redux'
 import colors from '../../../styles/colors'
-import { leaveGroup, deleteGroup } from '../../../redux/actions/GroupDataActions'
+import { leaveGroup, deleteGroup, removeUserFromGroupAsync } from '../../../redux/actions/GroupDataActions'
 import { removeGroupId } from '../../../redux/actions/UserDataActions'
 
 class InfoView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      group: this.props.route.params.group,
     }
   }
 
   createLeaveConfirmOverlay() {
+    const group = this.props.groupData.filter(group => group.gid === this.props.route.params.gid)[0];
     Alert.alert(
       "Confirm",
       "Leaving this group ?",
@@ -31,14 +31,20 @@ class InfoView extends React.Component {
           text: "OK", 
           onPress: () => {
             
-            const policy = getPolicyFromGroup(this.state.group, this.props.userData.data.username);
+            const policy = getPolicyFromGroup(group, this.props.userData.data.username);
             if (policy === POLICIES.OWNER) {
-              this.props.deleteGroup(this.state.group.gid);
+              group.members.forEach(username => {this.props.removeUserFromGroupAsync(username, group.gid)});
+              group.admins.forEach(username => {this.props.removeUserFromGroupAsync(username, group.gid)});
+              this.props.removeGroupId(group.gid);
+              this.props.leaveGroup(this.props.userData.data.username, group.gid);
+              this.props.deleteGroup(group.gid);
             } else {
-              this.props.leaveGroup(this.props.userData.data.username, this.state.group.gid);
+              this.props.removeUserFromGroupAsync(this.props.userData.data.username, group.gid);
+              this.props.removeGroupId(group.gid);
+              this.props.leaveGroup(this.props.userData.data.username, group.gid);
             }
-
-            this.props.removeGroupId(this.state.group.gid);
+            // this.props.getGroupData();
+            // this.props.removeGroupId(group.gid);
             this.props.navigation.navigate('home')
             //navigation.popToTop();
           }
@@ -49,8 +55,7 @@ class InfoView extends React.Component {
 
   }
 
-  renderHeader() {
-    const title = this.state.group.name;
+  renderHeader(title) {
     const maxLengthForTitle = 15;
     const displayTitle  = title.length >  maxLengthForTitle ?
                     title.substring(0, maxLengthForTitle-3) + '...':
@@ -123,7 +128,8 @@ class InfoView extends React.Component {
         backgroundColor: this.props.customize.theme.Overlay,
       }
     }
-    const policy = getPolicyFromGroup(this.state.group, this.props.userData.data.username);
+    const group = this.props.groupData.filter(group => group.gid === this.props.route.params.gid)[0];
+    const policy = getPolicyFromGroup(group, this.props.userData.data.username);
     const navigation = this.props.navigation;
 
     return (
@@ -134,11 +140,11 @@ class InfoView extends React.Component {
         }}
       >
 
-        {this.renderHeader()}
+        {this.renderHeader(group?group.name:"")}
 
         <TouchableOpacity
           onPress={() => navigation.navigate('members', {
-            group: this.state.group,
+            gid: this.props.route.params.gid,
           })}
           style={localStyles.container}
         > 
@@ -149,7 +155,7 @@ class InfoView extends React.Component {
         {(policy === POLICIES.OWNER || policy == POLICIES.ADMIN)?
         <TouchableOpacity
           style={localStyles.container}
-          onPress={() => {navigation.navigate('add-members',{group: this.state.group})}}
+          onPress={() => {navigation.navigate('add-members',{gid: this.props.route.params.gid})}}
         > 
           <Text style={localStyles.menuText}> {"Add more people"} </Text>  
         </TouchableOpacity>:
@@ -177,6 +183,7 @@ const mapDispatchToProps = (dispatch) => ({
   leaveGroup: bindActionCreators(leaveGroup, dispatch),
   removeGroupId: bindActionCreators(removeGroupId, dispatch),
   deleteGroup: bindActionCreators(deleteGroup, dispatch),
+  removeUserFromGroupAsync: (username, gid) => dispatch(removeUserFromGroupAsync(username, gid)), 
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(InfoView)
@@ -197,9 +204,6 @@ const styles=StyleSheet.create({
     marginTop: 10,
     marginHorizontal: 8,
     borderRadius: 20,
-    borderColor: colors.Border,
-    borderBottomWidth: 0.5,
-    marginHorizontal: 20,
   }, 
   menuText: {
     paddingVertical: 8,

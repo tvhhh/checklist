@@ -5,29 +5,74 @@ import { bindActionCreators } from 'redux';
 import {connect } from 'react-redux'
 import colors from '../../../styles/colors'
 import { addUserToGroupAsync } from '../../../redux/actions/GroupDataActions';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 class AddMemberView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      group: this.props.route.params.group,
+      group: this.props.groupData.filter(group => group.gid === this.props.route.params.gid)[0],
       textInput: [],
       inputData: [],
     };
   }
 
-  renderHeader() {
-    return (
-      <View>
+  renderHeader(title) {
+    const maxLengthForTitle = 15;
+    const displayTitle  = title.length >  maxLengthForTitle ?
+                    title.substring(0, maxLengthForTitle-3) + '...':
+                    title;
 
+    return (
+      <View 
+      style={[
+          styles.header,
+          {
+            backgroundColor: this.props.customize.theme.Background,
+          }
+        ]}
+      >
+      {/* back button */}
+      <TouchableOpacity
+          style={
+            {
+              marginRight:20,
+              flex:1
+            }
+          }
+          onPress={() => {this.props.navigation.navigate('info')}}
+        >
+          <MaterialIcons
+            name={"arrow-back"}
+            size={25}
+            color={this.props.customize.theme.TitleText}
+          />
+        </TouchableOpacity>
+
+        <Text
+          style={
+            {
+              color: this.props.customize.theme.TitleText, 
+              fontSize: this.props.customize.fontSize.TitleText, 
+              fontFamily: this.props.customize.font,
+              flex: 8,
+            }
+          }
+        >{`Add users: ${displayTitle}`}</Text>
       </View>
-    );
+    ); 
   }
 
   addTextInput = (index) => {
     let textInput = this.state.textInput;
     textInput.push(
-      <TextInput style={styles.textInput}
+      <TextInput 
+        style={{
+          ...styles.textInput,
+          color: this.props.customize.theme.PrimaryText, 
+          fontSize: this.props.customize.fontSize.PrimaryText, 
+          fontFamily: this.props.customize.font,
+          borderColor:this.props.customize.theme.PrimaryText,
+        }}
         onChangeText={(text) => this.addValues(text, index)}
         placeholder="Username"
         key={index}
@@ -85,14 +130,57 @@ class AddMemberView extends React.Component {
   }
 
   render() {
+    const group = this.props.groupData.filter(group => group.gid === this.props.route.params.gid)[0];
     return (
-      <ScrollView> 
+      <ScrollView
+        style={{
+          flex:1,
+          backgroundColor: this.props.customize.theme.Background,
+        }}
+      > 
+        {this.renderHeader(group.name)}
         <View style={styles.row}> 
           <View style={{margin: 10}}>
-            <Button title='add more member' onPress={() => this.addTextInput(this.state.textInput.length)}/>
+            <TouchableOpacity
+              style={{
+                ...styles.container,
+                backgroundColor: this.props.customize.theme.Overlay,
+              }}
+              onPress={() => this.addTextInput(this.state.textInput.length)}
+            >
+              <Text
+                style={{
+                  ...styles.menuText,
+                  color: this.props.customize.theme.TitleText, 
+                  fontSize: this.props.customize.fontSize.TitleText, 
+                  fontFamily: this.props.customize.font 
+                }}
+              > 
+                {"Add user"}
+              </Text>
+            </TouchableOpacity>
+            {/* <Button title='add more member' onPress={() => this.addTextInput(this.state.textInput.length)}/> */}
           </View>
           <View style={{margin: 10}}>
-            <Button title='Remove' onPress={() => this.removeTextInput()} />
+            <TouchableOpacity
+              style={{
+                ...styles.container,
+                backgroundColor: this.props.customize.theme.Overlay,
+              }}
+              onPress={() => this.removeTextInput()}
+            >
+              <Text
+                style={{
+                  ...styles.menuText,
+                  color: this.props.customize.theme.TitleText, 
+                  fontSize: this.props.customize.fontSize.TitleText, 
+                  fontFamily: this.props.customize.font 
+                }}
+              > 
+                {"Remove"}
+              </Text>
+            </TouchableOpacity>
+            {/* <Button title='Remove' onPress={() => this.removeTextInput()} /> */}
           </View>
         </View>
 
@@ -101,7 +189,26 @@ class AddMemberView extends React.Component {
           {this.state.textInput.map((value) => {
             return value
           })}
-          <Button title='Submit' onPress={() => this.handleSubmit()} />
+          <TouchableOpacity
+            style={{
+              ...styles.container,
+              backgroundColor: this.props.customize.theme.Overlay,
+            }}
+            onPress={() => this.handleSubmit()}
+          >
+            <Text
+              style={{
+                ...styles.menuText,
+                color: this.props.customize.theme.TitleText, 
+                fontSize: this.props.customize.fontSize.TitleText, 
+                fontFamily: this.props.customize.font,
+                
+              }}
+            > 
+              {"Submit"}
+            </Text>
+          </TouchableOpacity>
+          {/* <Button title='Submit' onPress={() => this.handleSubmit()} /> */}
         </View>
       </ScrollView>
     );
@@ -121,11 +228,26 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(AddMemberView)
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection:'row',
+    padding: 20,
+    textAlign: 'center',
+    backgroundColor: '#ffffff',
+    color: '#ffffff',
+    fontSize: 30,
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 5,
+    marginTop: 10,
+    marginHorizontal: 8,
+    borderRadius: 20,
+  }, 
+  menuText: {
+    paddingVertical: 8,
+    marginLeft: 8,
   },
   buttonView: {
     flexDirection: 'row'
