@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity} from 'react-native'
-import { POLICIES, TASK_STATES, TEST_DATA, currentUserId } from '../../../utils/GroupEnum'
-
-import { registerGroup } from '../../../redux/actions/GroupDataActions'
+import React from 'react'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native'
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+
+import { registerGroup } from '../../redux/actions/GroupDataActions'
+
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import colors from '../../styles/colors';
+
 
 export class AddGroupView extends React.Component {
   constructor(props) {
@@ -27,7 +29,6 @@ export class AddGroupView extends React.Component {
           }
         ]}
       >
-      {/* back button */}
       <TouchableOpacity
           style={
             {
@@ -104,7 +105,7 @@ export class AddGroupView extends React.Component {
               fontFamily: this.props.customize.font,
             }}
           >
-            Submit
+            SUBMIT
           </Text>
         </TouchableOpacity>
       </View>
@@ -129,20 +130,13 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     padding: 20,
     textAlign: 'center',
-    backgroundColor: '#ffffff',
-    color: '#ffffff',
     fontSize: 30,
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
   },
   textInput: {
     height: 40,
-    borderColor: 'black', 
+    borderColor: colors.Border, 
     borderWidth: 1,
+    borderRadius: 10,
     margin: 10,
     padding: 10,
   },
@@ -151,18 +145,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   menuText: {
-    paddingVertical: 8,
-    marginLeft: 8,
+    padding: 5,
   },
   submitButton: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     padding: 5,
     marginTop: 10,
     marginHorizontal: 8,
     borderRadius: 20,
   }, 
-}
-
-);
-
+});

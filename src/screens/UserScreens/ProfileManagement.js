@@ -4,9 +4,9 @@ import { Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import Header from '../Header';
-import { AvatarPicker, InformationBox, PasswordBox, ConfirmPasswordBox } from '../Forms/UserInformationForm';
-import ConfirmationBox from '../Forms/ConfirmationBox';
+import Header from '../../components/Header';
+import { AvatarPicker, InformationBox, PasswordBox, ConfirmPasswordBox } from '../../components/Forms/UserInformationForm';
+import ConfirmationBox from '../../components/Forms/ConfirmationBox';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -14,7 +14,7 @@ import FontTisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { FILTER_OVERDUED, FILTER_UPCOMING, FILTER_COMPLETED } from '../TaskList';
+import { FILTER_OVERDUED, FILTER_UPCOMING, FILTER_COMPLETED } from '../../components/TaskList';
 
 import colors from '../../styles/colors';
 

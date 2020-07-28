@@ -1,13 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import TaskList, { FILTER_NOTIFICATION } from './TaskList';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import colors from '../styles/colors';
-
-import { showNotification } from '../utils/Notification';
 
 
 export default class Notification extends React.Component {
@@ -27,7 +25,6 @@ export default class Notification extends React.Component {
             </View>
           }
         />
-        <TouchableOpacity style={{ position: "absolute", bottom: 5, height: 100, width: 100, backgroundColor: "red" }} onPress={showNotification} />
       </View>
     );
   }

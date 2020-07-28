@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 
 
-import ProfileManagement from '../components/Screens/ProfileManagement';
-import List from '../components/Screens/List';
-import LogIn from '../components/Screens/LogIn';
-import SignUp from '../components/Screens/SignUp';
-import ForgotPassword from '../components/Screens/ForgotPassword';
+import ProfileManagement from '../screens/UserScreens/ProfileManagement';
+import List from '../screens/TaskScreens/List';
+import LogIn from '../screens/UserScreens/LogIn';
+import SignUp from '../screens/UserScreens/SignUp';
+import ForgotPassword from '../screens/UserScreens/ForgotPassword';
 
 
 const GuestStack = createStackNavigator();

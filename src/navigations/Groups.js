@@ -1,27 +1,29 @@
 import React from 'react';
-import { View, Text, EventSubscriptionVendor, TouchableOpacity, StyleSheet} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+
+import { createStackNavigator } from '@react-navigation/stack';
 
 import Header from '../components/Header';
-import { createStackNavigator } from '@react-navigation/stack';
-import { white } from 'color-name';
-import { connect } from 'react-redux';
-import { Menu, Notice } from '../components/Button';
+
+import Fontisto from 'react-native-vector-icons/Fontisto';
+
 import colors from '../styles/colors';
-import { HomeView, GroupView, InfoView, MemberView, AddGroupView, AddMemberView } from '../components/Screens/GroupScreens/index.js'
-import {POLICIES, TASK_STATES, TEST_DATA, currentUserId} from '../utils/GroupEnum'
-import {clearData} from '../redux/actions/UserDataActions'
-import { bindActionCreators } from 'redux';
+
+import { HomeView, GroupView, InfoView, MemberView, AddGroupView, AddMemberView } from '../screens/GroupScreens/index';
+
 
 export const Stack = createStackNavigator();
 
 class Groups extends React.Component {
   constructor (props) {
     super(props);
-    // this.props.clearData();
   }
 
   render() {
     const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <View style={{ flex: 1, backgroundColor: theme.Background}}>
         <Header
@@ -31,80 +33,31 @@ class Groups extends React.Component {
           notice={true}
         />
         {this.props.userData.loggedIn?
-        <Stack.Navigator headerMode="none" >
-          <Stack.Screen name="home" component={HomeView} />
-          <Stack.Screen name="group" component={GroupView} />
-          <Stack.Screen name="info" component={InfoView} />
-          <Stack.Screen name="members" component={MemberView} />
-          <Stack.Screen name='create-group' component={AddGroupView} />
-          <Stack.Screen name='add-members' component={AddMemberView} />
-        </Stack.Navigator>:
-        <TouchableOpacity
-          onPress={() => {this.props.navigation.jumpTo('profile')}}
-        >
-          <Text>To login page</Text>
-        </TouchableOpacity>
-
+          <Stack.Navigator headerMode="none" >
+            <Stack.Screen name="home" component={HomeView} />
+            <Stack.Screen name="group" component={GroupView} />
+            <Stack.Screen name="info" component={InfoView} />
+            <Stack.Screen name="members" component={MemberView} />
+            <Stack.Screen name='create-group' component={AddGroupView} />
+            <Stack.Screen name='add-members' component={AddMemberView} />
+          </Stack.Navigator>:
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Fontisto name="user-secret" size={80} color={colors.PrimaryColor} />
+            <Text style={{ color: theme.TitleText, fontSize: fonts.TitleText, fontFamily: font }}>You haven't logged in yet</Text>
+            <TouchableOpacity style={{ backgroundColor: colors.PrimaryColor, marginTop: 10, padding: 10, borderRadius: 10 }} onPress={() => {this.props.navigation.jumpTo('profile')}}>
+              <Text style={{ color: "white", fontSize: fonts.ButtonText, fontFamily: font }}>TO LOGIN PAGE</Text>
+            </TouchableOpacity>
+          </View>
         }
       </View>
     );
   }
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.PrimaryColor,
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 6,
-    marginVertical: 5,
-    marginHorizontal: 8,
-    
-    borderRadius: 5,
-  },
-  
-  menuText: {
-    color: '#ffffff',
-    fontFamily: "sans-serif-light",
-    fontSize: 20,
-    paddingVertical: 8,
-    marginLeft:8,
-    flex: 1,
-  },
-
-  itemText: {
-    color: '#000000',
-    backgroundColor: '#ffffff',
-    fontSize: 16,
-    paddingVertical: 8,
-    marginTop: 6,
-    marginLeft: 20,
-    marginRight: 20, 
-    borderRadius: 5,
-    textAlign: 'left',
-    paddingLeft: 20,
-  },
-
-  itemHeaderContainer: {
-    flex:1,
-    backgroundColor: colors.SecondaryColor,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    
-    borderRadius: 5,
-  }
-});
-
-
 const mapStateToProps = state => ({
   customize: state.customize,
   userData: state.userData,
 });
 
-const mapDispatchToProps = dispatch => ({
-  clearData: bindActionCreators(clearData, dispatch),
-})
 
-export default connect(mapStateToProps, mapDispatchToProps)(Groups);
+export default connect(mapStateToProps)(Groups);

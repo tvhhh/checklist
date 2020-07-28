@@ -3,9 +3,9 @@ import { FlatList, StyleSheet, Text, View, } from 'react-native';
 
 import { connect } from 'react-redux';
 
-import { FILTER_CATEGORY } from '../TaskList';
-import Header from '../Header';
-import Category from '../Category';
+import { FILTER_CATEGORY } from '../../components/TaskList';
+import Header from '../../components/Header';
+import Category from '../../components/Category';
 
 import colors from '../../styles/colors';
 

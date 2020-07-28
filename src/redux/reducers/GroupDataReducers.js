@@ -32,10 +32,6 @@ export default function groupDataReducers(state = initialState, action) {
       return newGroupList;
 
     case LEAVE_GROUP:
-      console.debug("in leave group, reducers")
-      console.debug(`payload = `);
-      console.debug(payload.gid);
-
       newGroupList = state.filter(group => {
         if (group.gid === payload.gid) {
           group.admins = group.admins.filter(username => username !== payload.username);
@@ -46,12 +42,10 @@ export default function groupDataReducers(state = initialState, action) {
         }
         return true;    
       });
-      console.debug(newGroupList);
       storeLocalGroupData(JSON.stringify(newGroupList));
       return newGroupList;
 
     case DELETE_GROUP:
-      console.debug('delete group, group data reducer');
       newGroupList = state.filter(group => {
         if (group.gid === payload.gid) {
           
@@ -61,13 +55,9 @@ export default function groupDataReducers(state = initialState, action) {
         return true;    
       });
       storeLocalGroupData(JSON.stringify(newGroupList));
-      console.debug(newGroupList);
       return newGroupList;
 
     case REMOVE_USER_FROM_GROUP:
-      console.debug('in remove user from group, reducers');
-      console.debug(`payload = ${payload}`);
-
       newGroupList = state.map(group => {
         if (group.gid === payload.gid) {
           let newMembers = group.members.filter(username => username !== payload.username);
@@ -83,7 +73,6 @@ export default function groupDataReducers(state = initialState, action) {
       
 
     case ADD_USER_TO_GROUP:
-      console.debug('in add user to group, reducers');
       newGroupList = state.map(group => {
         if (group.gid === payload.gid && !group.members.includes(payload.username) && !group.admins.includes(payload.username)) {
           group.members = [...group.members, payload.username];
@@ -171,18 +160,6 @@ export default function groupDataReducers(state = initialState, action) {
       storeLocalGroupData(JSON.stringify(newGroupList));
       return newGroupList;
 
-      // newGroupList = state.map(group => {
-      //   if (group.gid === payload.gid) {
-
-
-      //     newData = { ...group, tasks: newTaskList };
-      //     updateGroupData(group.gid, JSON.stringify(newTaskList), 'tasks');
-      //     return newData;
-      //   }
-      //   return group;
-      // });
-      // storeLocalGroupData(JSON.stringify(newGroupList));
-      // return newGroupList;
     case TOGGLE_GROUP_PINNED:
       newGroupList = state.map(group => {
         if (group.gid === payload.gid) {

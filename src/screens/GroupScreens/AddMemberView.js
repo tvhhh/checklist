@@ -3,9 +3,11 @@ import {View, Button, ScrollView, TextInput, Text, TouchableOpacity, FlatList, S
 
 import { bindActionCreators } from 'redux';
 import {connect } from 'react-redux'
-import colors from '../../../styles/colors'
-import { addUserToGroupAsync } from '../../../redux/actions/GroupDataActions';
+
+import { addUserToGroupAsync } from '../../redux/actions/GroupDataActions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+
 class AddMemberView extends React.Component {
   constructor(props) {
     super(props);
@@ -180,7 +182,6 @@ class AddMemberView extends React.Component {
                 {"Remove"}
               </Text>
             </TouchableOpacity>
-            {/* <Button title='Remove' onPress={() => this.removeTextInput()} /> */}
           </View>
         </View>
 
@@ -202,10 +203,9 @@ class AddMemberView extends React.Component {
                 color: this.props.customize.theme.TitleText, 
                 fontSize: this.props.customize.fontSize.TitleText, 
                 fontFamily: this.props.customize.font,
-                
               }}
             > 
-              {"Submit"}
+              {"SUBMIT"}
             </Text>
           </TouchableOpacity>
           {/* <Button title='Submit' onPress={() => this.handleSubmit()} /> */}
@@ -238,16 +238,15 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     padding: 5,
     marginTop: 10,
     marginHorizontal: 8,
     borderRadius: 20,
   }, 
   menuText: {
-    paddingVertical: 8,
-    marginLeft: 8,
+    padding: 8,
   },
   buttonView: {
     flexDirection: 'row'
@@ -262,5 +261,5 @@ const styles = StyleSheet.create({
   row:{
     flexDirection: 'row',
     justifyContent: 'center'
-    },
+  },
 });

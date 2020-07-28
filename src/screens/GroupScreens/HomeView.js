@@ -1,12 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, FlatList, Text, SectionList } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, SectionList } from 'react-native';
+import { connect } from 'react-redux';
+
 import AntDesgin from 'react-native-vector-icons/AntDesign';
 
-import { extractDate } from '../../../utils/DateTime';
-
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import colors from '../../../styles/colors';
+import colors from '../../styles/colors';
 
 
 class HomeView extends React.Component {
@@ -41,17 +39,16 @@ class HomeView extends React.Component {
     </TouchableOpacity>
 
   filterGroups = groupList => {
-    return groupList.reduce((obj, group) => {
+    const obj = {
+      "Groups you're managing": [],
+      "Groups you're in": [],
+    };
+    groupList.forEach(group => {
       const title = (group.admins.includes(this.props.userData.data.username)) ? 
-        "Groups you are managing" : "Groups you are in";
-      return {
-        ...obj,
-        [title]: [...obj[title], group],
-      };
-    }, {
-      "Groups you are managing": [],
-      "Groups you are in": [],
+        "Groups you're managing" : "Groups you're in";
+      obj[title] = [...obj[title], group];
     });
+    return obj;
   }
 
   render() {

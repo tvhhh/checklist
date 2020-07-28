@@ -3,7 +3,7 @@ import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWitho
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import Header from '../Header';
+import Header from '../../components/Header';
 
 import colors from '../../styles/colors';
 

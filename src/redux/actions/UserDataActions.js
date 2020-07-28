@@ -14,6 +14,7 @@ import {
   storeLocalGroupData,
   deleteUser,
 } from '../../api';
+import { scheduleNotification, deleteAllNotification } from '../../utils/Notification';
 
 
 export const GET_DATA = "GET_DATA";
@@ -149,9 +150,26 @@ export const registerUser = async (data) => {
 
 export const logIn = async (email, password) => {
   try {
+    deleteAllNotification();
     var res = await signIn(email, password);
     var data = await fetchUserData(res.user.uid);
     var groupData = await fetchGroupData(res.user.uid);
+    data.tasks.forEach(task => {
+      var time = new Date(task.dueTime);
+      time.setMinutes(time.getMinutes() - 30);
+      scheduleNotification(
+        task.title,
+        task.id,
+        'Your task will end in a few minutes.',
+        time,
+      );
+      scheduleNotification(
+        task.title,
+        task.id,
+        'Your task has expired.',
+        task.dueTime,
+      );
+    });
     storeLocalUserData(JSON.stringify(data));
     storeLocalGroupData(JSON.stringify(groupData));
     return { status: "done", data: data, groupData: groupData };
@@ -161,6 +179,7 @@ export const logIn = async (email, password) => {
 };
 
 export const logOut = async () => {
+  deleteAllNotification();
   signOut();
   clearLocalUserData();
 };

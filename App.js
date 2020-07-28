@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { StatusBar, View, YellowBox } from 'react-native';
+import { StatusBar, YellowBox } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 

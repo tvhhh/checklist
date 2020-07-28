@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import SwipeableView from '../components/Screens/SwipeableView';
-import List from '../components/Screens/List';
-import Search from '../components/Screens/Search';
+import SwipeableView from '../screens/TaskScreens/SwipeableView';
+import List from '../screens/TaskScreens/List';
+import Search from '../screens/TaskScreens/Search';
 
 
 const Stack = createStackNavigator();

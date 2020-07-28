@@ -1,14 +1,14 @@
 import React from 'react'
-import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native'
-import {Overlay } from 'react-native-elements';
-import {POLICIES, TASK_STATES, TEST_DATA, currentUserId, getPolicyFromGroup} from '../../../utils/GroupEnum'
+import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native'
+import { Overlay } from 'react-native-elements';
+import { POLICIES, TASK_STATES, TEST_DATA, currentUserId, getPolicyFromGroup } from '../../utils/GroupEnum'
 import { bindActionCreators } from 'redux';
-import {connect } from 'react-redux'
+import { connect } from 'react-redux'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { removeUserFromGroupAsync, changeUserPolicy } from '../../../redux/actions/GroupDataActions'
-import ConfirmationBox from '../../Forms/ConfirmationBox'
+import { removeUserFromGroupAsync, changeUserPolicy } from '../../redux/actions/GroupDataActions'
+import ConfirmationBox from '../../components/Forms/ConfirmationBox'
 
 
 class MemberView extends React.Component {
@@ -22,9 +22,8 @@ class MemberView extends React.Component {
 
   renderHeader(title) {
     const maxLengthForTitle = 15;
-    const displayTitle  = title.length >  maxLengthForTitle ?
-                    title.substring(0, maxLengthForTitle-3) + '...':
-                    title;
+    const displayTitle  = title.length > maxLengthForTitle ?
+      title.substring(0, maxLengthForTitle-3) + '...' : title;
 
     return (
       <View 
@@ -35,7 +34,6 @@ class MemberView extends React.Component {
           }
         ]}
       >
-      {/* back button */}
       <TouchableOpacity
           style={
             {
@@ -71,13 +69,8 @@ class MemberView extends React.Component {
   }
 
   handleRemove(user) {
-    // console.debug('in handle remove');
-
-    
-    // this.setState({displayConfirmDelete: true});
     this.setState({...this.state, selectUser: user})
     this.toggleConfirmationBox();
-    // this.props.removeUserFromGroupAsync(username, group);
   }
 
   handleRemoveAfterConfirm = () => {
@@ -126,7 +119,6 @@ class MemberView extends React.Component {
     for (let member of group.members) {
       memberList.push({username: member, policy: POLICIES.MEMBER, key: memberList.length});
     }
-    // console.debug(memberList);
 
     const displayList = memberList.map(user => {
       return (
@@ -204,7 +196,6 @@ class MemberView extends React.Component {
 
   render() {
     const group = this.props.groupData.filter(group => group.gid === this.props.route.params.gid)[0];
-    // console.debug(group);
     const theme = this.props.customize.theme;
     const isVisible = this.state.displayConfirmDelete;
     return (
@@ -225,19 +216,12 @@ class MemberView extends React.Component {
             <ConfirmationBox 
               title={"Remove this user?"}
               onCancel={this.toggleConfirmationBox}
-              // onConfirm={this.handleRemoveAccountConfirm}
               onConfirm={this.handleRemoveAfterConfirm}
               customize={this.props.customize}
             />
           }
           animationType="fade"
         />
-        {/* <Text 
-          style={{
-            color: this.props.customize.theme.TitleText,
-          }}>
-          {JSON.stringify(group)}
-        </Text> */}
       </View>
     );
   }
@@ -324,8 +308,6 @@ export function MemberViewOld({route, navigation}) {
 
   return (
     <View>
-      {/* <Text>{JSON.stringify(database.users[group.admins[0]].username)}</Text>
-      <Text>{JSON.stringify(group)}</Text> */}
       <FlatList
         data={members}
         keyExtractor={item => item.uid}

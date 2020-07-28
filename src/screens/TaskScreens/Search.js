@@ -4,12 +4,12 @@ import { SearchBar } from 'react-native-elements';
 
 import { connect } from 'react-redux';
 
-import TaskList, { FILTER_SEARCH } from '../TaskList';
+import TaskList, { FILTER_SEARCH } from '../../components/TaskList';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import CategoryPicker from '../Forms/CategoryPicker';
+import CategoryPicker from '../../components/Forms/CategoryPicker';
 import { Overlay } from 'react-native-elements';
-import Category from '../Category';
+import Category from '../../components/Category';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';

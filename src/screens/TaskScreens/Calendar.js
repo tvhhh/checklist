@@ -3,9 +3,9 @@ import { View } from 'react-native';
 
 import { connect } from 'react-redux';
 
-import Header from '../Header';
-import CalendarPicker from '../CalendarPicker';
-import TaskList, { FILTER_DATE } from '../TaskList';
+import Header from '../../components/Header';
+import CalendarPicker from '../../components/CalendarPicker';
+import TaskList, { FILTER_DATE } from '../../components/TaskList';
 
 import { lightTheme} from '../../styles/colors';
 

@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import Header from '../Header';
-import TaskList, { FILTER_TODAY, FILTER_WEEK, FILTER_PINNED } from '../TaskList';
+import Header from '../../components/Header';
+import TaskList, { FILTER_TODAY, FILTER_WEEK, FILTER_PINNED } from '../../components/TaskList';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
