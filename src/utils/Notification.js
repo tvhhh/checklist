@@ -23,9 +23,9 @@ PushNotification.configure({
   requestPermissions: false,
 });
 
-export const scheduleNotification = (title, id_task, mess, time) => {
+export const scheduleNotification = (title, id, mess, time) => {
   PushNotification.localNotificationSchedule({
-    id: id_task,
+    id: id,
     title: title,
     message: mess,
     playSound: false,
@@ -34,8 +34,8 @@ export const scheduleNotification = (title, id_task, mess, time) => {
   });
 };
 
-export const deleteNotification = (id_task) => {
-  PushNotification.cancelLocalNotifications({id: id_task});
+export const deleteNotification = (id) => {
+  PushNotification.cancelLocalNotifications({id: id});
 };
 
 export const deleteAllNotification = () => {
