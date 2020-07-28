@@ -1,32 +1,54 @@
 import React from 'react';
-import { StyleSheet, View, } from 'react-native';
+import { connect } from 'react-redux';
 
-import { Menu } from '../components/Button';
-
-import colors from '../styles/colors';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
-export default class Profile extends React.Component {
-  constructor (props) {
-    super(props);
-  }
+import ProfileManagement from '../components/Screens/ProfileManagement';
+import List from '../components/Screens/List';
+import LogIn from '../components/Screens/LogIn';
+import SignUp from '../components/Screens/SignUp';
+import ForgotPassword from '../components/Screens/ForgotPassword';
 
-  toggleDrawer = () => {
-    this.props.navigation.toggleDrawer();
-  }
 
+const GuestStack = createStackNavigator();
+const RegisteredStack = createStackNavigator();
+
+class GuestScreen extends React.Component {
   render() {
     return (
-      <View style={styles.screenContainer}>
-        <Menu onPress={this.toggleDrawer} />
-      </View>
+      <GuestStack.Navigator initialRouteName="LogIn" headerMode="none">
+        <GuestStack.Screen name="LogIn" component={LogIn} />
+        <GuestStack.Screen name="SignUp" component={SignUp} />
+        <GuestStack.Screen name="Forgot" component={ForgotPassword} />
+      </GuestStack.Navigator>
     );
   }
 };
 
-const styles = StyleSheet.create({
-  screenContainer: {
-    flex: 1,
-    backgroundColor: colors.Background,
-  },
+class RegisteredUserScreen extends React.Component {
+  render() {
+    return (
+      <RegisteredStack.Navigator headerMode="none">
+        <RegisteredStack.Screen name="Profile" component={ProfileManagement} />
+        <RegisteredStack.Screen name="List" component={List} />
+      </RegisteredStack.Navigator>
+    );
+  }
+};
+
+class Profile extends React.Component {
+  render() {
+    return (
+      <>
+        {this.props.loggedIn ? <RegisteredUserScreen /> : <GuestScreen />}
+      </>
+    );
+  }
+};
+
+const mapStateToProps = state => ({
+  loggedIn: state.userData.loggedIn,
 });
+
+export default connect(mapStateToProps)(Profile);

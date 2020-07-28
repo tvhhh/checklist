@@ -1,45 +1,30 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, } from 'react-native';
-
 import CheckButton from './CheckBox';
 import Category from './Category';
-
-import colors from '../styles/colors';
-
 import { extractDateTime } from '../utils/DateTime';
 
 
 export default class Task extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      id: this.props.id,
-      title: this.props.title,
-      description: this.props.description,
-      dueTime: this.props.dueTime,
-      category: this.props.category,
-      pinned: false,
-      done: false,
-    };
-  }
-
-  UNSAFE_componentWillReceiveProps = newProps => {
-    this.setState({ ...newProps });
-  }
-
   render() {
-    const extractedTime = extractDateTime(this.state.dueTime);
-
+    const extractedTime = extractDateTime(this.props.dueTime);
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <TouchableOpacity onPress={this.props.onSelect}>
-        <View style={[styles.taskContainer, { opacity: (this.state.done) ? 0.5 : 1 }]}>
-          <CheckButton name="done" checked={this.state.done} onPress={this.props.toggleDone} />
+        <View style={[styles.taskContainer, { opacity: (this.props.done) ? 0.5 : 1, backgroundColor: theme.Overlay}]}>
+          <CheckButton name="done" checked={this.props.done} onPress={this.props.toggleDone} />
           <View style={styles.textContainer}>
-            <Text style={styles.taskTitle}>{this.state.title}</Text>
-            <Text style={styles.taskTime}>{`${extractedTime.date}  ${extractedTime.time}`}</Text>
+            <Text 
+              style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.PrimaryText}}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >{this.props.title}</Text>
+            <Text style={{color: theme.SecondaryText, fontFamily: font, fontSize: fonts.SecondaryText}}>{`${extractedTime.date}  ${extractedTime.time}`}</Text>
           </View>
-          <Category name={this.state.category} size={40} />
-          <CheckButton name="pinned" checked={this.state.pinned} onPress={this.props.togglePinned} />
+          <Category name={this.props.category} size={40} />
+          <CheckButton name="pinned" checked={this.props.pinned} onPress={this.props.togglePinned} />
         </View>
       </TouchableOpacity>
     );
@@ -49,22 +34,14 @@ export default class Task extends React.Component {
 const styles = StyleSheet.create({
   taskContainer: {
     flex: 1,
-    backgroundColor: colors.Overlay,
     alignItems: "center",
     flexDirection: "row",
     padding: 5,
     marginBottom: 5,
     borderRadius: 15,
+    marginHorizontal: 5,
   },
   textContainer: {
     flex: 1,
-  },
-  taskTitle: {
-    fontSize: 14,
-    color: colors.PrimaryText,
-  },
-  taskTime: {
-    fontSize: 12,
-    color: colors.SecondaryText,
   },
 });

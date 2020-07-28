@@ -1,44 +1,51 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, View, } from 'react-native';
 
+import { connect } from 'react-redux';
+
+import { FILTER_CATEGORY } from '../TaskList';
 import Header from '../Header';
 import Category from '../Category';
-import { Menu, Notice, Search } from '../Button';
 
-import screenStyles from './screenStyles';
 import colors from '../../styles/colors';
 
 
-export default class Categories extends React.Component {
+class Categories extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categories: ["health", "workout", "work", "study", "payment", "entertainment"],
+      categories: [
+        "health", "workout", "ideas",
+        "work", "payment", "liveliness",
+        "meeting", "study", "event",
+      ],
     };
   }
 
-  toggleDrawer = () => {
-    this.props.navigation.toggleDrawer();
+  onCategoryPress = category => {
+    this.props.navigation.navigate("List", { filterOption: FILTER_CATEGORY, category: category });
   }
 
   render() {
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
-      <View style={[screenStyles.screenContainer, styles.container]}>
-        <Header title="CATEGORIES" />
-        <Menu onPress={this.toggleDrawer} />
-        <Search
-          position={{ position: "absolute", top: 12, right: 45, }}
-          onPress={() => this.props.navigation.navigate("Search",{taskList: this.props.taskList})}
+      <View style={[styles.container, { flex: 1, backgroundColor: theme.Background }]}>
+        <Header
+          navigation={this.props.navigation} 
+          title={this.props.title}
+          search={true}
+          notice={true}
         />
-        <Notice onPress={() => this.props.navigation.navigate("Notice")} />
         <FlatList 
           data={this.state.categories}
           keyExtractor={(item, index) => item + index}
-          renderItem={obj => (
+          renderItem={({ item }) => (
             <View style={styles.categoryContainer}>
-              <Category name={obj.item} size={100} />
-              <Text style={styles.categoryName}>
-                {obj.item.charAt(0).toUpperCase() + obj.item.slice(1)}
+              <Category name={item} size={100} onPress={() => this.onCategoryPress(item)} />
+              <Text style={{ color: colors[item.charAt(0).toUpperCase() + item.slice(1)] , fontFamily: font, fontSize: fonts.CaptionText}}>
+                {item.toUpperCase()}
               </Text>
             </View>
           )}
@@ -59,7 +66,11 @@ const styles = StyleSheet.create({
     justifyContent: "center", 
     padding: 10,
   },
-  categoryName: {
-    color: colors.PrimaryText,
-  },
 });
+
+const mapStateToProps = state => ({
+  customize: state.customize,
+  taskList: state.userData.data.tasks,
+});
+
+export default connect(mapStateToProps)(Categories);

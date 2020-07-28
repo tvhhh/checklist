@@ -1,5 +1,5 @@
 import React from 'react';
-import { Keyboard, StyleSheet, Text, TextInput,TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Overlay } from 'react-native-elements';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -7,7 +7,6 @@ import CategoryPicker from './CategoryPicker';
 import Category from '../Category';
 import ConfirmationBox from './ConfirmationBox';
 
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import colors from '../../styles/colors';
@@ -27,7 +26,9 @@ export default class TaskForm extends React.Component {
         title: this.props.title || "",
         description: this.props.description || "",
         dueTime: this.props.dueTime || today,
-        category: this.props.category || "uncategorized",
+        category: this.props.category || "unknown",
+        pinned: this.props.pinned || false,
+        done: this.props.done || false,
       },
       errorText: false,
       errorTime: false,
@@ -48,8 +49,7 @@ export default class TaskForm extends React.Component {
 
   handleDateTimeConfirm = time => {
     time.setSeconds(0, 0);
-    this.setState({ task: {...(this.state.task), dueTime: time} });
-    this.setState({ isDateTimePickerVisible: false });
+    this.setState({ task: {...(this.state.task), dueTime: time}, isDateTimePickerVisible: false });
   }
 
   toggleCategoryPicker = () => {
@@ -57,7 +57,7 @@ export default class TaskForm extends React.Component {
   }
 
   updateCategory = category => {
-    this.setState({ task: {...(this.state.task), category: category} });
+    this.setState({ task: {...(this.state.task), category: category}, isCategoryPickerVisible: false });
   }
 
   toggleConfirmationBox = () => {
@@ -81,59 +81,64 @@ export default class TaskForm extends React.Component {
   }
 
   render() {
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
+    
     const extractedDateTime = extractDateTime(this.state.task.dueTime);
-
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.taskFormLayout} >
+        <View style={styles.container}>
           <View style={styles.taskFormHeader}>
-            <TouchableOpacity style={styles.saveButtonContainer} onPress={this.handleSubmit} >
-              <Text style={styles.saveButtonText}>SAVE</Text>
+            <TouchableOpacity style={styles.buttonContainer} onPress={this.handleSubmit}>
+              <Text style={[styles.saveButtonText, {fontSize: fonts.ButtonText, fontFamily: font}]}>SAVE</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonContainer} onPress={this.props.onBack}>
+              <Text style={[styles.cancelButtonText, {fontSize: fonts.ButtonText, fontFamily: font}]}>CANCEL</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.taskFormInputField}>
-            <TextInput style={styles.titleInput}
+            <TextInput style={[styles.titleInput, {fontSize: fonts.TitleText, fontFamily: font, color: theme.TitleText}]}
               underlineColorAndroid="transparent"
               placeholder="I'm gonna do..."
-              placeholderTextColor={colors.PrimaryText}
+              placeholderTextColor={theme.PrimaryText}
               onChangeText={this.updateTitle}
               defaultValue={this.state.task.title}
               autoCapitalize="none"
             />
             {this.state.errorText ? 
-              <Text style={styles.errorText}>
+              <Text style={{ color: colors.Error, fontSize: fonts.ErrorText, fontFamily: font }}>
                 This field is required.
               </Text> : null
             }
-            <TextInput style={styles.descriptionInput}
+            <TextInput style={[styles.descriptionInput, {fontSize: fonts.CaptionText, fontFamily: font, color: theme.PrimaryText}]}
               underlineColorAndroid="transparent"
               placeholder="DESCRIPTION"
-              placeholderTextColor={colors.SecondaryText}
+              placeholderTextColor={theme.SecondaryText}
               onChangeText={this.updateDescription}
               defaultValue={this.state.task.description}
               autoCapitalize="none"
             />
             <TouchableOpacity style={styles.datetimePicker} onPress={this.toggleDateTimePicker}>
-              <Text style={styles.dateTimePickerText}>{`${extractedDateTime.date}  ${extractedDateTime.time}`}</Text>
+              <Text style={{color: theme.PrimaryText, fontSize: fonts.PrimaryText, fontFamily: font}}>{`${extractedDateTime.date}  ${extractedDateTime.time}`}</Text>
             </TouchableOpacity>
             {this.state.errorTime ? 
-              <Text style={styles.errorText}>
+              <Text style={{ color: colors.Error, fontSize: fonts.ErrorText, fontFamily: font }}>
                 Sorry, your due time should be later than now.
               </Text> : null
             }
             <View style={styles.categoryPickerButton}>
-              {(this.state.task.category === "uncategorized") ? 
-                (<TouchableOpacity onPress={this.toggleCategoryPicker} >
-                  <AntDesign name="questioncircleo" size={59} color="grey" />
-                </TouchableOpacity>) :
-                <Category name={this.state.task.category} onPress={this.toggleCategoryPicker} />
-              }
-              <Text style={styles.categoryName}>{this.state.task.category.toUpperCase()}</Text>
+              <Category name={this.state.task.category} onPress={this.toggleCategoryPicker} />
+              <Text style={
+                { color: colors[this.state.task.category.charAt(0).toUpperCase() + this.state.task.category.slice(1)] , fontSize: fonts.PrimaryText, fontFamily: font}
+              }>
+                {this.state.task.category.toUpperCase()}
+              </Text>
             </View>
             {this.props.isOnSelected ?
               <View style={styles.taskFormFooter}>
                 <TouchableOpacity style={styles.removeButton} onPress={this.toggleConfirmationBox} >
-                  <FontAwesome name="trash-o" size={30} color="midnightblue" />
+                  <FontAwesome name="trash-o" size={30} color={colors.SecondaryColor} />
                 </TouchableOpacity>
               </View> : null
             }
@@ -147,17 +152,31 @@ export default class TaskForm extends React.Component {
           <Overlay
             isVisible={this.state.isCategoryPickerVisible}
             onBackdropPress={this.toggleCategoryPicker}
+            overlayBackgroundColor={theme.Overlay}
             overlayStyle={styles.categoryPickerForm}
-          >
-            <CategoryPicker onBack={this.toggleCategoryPicker} onSubmit={this.updateCategory} />
-          </Overlay>
+            children={
+              <CategoryPicker 
+                onSubmit={this.updateCategory} 
+                customize={this.props.customize}
+              />
+            }
+            animationType="fade"
+          />
           <Overlay
             isVisible={this.state.isConfirmationBoxVisible}
             onBackdropPress={this.toggleConfirmationBox}
+            overlayBackgroundColor={theme.Overlay}
             overlayStyle={styles.confirmationBox}
-          >
-            <ConfirmationBox onCancel={this.toggleConfirmationBox} onConfirm={this.handleRemoveConfirm} />
-          </Overlay>
+            children={
+              <ConfirmationBox 
+                title="Delete this task?" 
+                onCancel={this.toggleConfirmationBox} 
+                onConfirm={this.handleRemoveConfirm}
+                customize={this.props.customize} 
+              />
+            }
+            animationType="fade"
+          />
         </View>
       </TouchableWithoutFeedback>
     );
@@ -165,32 +184,32 @@ export default class TaskForm extends React.Component {
 };
 
 const styles = StyleSheet.create({
-  taskFormLayout: {
+  container: {
     flex: 1,
+    padding: 10,
   },
   taskFormHeader: {
     flexDirection: "row-reverse",
-    paddingHorizontal: 15,
   },
-  saveButtonContainer: {
-    padding: 5,
+  buttonContainer: {
+    paddingHorizontal: 10,
+    marginBottom: 5,
   },
   saveButtonText: {
     color: colors.PrimaryColor,
-    fontSize: 20,
+  },
+  cancelButtonText: {
+    color: colors.SecondaryColor,
   },
   taskFormInputField: {
     flex: 1,
-    paddingHorizontal: 10,
   },
   titleInput: {
-    fontSize: 18,
     borderColor: colors.Border,
     borderBottomWidth: 1,
     paddingBottom: 3,
   },
   descriptionInput: {
-    fontSize: 14,
     borderColor: colors.Border,
     borderBottomWidth: 1,
     paddingBottom: 3,
@@ -203,9 +222,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
   },
-  dateTimePickerText: {
-    fontSize: 16,
-  },
   categoryPickerButton: {
     alignItems: "center",
     justifyContent: "center",
@@ -213,22 +229,20 @@ const styles = StyleSheet.create({
   },
   categoryPickerForm: { 
     padding: 0,
-    height: 280,
+    height: 350,
     width: 300,
     borderRadius: 5,
-  },
-  categoryName: {
-    color: colors.PrimaryText,
   },
   taskFormFooter: {
     alignItems: "center",
     justifyContent: "center",
     paddingTop: 5,
+    paddingBottom: 10,
   },
   removeButton: {
     alignItems: "center",
     justifyContent: "center",
-    borderColor: "midnightblue",
+    borderColor: colors.SecondaryColor,
     borderWidth: 1,
     height: 40,
     width: 40,
@@ -238,9 +252,5 @@ const styles = StyleSheet.create({
     height: 150,
     width: 300,
     borderRadius: 5,
-  },
-  errorText: {
-    color: colors.ErrorText,
-    fontSize: 12,
   },
 });

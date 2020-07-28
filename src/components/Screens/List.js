@@ -1,30 +1,71 @@
 import React from 'react';
-import { View, } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { connect } from 'react-redux';
 
 import Header from '../Header';
-import TaskList from '../TaskList';
-import { Menu, Notice, Search } from '../Button';
+import TaskList, { FILTER_TODAY, FILTER_WEEK, FILTER_PINNED } from '../TaskList';
 
-import screenStyles from './screenStyles';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import colors from '../../styles/colors';
 
 
-export default class List extends React.Component {
-  toggleDrawer = () => {
-    this.props.navigation.toggleDrawer();
+class List extends React.Component {
+  getFilter = () => {
+    switch(this.props.title) {
+      case "MY DAY":
+        return { filterOption: FILTER_TODAY };
+      case "MY WEEK":
+        return { filterOption: FILTER_WEEK };
+      case "PINNED":
+        return { filterOption: FILTER_PINNED };
+      default:
+        return this.props.route.params;
+    }
   }
 
   render() {
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
+
+    const filter = this.getFilter();
     return (
-      <View style={screenStyles.screenContainer}>
-        <Header title={this.props.title} />
-        <Menu onPress={this.toggleDrawer} />
-        <Search
-          position={{ position: "absolute", top: 12, right: 45, }}
-          onPress={() => this.props.navigation.navigate("Search",{taskList: this.props.taskList})}
+      <View style={{flex: 1, backgroundColor: theme.Background}}>
+        {this.props.headerMode ?
+          <Header
+            navigation={this.props.navigation} 
+            title={this.props.title}
+            search={true}
+            notice={true}
+          /> : null
+        }
+        <TaskList
+          {...filter}
+          create={true}
+          listEmptyComponent={
+            <View style={styles.emptyComponent}>
+              <MaterialIcons name="done-all" color={colors.PrimaryColor} size={120} />
+              <Text style={{ color: theme.PrimaryText, fontSize: fonts.HeavyText, fontFamily: font }}>You're all done here!</Text>
+              <Text style={{ color: theme.SecondaryText, fontSize: fonts.PrimaryText, fontFamily: font }}>Tap + to create a new task</Text>
+            </View>
+          }
         />
-        <Notice onPress={() => this.props.navigation.navigate("Notice")} />
-        <TaskList {...this.props} />
       </View>
     );
   }
 };
+
+const styles = StyleSheet.create({
+  emptyComponent: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 180,
+  },
+});
+
+const mapStateToProps = state => ({
+  customize: state.customize,
+});
+
+export default connect(mapStateToProps)(List);

@@ -1,23 +1,24 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, } from 'react-native';
-
 import colors from '../../styles/colors';
-
 
 export default class ConfirmationBox extends React.Component {
   render() {
+    const theme = this.props.customize.theme;
+    const fonts = this.props.customize.fontSize;
+    const font = this.props.customize.font;
     return (
       <View style={styles.container}>
         <View style={styles.content}>
-          <Text style={styles.largeText}>Delete this task?</Text>
-          <Text style={styles.smallText}>You cannot undo this action</Text>
+          <Text style={[styles.title, {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.TitleText}]}>{this.props.title}</Text>
+          <Text style={{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.CaptionText}}>You cannot undo this action</Text>
         </View>
         <View style={styles.optionContainer}>
           <TouchableOpacity style={styles.button} onPress={this.props.onCancel}>
-            <Text style={styles.cancelText}>Cancel</Text>
+            <Text style={[styles.cancelText, {fontFamily: font, fontSize: fonts.ButtonText}]}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={this.props.onConfirm}>
-            <Text style={styles.confirmText}>Delete</Text>
+            <Text style={[styles.confirmText, {fontFamily: font, fontSize: fonts.ButtonText}]}>Delete</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -34,14 +35,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  largeText: {
-    color: colors.PrimaryText,
-    fontSize: 20,
+  title: {
     marginBottom: 5,
-  },
-  smallText: {
-    color: colors.PrimaryText,
-    fontSize: 14,
   },
   optionContainer: {
     flexDirection: "row",
@@ -52,10 +47,8 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     color: "red",
-    fontSize: 20,
   },
   cancelText: {
     color: "dodgerblue",
-    fontSize: 20,
   },
 });
