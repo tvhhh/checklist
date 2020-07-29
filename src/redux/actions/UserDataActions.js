@@ -26,7 +26,6 @@ export const REMOVE_TASK = "REMOVE_TASK";
 export const TOGGLE_PINNED = "TOGGLE_PINNED";
 export const TOGGLE_DONE = "TOGGLE_DONE";
 export const SET_AVATAR = "SET_AVATAR";
-export const SET_USERNAME = "SET_USERNAME";
 export const SET_NAME = "SET_NAME";
 export const SET_PHONE = "SET_PHONE";
 export const ADD_GROUP_ID = "ADD_GROUP_ID";
@@ -92,13 +91,6 @@ export const setAvatar = color => ({
     color,
   },
 });
-
-export const setUsername = username => ({
-  type: SET_USERNAME,
-  payload: {
-    username,
-  },
-})
 
 export const setName = name => ({
   type: SET_NAME,

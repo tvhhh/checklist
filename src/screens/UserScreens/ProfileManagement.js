@@ -18,7 +18,7 @@ import { FILTER_OVERDUED, FILTER_UPCOMING, FILTER_COMPLETED } from '../../compon
 
 import colors from '../../styles/colors';
 
-import { setAvatar, setUsername, setName, setPhone, logOut, deactivateUser, clearData } from '../../redux/actions/UserDataActions';
+import { setAvatar, setName, setPhone, logOut, deactivateUser, clearData } from '../../redux/actions/UserDataActions';
 
 
 class ProfileManagement extends React.Component {
@@ -49,9 +49,6 @@ class ProfileManagement extends React.Component {
 
   handleInformationSubmit = (info, type) => {
     switch(type) {
-      case "username":
-        this.props.setUsername(info);
-        break;
       case "name":
         this.props.setName(info);
         break;
@@ -112,9 +109,7 @@ class ProfileManagement extends React.Component {
               size={100}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.toggleInformationBox("username")}>
-            <Text style={{color: data.avatar, fontFamily: font, fontSize: fonts.UsernameText}}>{`@${data.username}`}</Text>
-          </TouchableOpacity>
+          <Text style={{color: data.avatar, fontFamily: font, fontSize: fonts.UsernameText}}>{`@${data.username}`}</Text>
         </View>
         <View style={styles.statisticContainer}>
           <TouchableOpacity
@@ -356,7 +351,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setAvatar: bindActionCreators(setAvatar, dispatch),
-  setUsername: bindActionCreators(setUsername, dispatch),
   setName: bindActionCreators(setName, dispatch),
   setPhone: bindActionCreators(setPhone, dispatch),
   clearData: bindActionCreators(clearData, dispatch),

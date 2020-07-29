@@ -6,6 +6,7 @@ import {connect } from 'react-redux'
 
 import { addUserToGroupAsync } from '../../redux/actions/GroupDataActions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import colors from '../../styles/colors'
 
 
 class AddMemberView extends React.Component {
@@ -66,25 +67,26 @@ class AddMemberView extends React.Component {
 
   addTextInput = (index) => {
     let textInput = this.state.textInput;
-    textInput.push(
-      <TextInput 
-        style={{
-          ...styles.textInput,
-          color: this.props.customize.theme.PrimaryText, 
-          fontSize: this.props.customize.fontSize.PrimaryText, 
-          fontFamily: this.props.customize.font,
-          borderColor:this.props.customize.theme.PrimaryText,
-        }}
-        onChangeText={(text) => this.addValues(text, index)}
-        placeholder="Username"
-        key={index}
-      />);
-    this.setState({textInput});
+    this.setState({textInput: [...this.state.textInput, index]});
+    // textInput.push(
+    //   <TextInput 
+    //     style={{
+    //       ...styles.textInput,
+    //       color: colors.Border, 
+    //       fontSize: this.props.customize.fontSize.PrimaryText, 
+    //       fontFamily: this.props.customize.font,
+    //       borderColor:colors.Border,
+    //     }}
+    //     onChangeText={(text) => this.addValues(text, index)}
+    //     placeholder="Username"
+    //     key={index}
+    //   />);
+    // this.setState({textInput});
   }
 
   removeTextInput = () => {
-    let textInput = this.state.textInput;
-    let inputData = this.state.inputData;
+    let textInput = [...this.state.textInput];
+    let inputData = [...this.state.inputData];
     textInput.pop()
     inputData.pop()
     this.setState({textInput, inputData})
@@ -187,9 +189,21 @@ class AddMemberView extends React.Component {
 
         
         <View style={{margin: 10}}>
-          {this.state.textInput.map((value) => {
-            return value
-          })}
+          {this.state.textInput.map((index) => (
+            <TextInput 
+              style={{
+                ...styles.textInput,
+                color: this.props.customize.theme.PrimaryText,
+                fontSize: this.props.customize.fontSize.PrimaryText, 
+                fontFamily: this.props.customize.font,
+                borderColor:colors.Border,
+              }}
+              onChangeText={(text) => this.addValues(text, index)}
+              placeholder="Username"
+              key={index}
+              placeholderTextColor={this.props.customize.theme.SecondaryText}
+            />  
+          ))}
           <TouchableOpacity
             style={{
               ...styles.container,

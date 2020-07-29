@@ -103,7 +103,7 @@ export const toggleGroupDone = (gid, selected) => ({
   },
 });
 
-export const fetchGroupDataAsync = () => async (dispatch) => {
+export const fetchGroupData = () => async (dispatch) => {
   try {
     const data = await fetchLocalGroupData();
     dispatch(getGroupData(data));

@@ -17,9 +17,9 @@ import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import TodoApp from './src/index';
 
 import { fetchData, setConnectionStatus, getData } from './src/redux/actions/UserDataActions';
-import { fetchGroupDataAsync, getGroupData } from './src/redux/actions/GroupDataActions';
+import { fetchGroupData } from './src/redux/actions/GroupDataActions';
 import { fetchCustomData } from './src/redux/actions/CustomizeActions';
-import { updateUserData, fetchGroupData } from './src/api';
+import { updateUserData } from './src/api';
 
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
@@ -28,7 +28,7 @@ class App extends React.Component {
   componentDidMount = async () => {
     await this.props.fetchCustomData();
     await this.props.fetchData();
-    await this.props.fetchGroupDataAsync();
+    await this.props.fetchGroupData();
     var uid = this.props.userData.data.uid;
     StatusBar.setBackgroundColor(this.props.customize.theme.Background);
     StatusBar.setBarStyle(this.props.customize.darkTheme ? "light-content" : "dark-content");
@@ -55,10 +55,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchData: () => dispatch(fetchData()),
-  fetchGroupDataAsync: () => dispatch(fetchGroupDataAsync()),
+  fetchGroupData: () => dispatch(fetchGroupData()),
   fetchCustomData: () => dispatch(fetchCustomData()),
   getData: bindActionCreators(getData, dispatch),
-  getGroupData: bindActionCreators(getGroupData, dispatch),
   setConnectionStatus: bindActionCreators(setConnectionStatus, dispatch),
 });
 

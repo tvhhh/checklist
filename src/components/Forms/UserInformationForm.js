@@ -55,12 +55,8 @@ export class InformationBox extends React.Component {
     this.setState({ info: text, error: false });
   }
 
-  handleSubmit = async () => {
-    if (this.props.type === "username" && this.state.info !== this.props.info && await isUsernameExisting(this.state.info)) {
-      this.setState({ error: true, errorMessage: "This username has existed." });
-    } else {
-      this.props.onSubmit(this.state.info, this.props.type);
-    }
+  handleSubmit = () => {
+    this.props.onSubmit(this.state.info, this.props.type);
   }
 
   render() {
