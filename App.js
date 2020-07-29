@@ -16,8 +16,8 @@ import changeNavigationBarColor from 'react-native-navigation-bar-color';
 
 import TodoApp from './src/index';
 
-import { fetchData, setConnectionStatus } from './src/redux/actions/UserDataActions';
-import { fetchGroups, getGroupData } from './src/redux/actions/GroupDataActions';
+import { fetchData, setConnectionStatus, getData } from './src/redux/actions/UserDataActions';
+import { fetchGroupDataAsync, getGroupData } from './src/redux/actions/GroupDataActions';
 import { fetchCustomData } from './src/redux/actions/CustomizeActions';
 import { updateUserData, fetchGroupData } from './src/api';
 
@@ -28,18 +28,16 @@ class App extends React.Component {
   componentDidMount = async () => {
     await this.props.fetchCustomData();
     await this.props.fetchData();
-    await this.props.fetchGroups();
+    await this.props.fetchGroupDataAsync();
+    var uid = this.props.userData.data.uid;
     StatusBar.setBackgroundColor(this.props.customize.theme.Background);
     StatusBar.setBarStyle(this.props.customize.darkTheme ? "light-content" : "dark-content");
     changeNavigationBarColor(this.props.customize.theme.Background);
     NetInfo.addEventListener(async (state) => {
       this.props.setConnectionStatus(state.isConnected);
-      let uid = this.props.userData.data.uid;
       let tasks = JSON.stringify(this.props.userData.data.tasks);
       if (state.isConnected && uid !== "Guest") {
         updateUserData(uid, tasks, 'tasks');
-        const groupData = await fetchGroupData(uid);
-        this.props.getGroupData(groupData);
       }
     });
   }
@@ -56,11 +54,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchCustomData: () => dispatch(fetchCustomData()),
   fetchData: () => dispatch(fetchData()),
-  fetchGroups: () => dispatch(fetchGroups()),
-  setConnectionStatus: bindActionCreators(setConnectionStatus, dispatch),
+  fetchGroupDataAsync: () => dispatch(fetchGroupDataAsync()),
+  fetchCustomData: () => dispatch(fetchCustomData()),
+  getData: bindActionCreators(getData, dispatch),
   getGroupData: bindActionCreators(getGroupData, dispatch),
+  setConnectionStatus: bindActionCreators(setConnectionStatus, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

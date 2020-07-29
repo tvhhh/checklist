@@ -1,16 +1,19 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Header from '../components/Header';
 
-import Fontisto from 'react-native-vector-icons/Fontisto';
+import { HomeView, GroupView, InfoView, MemberView, AddGroupView, AddMemberView } from '../screens/GroupScreens/index';
 
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import colors from '../styles/colors';
 
-import { HomeView, GroupView, InfoView, MemberView, AddGroupView, AddMemberView } from '../screens/GroupScreens/index';
+import { getGroupData } from '../redux/actions/GroupDataActions';
+import { fetchGroupData } from '../api';
 
 
 export const Stack = createStackNavigator();
@@ -18,6 +21,13 @@ export const Stack = createStackNavigator();
 class Groups extends React.Component {
   constructor (props) {
     super(props);
+  }
+
+  refresh = async () => {
+    if (this.props.userData.loggedIn) {
+      var groupData = await fetchGroupData(this.props.userData.data.uid);
+      this.props.getGroupData(groupData);
+    }
   }
 
   render() {
@@ -32,6 +42,9 @@ class Groups extends React.Component {
           search={true}
           notice={true}
         />
+        <TouchableOpacity style={{ flexDirection: "row-reverse", paddingHorizontal: 20 }} onPress={this.refresh}>
+          <Fontisto name="spinner-refresh" size={25} color={colors.Button} />
+        </TouchableOpacity>
         {this.props.userData.loggedIn?
           <Stack.Navigator headerMode="none" >
             <Stack.Screen name="home" component={HomeView} />
@@ -57,7 +70,12 @@ class Groups extends React.Component {
 const mapStateToProps = state => ({
   customize: state.customize,
   userData: state.userData,
+  groupData: state.groupData,
+});
+
+const mapDispatchToProps = dispatch => ({
+  getGroupData: bindActionCreators(getGroupData, dispatch),
 });
 
 
-export default connect(mapStateToProps)(Groups);
+export default connect(mapStateToProps, mapDispatchToProps)(Groups);

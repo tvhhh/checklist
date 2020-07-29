@@ -24,7 +24,9 @@ export default function groupDataReducers(state = initialState, action) {
   
   switch (action.type) {
     case GET_GROUP_DATA:
-      return [ ...payload.data ];
+      newGroupList = [ ...payload.data ];
+      storeLocalGroupData(JSON.stringify(newGroupList));
+      return newGroupList;
 
     case ADD_GROUP:
       newGroupList = [ ...state, payload.data ];

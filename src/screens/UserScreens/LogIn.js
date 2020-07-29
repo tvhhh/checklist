@@ -53,7 +53,6 @@ class LogIn extends React.Component {
       const data = res.data;
       this.props.getData(data);
       const groupData = res.groupData;
-      console.log(groupData);
       this.props.getGroupData(groupData);
     } else {
       const error = res.error;
