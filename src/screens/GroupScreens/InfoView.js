@@ -7,7 +7,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { POLICIES, TASK_STATES, TEST_DATA, currentUserId, getPolicyFromGroup } from '../../utils/GroupEnum'
 import { bindActionCreators } from 'redux';
 
-import { leaveGroup, deleteGroup, removeUserFromGroupAsync } from '../../redux/actions/GroupDataActions'
+import { leaveGroup, removeUserFromGroupAsync } from '../../redux/actions/GroupDataActions'
+import { deleteGroup } from '../../api'
 import { removeGroupId } from '../../redux/actions/UserDataActions'
 
 
@@ -38,7 +39,7 @@ class InfoView extends React.Component {
               group.admins.forEach(username => {this.props.removeUserFromGroupAsync(username, group.gid)});
               this.props.removeGroupId(group.gid);
               this.props.leaveGroup(this.props.userData.data.username, group.gid);
-              this.props.deleteGroup(group.gid);
+              deleteGroup(group.gid);
             } else {
               this.props.removeUserFromGroupAsync(this.props.userData.data.username, group.gid);
               this.props.removeGroupId(group.gid);
