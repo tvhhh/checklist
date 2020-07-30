@@ -64,6 +64,7 @@ class SwipeableView extends React.Component {
         renderScene={this.renderScene}
         onIndexChange={index => this.handleIndexChange(index)}
         renderTabBar={() => null}
+        style={{ backgroundColor: this.props.customize.theme.Background }}
       />
     );
   }

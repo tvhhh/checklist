@@ -3,14 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBfZjRzGXUE3hpv718gFxr1Ir5pvFKWkmY",
-  authDomain: "todos-f0b71.firebaseapp.com",
-  databaseURL: "https://todos-f0b71.firebaseio.com",
-  projectId: "todos-f0b71",
-  storageBucket: "todos-f0b71.appspot.com",
-  messagingSenderId: "32907944673",
-  appId: "1:32907944673:web:3b0c27a619f044eb978da0",
-  measurementId: "G-YVR9FCCVND"
+  //<FIREBASE-CONFIG>
 };
 
 const USER_ASYNC_STORAGE_KEY = '@TodoApp:UserDB';

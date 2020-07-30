@@ -146,7 +146,7 @@ export const logIn = async (email, password) => {
     var res = await signIn(email, password);
     var data = await fetchUserData(res.user.uid);
     var groupData = await fetchGroupData(res.user.uid);
-    data.tasks.forEach(task => {
+    data.tasks.filter(task => !task.done).forEach(task => {
       var time = new Date(task.dueTime);
       time.setMinutes(time.getMinutes() - 30);
       scheduleNotification(
