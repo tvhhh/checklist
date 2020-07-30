@@ -70,7 +70,7 @@ class Search extends React.Component {
   
   handleStartIntervalConfirm = time => {
     time.setHours(0,0,0,0);
-    this.setState({startInterval: time});
+    this.setState({startInterval: time, isCalendarPressed: true});
     if (this.state.startInterval > this.state.endInterval && this.state.endInterval !== ""){
       this.setState({errorInterval: true})
     }
@@ -82,7 +82,7 @@ class Search extends React.Component {
 
   handleEndIntervalConfirm = time => {
     time.setHours(23,59,59,99);
-    this.setState({endInterval: time});
+    this.setState({endInterval: time, isCalendarPressed: true});
     if (this.state.startInterval > this.state.endInterval && this.state.startInterval !== ""){
       this.setState({errorInterval: true})
     }
@@ -102,21 +102,10 @@ class Search extends React.Component {
 
   toggleDatePicker = () => {
     this.setState({ isDatePickerVisible: !this.state.isDatePickerVisible});
-    if (this.state.startInterval !== "" || this.state.endInterval !== ""){
-      this.setState({isCalendarPressed: true})
-    }
   }
 
   toggleCategoryPicker = () => {
     this.setState({ isCategoryPickerVisible: !this.state.isCategoryPickerVisible,isCategoryPressed: !this.state.isCategoryPressed });
-  }
-
-  toggleDateTimePicker = () => {
-    this.setState({isDateTimePickerVisible: !this.state.isDateTimePickerVisible});
-    if (this.state.startInterval !== "" || this.state.endInterval !== "")
-    {
-      this.setState({isCalendarPressed: true});
-    }
   }
 
   toggleStartIntervalPicker = () => {

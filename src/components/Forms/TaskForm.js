@@ -145,6 +145,7 @@ export default class TaskForm extends React.Component {
           </View>
           <DateTimePickerModal
             isVisible={this.state.isDateTimePickerVisible}
+            date={this.state.task.dueTime}
             mode="datetime"
             onConfirm={this.handleDateTimeConfirm}
             onCancel={this.toggleDateTimePicker}

@@ -123,7 +123,6 @@ export const clearLocalUserData = () => {
   .catch(error => console.log(`AsyncStorage - Clear data - ${error}`));
 };
 
-/* api for groups */
 export const createGroup = (username, name) => {
   var ref = firebase.database().ref('groups');
   var data = {
@@ -196,8 +195,6 @@ export const deleteGroup = gid => {
   var ref = firebase.database().ref(`groups/${gid}`);
   ref.remove();
 }
-
-/* END api for groups */
 
 export const fetchCustomization = () => {
   return AsyncStorage.getItem(CUSTOM_ASYNC_STORAGE_KEY)

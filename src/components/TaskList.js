@@ -200,8 +200,9 @@ class TaskList extends React.Component {
       const itemDueTime = item.dueTime;
       const startIntervalChecker = startInterval === "" ? 1 : itemDueTime >= startInterval;
       const endIntervalChecker = endInterval === "" ? 1 : itemDueTime <= endInterval;
-      const textData = query.toUpperCase();
-      if (category === "default" &&
+      const textData = query.trim().toUpperCase();
+      if (textData === "" &&
+        category === "default" &&
         startInterval === "" &&
         endInterval === "" &&
         !pinned) {
