@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 const firebaseConfig = {
-  //<FIREBASE-CONFIG>
+  
 };
 
 const USER_ASYNC_STORAGE_KEY = '@TodoApp:UserDB';
@@ -61,8 +61,13 @@ export const deleteUser = () => {
 export const getDataByUsername = username => {
   var ref = firebase.database().ref('users');
   return ref.orderByChild('username').equalTo(username).once('value')
-  .then(snapshot => (snapshot.val()))
+  .then(snapshot => (snapshot.exists()?snapshot.val():null))
   .then(data => {
+
+    // console.log("in getDataByUsername");
+    // console.log(data);
+
+    if (data === null) return {};
     let uid = Object.keys(data)[0];
     return {
       groups: JSON.parse(data[uid].groups),

@@ -150,7 +150,7 @@ class MemberView extends React.Component {
           {/* change policy */}
           {((thisPolicy === POLICIES.OWNER || thisPolicy === POLICIES.ADMIN)
             && (user.policy !== POLICIES.OWNER) && (user.username !== this.props.userData.data.username)
-            )?
+            &&this.props.userData.connected)?
           <TouchableOpacity
             style={{
               flex: 1,
@@ -169,7 +169,7 @@ class MemberView extends React.Component {
           {/* delete users */}
           {((thisPolicy === POLICIES.OWNER || thisPolicy === POLICIES.ADMIN)
             && (user.policy !== POLICIES.OWNER) && (user.username !== this.props.userData.data.username)
-            )?
+            &&this.props.userData.connected)?
           <TouchableOpacity
             style={{
               flex: 1,

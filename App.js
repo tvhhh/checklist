@@ -19,7 +19,7 @@ import TodoApp from './src/index';
 import { fetchData, setConnectionStatus, getData } from './src/redux/actions/UserDataActions';
 import { fetchGroupData } from './src/redux/actions/GroupDataActions';
 import { fetchCustomData } from './src/redux/actions/CustomizeActions';
-import { updateUserData } from './src/api';
+import { updateUserData, updateGroupData } from './src/api';
 
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
@@ -38,6 +38,11 @@ class App extends React.Component {
       let tasks = JSON.stringify(this.props.userData.data.tasks);
       if (state.isConnected && uid !== "Guest") {
         updateUserData(uid, tasks, 'tasks');
+        this.props.groupData.forEach(group => {
+          let gid = group.gid;
+          let groupTasks = JSON.stringify(group.tasks);
+          updateGroupData(gid, groupTasks, 'tasks');
+        })
       }
     });
   }

@@ -154,6 +154,7 @@ class InfoView extends React.Component {
         {(policy === POLICIES.OWNER || policy == POLICIES.ADMIN)?
         <TouchableOpacity
           style={localStyles.container}
+          disabled={!this.props.userData.connected}
           onPress={() => {navigation.navigate('add-members',{gid: this.props.route.params.gid})}}
         > 
           <Text style={localStyles.menuText}> {"Add more people"} </Text>  
@@ -163,6 +164,7 @@ class InfoView extends React.Component {
 
         <TouchableOpacity
           style={localStyles.container}
+          disabled={!this.props.userData.connected}
           onPress={() => {this.createLeaveConfirmOverlay()}}
         > 
           <Text style={localStyles.menuText}> {"Leave group"} </Text>  

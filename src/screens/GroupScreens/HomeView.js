@@ -51,6 +51,12 @@ class HomeView extends React.Component {
     return obj;
   }
 
+  onAddGroupButtonPress = () => {
+    if (this.props.userData.connected) {
+      this.props.navigation.navigate("create-group");
+    }
+  }
+
   render() {
     const theme = this.props.customize.theme;
     const groups = this.filterGroups([...this.props.groupData]);
@@ -67,7 +73,7 @@ class HomeView extends React.Component {
           renderItem={this.renderItem}
           renderSectionHeader={this.renderSectionHeader}
         />
-        <TouchableOpacity style={styles.createGroupButton} onPress={() => this.props.navigation.navigate("create-group")}>
+        <TouchableOpacity style={styles.createGroupButton} onPress={this.onAddGroupButtonPress}>
           <AntDesgin name="addusergroup" size={30} color="white" />
         </TouchableOpacity>
       </View>

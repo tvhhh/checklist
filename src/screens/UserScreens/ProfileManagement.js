@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -19,7 +19,7 @@ import { FILTER_OVERDUED, FILTER_UPCOMING, FILTER_COMPLETED } from '../../compon
 import colors from '../../styles/colors';
 
 import { setAvatar, setName, setPhone, logOut, deactivateUser, clearData } from '../../redux/actions/UserDataActions';
-
+import { ErrorBox } from './LogIn'
 
 class ProfileManagement extends React.Component {
   constructor(props) {
@@ -31,6 +31,8 @@ class ProfileManagement extends React.Component {
       isConfirmPasswordBoxVisible: false,
       isConfirmationBoxVisible: false,
       informationType: "",
+      error: false,
+      errorMessage: "",
     };
   }
 
@@ -82,8 +84,21 @@ class ProfileManagement extends React.Component {
   }
 
   handleRemoveAccountConfirm = () => {
-    this.props.clearData();
-    deactivateUser();
+    if (this.props.appData.data.groups.length !== 0) {
+      // ko cho xoa
+      Alert.alert(
+        'Deactivate account ? ',
+        'Please leave all groups before deactivating your account !',
+        [
+          { text: 'OK' }
+        ],
+        { cancelable: false }
+      );
+    } else {
+      this.props.clearData();
+      deactivateUser();
+    }
+    this.setState({isConfirmationBoxVisible: false});
   }
 
   handleLogOut = () => {
@@ -183,6 +198,12 @@ class ProfileManagement extends React.Component {
           </View>
           <MaterialIcons name="keyboard-arrow-right" size={30} color={colors.Button} />
         </TouchableOpacity>
+        {/* {this.state.error ? 
+          <ErrorBox 
+            error={this.state.errorMessage}
+            customize={this.props.customize}
+          /> : null
+        } */}
         <TouchableOpacity style={styles.logOut} onPress={this.handleLogOut}>
           <Text style={[styles.logOutText, {fontFamily: font, fontSize: fonts.ButtonText}]}>LOG OUT</Text>
           <MaterialCommunityIcons name="logout" size={25} color="white" />
@@ -258,6 +279,8 @@ class ProfileManagement extends React.Component {
           }
           animationType="fade"
         />
+
+        
       </ScrollView>
     );
   }
