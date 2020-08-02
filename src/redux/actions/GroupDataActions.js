@@ -133,9 +133,13 @@ export const registerGroup = (username, name) => async (dispatch) => {
 export const addUserToGroupAsync = (username, gid) => async(dispatch) => {
   try {
     let userData = await getDataByUsername(username);
-    let newUserGroups = userData.groups.includes(gid)? userData.groups: [...userData.groups, gid];
-    updateUserData(userData.uid, JSON.stringify(newUserGroups), 'groups');
-    dispatch(addUserToGroup(username, gid));
+    // console.log("in addUserToGroupAsync");
+    // console.log(userData);
+    if (Object.keys(userData).length > 0) {
+      let newUserGroups = userData.groups.includes(gid)? userData.groups: [...userData.groups, gid];
+      updateUserData(userData.uid, JSON.stringify(newUserGroups), 'groups');
+      dispatch(addUserToGroup(username, gid));
+    }
   } catch(error) {
     console.log(`add user to group - ${error}`);
   }

@@ -75,6 +75,7 @@ export default function groupDataReducers(state = initialState, action) {
       
 
     case ADD_USER_TO_GROUP:
+      // console.log("in addUserToGroup, reducers");
       newGroupList = state.map(group => {
         if (group.gid === payload.gid && !group.members.includes(payload.username) && !group.admins.includes(payload.username)) {
           group.members = [...group.members, payload.username];
@@ -82,6 +83,7 @@ export default function groupDataReducers(state = initialState, action) {
         }
         return group;
       });
+      // console.log(newGroupList);
       storeLocalGroupData(JSON.stringify(newGroupList));
       
       return newGroupList;

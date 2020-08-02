@@ -117,20 +117,19 @@ class AddMemberView extends React.Component {
   }
 
   handleSubmit = () => {
-    console.debug('in handle submit, add more member');
+    // console.debug('in handle submit, add more member');
     let inputData = this.state.inputData;
 
-    console.debug(inputData);
+    // console.debug(inputData);
     inputData.forEach(item => {
-      console.debug('begin for each');
+      // console.debug('begin for each');
       let username = item.text;
       this.props.addUserToGroupAsync(username, this.state.group.gid);
-      console.debug('end for each');
-      
+      // console.debug('end for each');
       // return item;
     })
     this.props.navigation.goBack();
-    console.debug('END in handle submit, add more member');
+    // console.debug('END in handle submit, add more member');
   }
 
   render() {
@@ -209,6 +208,7 @@ class AddMemberView extends React.Component {
               ...styles.container,
               backgroundColor: this.props.customize.theme.Overlay,
             }}
+            disabled={!this.props.userData.connected}
             onPress={() => this.handleSubmit()}
           >
             <Text
