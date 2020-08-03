@@ -53,24 +53,16 @@ export default function userDataReducers(state = initialState, action) {
         connected: payload.status,
       };
     case CREATE_TASK:
+      let id = (currentTaskList.length == 0) ? 1 : currentTaskList[0].id + 1;
       newTaskList = [
-        { id: (currentTaskList.length == 0) ? 0 : currentTaskList[0].id + 1, ...payload.task },
+        { id: id, ...payload.task },
         ...currentTaskList,
       ];
       newData = { ...state.data, tasks: newTaskList };
-      var time = new Date(payload.task.dueTime);
-      time.setMinutes(time.getMinutes() - 30);
       scheduleNotification(
+        id,
         payload.task.title,
-        payload.task.id,
-        'Your task will end in a few minutes.',
-        time,
-      );
-      scheduleNotification(
-        payload.task.title,
-        payload.task.id,
-        'Your task has expired.',
-        payload.task.dueTime,
+        payload.task.dueTime
       );
       if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
       storeLocalUserData(JSON.stringify(newData));
@@ -82,19 +74,10 @@ export default function userDataReducers(state = initialState, action) {
       );
       newData = { ...state.data, tasks: newTaskList };
       deleteNotification(payload.selected.id);
-      var time = new Date(payload.task.dueTime);
-      time.setMinutes(time.getMinutes() - 30);
       scheduleNotification(
+        payload.selected.id,
         payload.task.title,
-        payload.task.id,
-        'Your task will end in a few minutes.',
-        time,
-      );
-      scheduleNotification(
-        payload.task.title,
-        payload.task.id,
-        'Your task has expired.',
-        payload.task.dueTime,
+        payload.task.dueTime
       );
       if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
       storeLocalUserData(JSON.stringify(newData));
@@ -123,19 +106,10 @@ export default function userDataReducers(state = initialState, action) {
       newData = { ...state.data, tasks: newTaskList };
       if (!payload.selected.done) deleteNotification(payload.selected.id);
       else {
-        var time = new Date(payload.selected.dueTime);
-        time.setMinutes(time.getMinutes() - 30);
         scheduleNotification(
-          payload.selected.title,
           payload.selected.id,
-          'Your task will end in a few minutes.',
-          time,
-        );
-        scheduleNotification(
           payload.selected.title,
-          payload.selected.id,
-          'Your task has expired.',
-          payload.selected.dueTime,
+          payload.selected.dueTime
         );
       }
       if (state.loggedIn) updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
@@ -158,16 +132,12 @@ export default function userDataReducers(state = initialState, action) {
       return { ...state, data: newData };
     case ADD_GROUP_ID:
       newGroupList = [ ...currentGroupList, payload.gid ];
-      console.log(newGroupList);
       newData = { ...state.data, groups: newGroupList };
-      console.log(newData);
       updateUserData(state.data.uid, JSON.stringify(newGroupList), 'groups');
       storeLocalUserData(JSON.stringify(newData));
       return { ...state, data: newData };
     case REMOVE_GROUP_ID:
-      newGroupList = currentGroupList.filter(gid => {
-        return gid !== payload.gid
-      });
+      newGroupList = currentGroupList.filter(gid => gid !== payload.gid);
       newData = { ...state.data, groups: newGroupList };
       updateUserData(state.data.uid, JSON.stringify(newGroupList), 'groups');
       storeLocalUserData(JSON.stringify(newData));

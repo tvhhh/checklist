@@ -1,10 +1,7 @@
 import firebase from 'firebase';
+import firebaseConfig from './APIKey';
 import AsyncStorage from '@react-native-community/async-storage';
 
-
-const firebaseConfig = {
-  
-};
 
 const USER_ASYNC_STORAGE_KEY = '@TodoApp:UserDB';
 const GROUP_ASYNC_STORAGE_KEY = '@TodoApp:GroupDB';
@@ -196,7 +193,6 @@ export const updateGroupData = (gid, value, key) => {
 };
 
 export const deleteGroup = gid => {
-  // console.log("delete group in api....");
   var ref = firebase.database().ref(`groups/${gid}`);
   ref.remove();
 }
