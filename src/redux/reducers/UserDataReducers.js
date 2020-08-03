@@ -8,17 +8,21 @@ import {
   TOGGLE_DONE,
   REMOVE_TASK,
   SET_AVATAR,
-  SET_USERNAME,
   SET_NAME,
   SET_PHONE,
+  ADD_GROUP_ID,
+  REMOVE_GROUP_ID,
 } from '../actions/UserDataActions';
 
 import {storeLocalUserData, updateUserData} from '../../api';
+import {
+  scheduleNotification,
+  deleteNotification,
+} from '../../utils/Notification';
 
-import {showNotification, delNotification} from '../../utils/Notification';
-
+var n = 0;
 const initialState = {
-  connection: false,
+  connected: false,
   loggedIn: false,
   data: {
     uid: 'Guest',
@@ -30,6 +34,8 @@ export default function userDataReducers(state = initialState, action) {
   const payload = action.payload;
   var currentTaskList = state.data.tasks;
   var newTaskList = [];
+  var currentGroupList = state.data.groups;
+  var newGroupList = [];
   var newData = {};
 
   switch (action.type) {
@@ -42,12 +48,12 @@ export default function userDataReducers(state = initialState, action) {
     case CLEAR_DATA:
       return {
         ...initialState,
-        connection: state.connection,
+        connected: state.connected,
       };
     case SET_CONNECTION:
       return {
         ...state,
-        connection: payload.status,
+        connected: payload.status,
       };
     case CREATE_TASK:
       newTaskList = [
@@ -57,21 +63,21 @@ export default function userDataReducers(state = initialState, action) {
         },
         ...currentTaskList,
       ];
+      newData = {...state.data, tasks: newTaskList};
       var time = new Date(payload.task.dueTime);
       time.setMinutes(time.getMinutes() - 30);
-      showNotification(
+      scheduleNotification(
         payload.task.title,
         payload.task.id,
-        'Your task will end in a few minutes',
+        'Your task will end in a few minutes.',
         time,
       );
-      showNotification(
+      scheduleNotification(
         payload.task.title,
         payload.task.id,
-        'Your task was expied',
+        'Your task has expired.',
         payload.task.dueTime,
       );
-      newData = {...state.data, tasks: newTaskList};
       if (state.loggedIn)
         updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
       storeLocalUserData(JSON.stringify(newData));
@@ -83,19 +89,19 @@ export default function userDataReducers(state = initialState, action) {
           : task,
       );
       newData = {...state.data, tasks: newTaskList};
-      delNotification(payload.task.id);
+      deleteNotification(payload.selected.id);
       var time = new Date(payload.task.dueTime);
       time.setMinutes(time.getMinutes() - 30);
-      showNotification(
+      scheduleNotification(
         payload.task.title,
         payload.task.id,
-        'Your task will end in a few minutes',
+        'Your task will end in a few minutes.',
         time,
       );
-      showNotification(
+      scheduleNotification(
         payload.task.title,
         payload.task.id,
-        'Your task was expied',
+        'Your task has expired.',
         payload.task.dueTime,
       );
       if (state.loggedIn)
@@ -103,17 +109,11 @@ export default function userDataReducers(state = initialState, action) {
       storeLocalUserData(JSON.stringify(newData));
       return {...state, data: newData};
     case REMOVE_TASK:
-      var id;
       newTaskList = currentTaskList.filter(
         task => task.id !== payload.selected.id,
       );
-      currentTaskList.map(task =>
-        task.id === payload.selected.id
-          ? {...task, done: !task.done, id: task.id}
-          : task,
-      );
-      delNotification(id);
       newData = {...state.data, tasks: newTaskList};
+      deleteNotification(payload.selected.id);
       if (state.loggedIn)
         updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
       storeLocalUserData(JSON.stringify(newData));
@@ -130,16 +130,28 @@ export default function userDataReducers(state = initialState, action) {
       storeLocalUserData(JSON.stringify(newData));
       return {...state, data: newData};
     case TOGGLE_DONE:
-      var id;
       newTaskList = currentTaskList.map(task =>
-        task.id === payload.selected.id
-          ? {...task, done: !task.done, id: task.id}
-          : task,
+        task.id === payload.selected.id ? {...task, done: !task.done} : task,
       );
-      if (payload.selected.done) {
-        delNotification(id);
-      }
       newData = {...state.data, tasks: newTaskList};
+      if (!payload.selected.done) deleteNotification(payload.selected.id);
+      else {
+        var time = new Date(payload.selected.dueTime);
+        time.setMinutes(time.getMinutes() - 30);
+        scheduleNotification(
+          payload.selected.title,
+          payload.selected.id + newTaskList.length + global.n,
+          'Your task will end in a few minutes.',
+          time,
+        );
+        scheduleNotification(
+          payload.selected.title,
+          payload.selected.id + newTaskList.length + global.n,
+          'Your task has expired.',
+          payload.selected.dueTime,
+        );
+        global.n++;
+      }
       if (state.loggedIn)
         updateUserData(state.data.uid, JSON.stringify(newTaskList), 'tasks');
       storeLocalUserData(JSON.stringify(newData));
@@ -147,11 +159,6 @@ export default function userDataReducers(state = initialState, action) {
     case SET_AVATAR:
       newData = {...state.data, avatar: payload.color};
       updateUserData(state.data.uid, payload.color, 'avatar');
-      storeLocalUserData(JSON.stringify(newData));
-      return {...state, data: newData};
-    case SET_USERNAME:
-      newData = {...state.data, username: payload.username};
-      updateUserData(state.data.uid, payload.username, 'username');
       storeLocalUserData(JSON.stringify(newData));
       return {...state, data: newData};
     case SET_NAME:
@@ -162,6 +169,22 @@ export default function userDataReducers(state = initialState, action) {
     case SET_PHONE:
       newData = {...state.data, phone: payload.phone};
       updateUserData(state.data.uid, payload.phone, 'phone');
+      storeLocalUserData(JSON.stringify(newData));
+      return {...state, data: newData};
+    case ADD_GROUP_ID:
+      newGroupList = [...currentGroupList, payload.gid];
+      console.log(newGroupList);
+      newData = {...state.data, groups: newGroupList};
+      console.log(newData);
+      updateUserData(state.data.uid, JSON.stringify(newGroupList), 'groups');
+      storeLocalUserData(JSON.stringify(newData));
+      return {...state, data: newData};
+    case REMOVE_GROUP_ID:
+      newGroupList = currentGroupList.filter(gid => {
+        return gid !== payload.gid;
+      });
+      newData = {...state.data, groups: newGroupList};
+      updateUserData(state.data.uid, JSON.stringify(newGroupList), 'groups');
       storeLocalUserData(JSON.stringify(newData));
       return {...state, data: newData};
     default:
