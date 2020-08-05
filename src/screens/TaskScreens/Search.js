@@ -27,11 +27,10 @@ class Search extends React.Component {
       isEndIntervalPickerVisible: false,
       isCategoryPickerVisible: false,
       isCategoryPressed: false,
-      isPinnedPressed: false,
       isCalendarPressed: false,
       query: "",
       category: "default",
-      pinned: false,
+      pinned: 0,
       startInterval: "",
       endInterval: "",
       showFilter: false,
@@ -48,20 +47,19 @@ class Search extends React.Component {
   }
 
   onPinnedPress = () => {
-    this.setState({isPinnedPressed: !this.state.isPinnedPressed,  pinned: !this.state.pinned});
+    this.setState({pinned: (this.state.pinned + 1) % 3});
   }
 
-  onCalendarPress = (interval) => {
+  onCalendarPress = () => {
     this.toggleDatePicker();
   }
 
   onResetPress = () => {
     this.setState({
-      isPinnedPressed: false,
       isCategoryPressed:false,
       isCalendarPressed: false,
       category: "default",
-      pinned: false,
+      pinned: 0,
       startInterval: "",
       endInterval: "",
       errorInterval: false,
@@ -129,6 +127,18 @@ class Search extends React.Component {
     }
   }
 
+  filterPinColorPicker = () => {
+    if (this.state.pinned === 0){
+      return null;
+    }
+    else if (this.state.pinned === 1){
+      return this.props.customize.theme.Overlay;
+    }
+    else{
+      return this.props.customize.theme.Overlay;
+    }
+  }
+
   renderDate = (extractedDate, type) => {
     const fonts = this.props.customize.fontSize;
     const font = this.props.customize.font;
@@ -158,11 +168,18 @@ class Search extends React.Component {
             </Text>
           </TouchableOpacity>
   
-          <TouchableOpacity onPress = {this.onPinnedPress} style = {this.state.isPinnedPressed ? [styles.filterButtonContainerPressed, {backgroundColor: theme.Overlay}] : styles.filterButtonContainerUnpressed}>
-            <MaterialCommunityIcons name="pin" size={fonts.FilterBox - 2} color='#2bd1ea' />  
-            <Text style = {this.state.isPinnedPressed ? 
-              {color: theme.PrimaryText, fontFamily: font, fontSize: fonts.FilterBox} : {color: theme.SecondaryText, fontFamily: font, fontSize: fonts.FilterBox}}
-            >Pinned Task</Text>
+          <TouchableOpacity onPress = {this.onPinnedPress} style = {[styles.filterButtonContainerPressed, {backgroundColor: this.filterPinColorPicker()}]}>
+            <MaterialCommunityIcons name="pin" size={fonts.FilterBox - 2} color='#2bd1ea' />
+            {this.state.pinned === 0 ?<Text style = {{color: theme.SecondaryText, fontFamily: font, fontSize: fonts.FilterBox}}
+            >Filter pin</Text>:null
+             }  
+             {this.state.pinned === 1 ?<Text style = {{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.FilterBox}}
+            >Pinned</Text>:null
+             } 
+             {this.state.pinned === 2 ?<Text style = {{color: theme.PrimaryText, fontFamily: font, fontSize: fonts.FilterBox}}
+            >Unpinned</Text>:null
+             } 
+            
           </TouchableOpacity>
     
           <TouchableOpacity onPress = {this.onCalendarPress} style = {this.state.isCalendarPressed ? [styles.filterButtonContainerPressed, {backgroundColor: theme.Overlay}] : styles.filterButtonContainerUnpressed}>
