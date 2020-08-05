@@ -60,10 +60,6 @@ export const getDataByUsername = username => {
   return ref.orderByChild('username').equalTo(username).once('value')
   .then(snapshot => (snapshot.exists()?snapshot.val():null))
   .then(data => {
-
-    // console.log("in getDataByUsername");
-    // console.log(data);
-
     if (data === null) return {};
     let uid = Object.keys(data)[0];
     return {
